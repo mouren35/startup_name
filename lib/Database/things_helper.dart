@@ -1,14 +1,14 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:startup_namer/Database/Things.dart';
+import 'package:startup_namer/Database/things.dart';
 
 class ThingsHandler {
-  static final columnId = 'id';
-  static final columnTitle = 'title';
-  static final columnNote = 'note';
-  static final columnSteps = 'steps';
-  static final columnTasktime = 'time';
-  static final columnTaskStatus = 'taskStatus';
+  static const columnId = 'id';
+  static const columnTitle = 'title';
+  static const columnNote = 'note';
+  static const columnSteps = 'steps';
+  static const columnTasktime = 'time';
+  static const columnTaskStatus = 'taskStatus';
 
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
@@ -16,7 +16,6 @@ class ThingsHandler {
       join(path, 'things.db'),
       onCreate: (database, version) async {
         await database.execute(
-          // 时间类型可能有错
           'CREATE TABLE things($columnId INTEGER PRIMARY KEY AUTOINCREMENT,$columnTitle TEXT NOT NULL,$columnNote TEXT NOT NULL,$columnSteps TEXT NOT NULL,$columnTasktime TEXT NOT NULL,$columnTaskStatus INTEGER)',
         );
       },
@@ -38,7 +37,6 @@ class ThingsHandler {
   changeState() async {
     Database db = await initializeDB();
     db.update('things', {columnTaskStatus: 1});
-    // db.rawUpdate(sql)
   }
 
   Future<void> deleteThing(int id) async {

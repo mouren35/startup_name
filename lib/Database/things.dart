@@ -1,5 +1,4 @@
-import 'ThingsHelper.dart';
-import 'package:logger/logger.dart';
+import 'things_helper.dart';
 
 class Things {
   final int? id;

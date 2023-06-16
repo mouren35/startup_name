@@ -1,11 +1,11 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:startup_namer/Database/Questions.dart';
+import 'package:startup_namer/Database/questions.dart';
 
 class DatabaseHandler {
-  static final columnId = 'id';
-  static final columnTitle = 'title';
-  static final columnAnswer = 'answer';
+  static const columnId = 'id';
+  static const columnTitle = 'title';
+  static const columnAnswer = 'answer';
   static const columnState = 'state';
 
   Future<Database> initializeDB() async {
@@ -32,24 +32,9 @@ class DatabaseHandler {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query(
       'questions',
-      // columns: [columnId, columnAnswer, columnTitle],
-      // where: '$columnId = ?',
-      // whereArgs: [id]
     );
     return queryResult.map((e) => Question.fromMap(e)).toList();
   }
-
-  // Future<Question?> retrieveQuestions(int id) async {
-  //   final Database db = await initializeDB();
-  //   final List<Map<String, Object?>> queryResult = await db.query('questions',
-  //       columns: [columnId, columnAnswer, columnTitle],
-  //       where: '$columnId = ?',
-  //       whereArgs: [id]);
-  //   if (queryResult.length > 0) {
-  //     return Question.fromMap(queryResult.first);
-  //   }
-  //   return null;
-  // }
 
   Future<void> deleteQuestion(int id) async {
     final db = await initializeDB();
