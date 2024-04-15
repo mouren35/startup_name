@@ -8,8 +8,8 @@ import 'time_starts.dart';
 String currentTime = '';
 var nowTime;
 
-class ItemsList extends StatelessWidget {
-  const ItemsList({Key? key}) : super(key: key);
+class TaskList extends StatelessWidget {
+  const TaskList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
