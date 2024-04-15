@@ -12,13 +12,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late NoteDb handler;
+  late NoteDb noteDb;
 
   @override
   void initState() {
     super.initState();
-    handler = NoteDb();
-    handler.initializeDB().whenComplete(() async {
+    noteDb = NoteDb();
+    noteDb.initializeDB().whenComplete(() async {
       setState(() {});
     });
   }
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: handler.queryNote(),
+                future: noteDb.queryNote(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<NoteModel>> snapshot) {
                   if (snapshot.hasData) {
@@ -51,21 +51,21 @@ class _HomePageState extends State<HomePage> {
                           ),
                           key: UniqueKey(),
                           onDismissed: (DismissDirection direction) async {
-                            await handler.deleteNote(snapshot.data![index].id!);
+                            await noteDb.deleteNote(snapshot.data![index].id!);
                             SnackBar snackbar = SnackBar(
                               content: const Text('已删除'),
                               action: SnackBarAction(
                                 label: '撤销',
                                 onPressed: () {
                                   setState(() {
-                                    handler.insertNote(snapshot.data![index]);
+                                    noteDb.insertNote(snapshot.data![index]);
                                   });
                                 },
                               ),
                             );
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
-                            await handler.deleteNote(snapshot.data![index].id!);
+                            await noteDb.deleteNote(snapshot.data![index].id!);
                           },
                           child: Column(
                             children: [

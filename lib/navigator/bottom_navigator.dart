@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/home_page.dart';
+import 'package:startup_namer/provider/note_provider.dart';
+import 'package:startup_namer/provider/task_provider.dart';
 
 import '../pages/tasks_list_page.dart';
 
@@ -26,7 +29,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           });
         },
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), TaskListPage()],
+        children: [
+          ChangeNotifierProvider(
+            create: (context) => NoteProvider(),
+            child: const HomePage(),
+          ),
+          ChangeNotifierProvider(
+            create: (context) => TaskProvider(),
+            child: const TaskListPage(),
+          )
+        ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,
