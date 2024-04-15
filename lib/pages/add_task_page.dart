@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
-
-int timeValue = 0;
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
@@ -13,43 +12,31 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  late TaskDB thingsItem;
-
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
   TextEditingController stepsController = TextEditingController();
 
   void _showMessageInScaffold(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
+      SnackBar(content: Text(message)),
     );
   }
 
   @override
-  void initState() {
-    super.initState();
-    thingsItem = TaskDB();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    double timeValue = 0;
     final formKey = GlobalKey<FormState>();
+    final provider = Provider.of<TaskDB>(context);
 
-    Widget slider = Slider(
-      activeColor: const Color.fromARGB(255, 14, 75, 132),
-      thumbColor: const Color.fromARGB(255, 14, 75, 132),
+    Widget _buildslider = Slider(
       min: 0,
-      value: timeValue.toDouble(),
+      value: timeValue,
       max: 60,
       divisions: 60,
       onChanged: (newValue) {
-        setState(() {
-          timeValue = newValue.toInt();
-        });
+        setState(() => timeValue = newValue);
       },
-      label: '${timeValue.toInt()}分钟',
+      label: '$timeValue分钟',
     );
 
     return DefaultTabController(
@@ -67,9 +54,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               minLines: 1,
               maxLines: 2,
               controller: titleController,
-              decoration: const InputDecoration(
-                labelText: '在此添加事项标题',
-              ),
+              decoration: const InputDecoration(labelText: '在此添加事项标题'),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return "标题输入不能为空";
@@ -78,14 +63,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               },
             ),
           ),
-          bottom: const TabBar(
-            indicatorColor: Color.fromARGB(255, 14, 75, 132),
-            labelColor: Colors.black,
-            tabs: [
-              Tab(text: '步骤'),
-              Tab(text: '笔记'),
-            ],
-          ),
+          bottom: const TabBar(tabs: [Tab(text: '步骤'), Tab(text: '笔记')]),
         ),
         body: TabBarView(
           children: [
@@ -102,14 +80,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     labelText: '在此添加事项步骤',
                   ),
                 ),
-                slider,
+                _buildslider,
                 Expanded(child: Container()),
                 Row(
                   children: [
                     Expanded(
                       child: MaterialButton(
-                        color: const Color.fromARGB(255, 14, 75, 132),
-                        textColor: Colors.white,
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text('添加'),
@@ -119,10 +95,17 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           String note = noteController.text;
                           String steps = stepsController.text;
 
-                          String time1 = timeValue.toString();
+                          int currentTime = timeValue.floor();
                           if (formKey.currentState!.validate() &&
                               timeValue != 0) {
-                            _insert(title, note, steps, time1);
+                            provider.addTask(
+                              TaskModel(
+                                title: title,
+                                note: note,
+                                steps: steps,
+                                taskTime: currentTime,
+                              ),
+                            );
                             titleController.clear();
                             noteController.clear();
                             stepsController.clear();
@@ -156,14 +139,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     labelText: '在此添加笔记',
                   ),
                 ),
-                slider,
+                _buildslider,
                 Expanded(child: Container()),
                 Row(
                   children: [
                     Expanded(
                       child: MaterialButton(
-                        color: const Color.fromARGB(255, 14, 75, 132),
-                        textColor: Colors.white,
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: Text('添加'),
@@ -173,11 +154,15 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           String note = noteController.text;
                           String steps = stepsController.text;
 
-                          String time1 = timeValue.toString();
+                          int time1 = timeValue.floor();
 
                           if (formKey.currentState!.validate() &&
                               timeValue != 0) {
-                            _insert(title, note, steps, time1);
+                            provider.addTask(TaskModel(
+                                title: title,
+                                note: note,
+                                steps: steps,
+                                taskTime: time1));
                             titleController.clear();
                             noteController.clear();
                             stepsController.clear();
@@ -203,23 +188,5 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ),
       ),
     );
-  }
-
-  void _insert(
-    title,
-    note,
-    steps,
-    time,
-  ) async {
-    Map<String, dynamic> row = {
-      TaskDB.title: title,
-      TaskDB.note: note,
-      TaskDB.steps: steps,
-      TaskDB.taskTime: time
-    };
-
-    TaskModel thing = TaskModel.fromMap(row);
-    await thingsItem.insertTask(thing);
-    _showMessageInScaffold('添加成功');
   }
 }

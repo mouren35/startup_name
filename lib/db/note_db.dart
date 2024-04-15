@@ -1,16 +1,19 @@
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:startup_namer/model/note_model.dart';
 
-class NoteDb {
+class NoteDb extends ChangeNotifier {
   static const id = 'id';
   static const title = 'title';
   static const answer = 'answer';
   static const status = 'state';
 
-  Future<Database> initializeDB() async {
+  late Database _db;
+
+  Future<void> init() async {
     String path = await getDatabasesPath();
-    return openDatabase(
+    _db = await openDatabase(
       join(path, 'note.db'),
       onCreate: (database, version) async {
         await database.execute("""
@@ -21,21 +24,35 @@ class NoteDb {
       },
       version: 1,
     );
+    notifyListeners();
   }
 
-  Future<int> insertNote(NoteModel note) async {
-    Database db = await initializeDB();
-    return await db.insert('note', note.toMap());
+  Future<void> addNote(NoteModel note) async {
+    await _db.insert('note', note.toMap());
+    notifyListeners();
   }
 
-  Future<List<NoteModel>> queryNote() async {
-    final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query('note');
+  Future<List<NoteModel>> getNote() async {
+    final List<Map<String, dynamic>> queryResult = await _db.query('note');
     return queryResult.map((e) => NoteModel.fromMap(e)).toList();
   }
 
   Future<void> deleteNote(int id) async {
-    final db = await initializeDB();
-    await db.delete('note', where: "id = ?", whereArgs: [id]);
+    await _db.delete(
+      'note',
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    notifyListeners();
+  }
+
+  Future<void> update(NoteModel note) async {
+    await _db.update(
+      'note',
+      note.toMap(),
+      where: 'id = ?',
+      whereArgs: [note.id],
+    );
+    notifyListeners();
   }
 }

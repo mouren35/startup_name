@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:startup_namer/pages/add_task_page.dart';
 import 'package:startup_namer/pages/home_page.dart';
-import 'package:startup_namer/provider/note_provider.dart';
-import 'package:startup_namer/provider/task_provider.dart';
+import 'package:startup_namer/util/navigator_util.dart';
 
+import '../pages/add_note_page.dart';
 import '../pages/tasks_list_page.dart';
 
 class BottomNavigator extends StatefulWidget {
@@ -29,15 +30,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           });
         },
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          ChangeNotifierProvider(
-            create: (context) => NoteProvider(),
-            child: const HomePage(),
-          ),
-          ChangeNotifierProvider(
-            create: (context) => TaskProvider(),
-            child: const TaskListPage(),
-          )
+        children: const [
+          HomePage(),
+          TaskListPage(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -53,6 +48,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           _bottomItem("任务", Icons.list, 1),
         ],
       ),
+      floatingActionButtonLocation: ExpandableFab.location,
+      floatingActionButton: ExpandableFab(
+        children: [
+          _buildFab('添加任务', Icons.playlist_add_rounded, const AddTaskPage()),
+          _buildFab('添加笔记', Icons.note_add_outlined, const AddNotePage())
+        ],
+      ),
     );
   }
 
@@ -60,6 +62,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     return NavigationDestination(
       icon: Icon(icon),
       label: label,
+    );
+  }
+
+  _buildFab(String heroTag, IconData icon, Widget page) {
+    return FloatingActionButton.small(
+      heroTag: heroTag,
+      child: Icon(icon),
+      onPressed: () {
+        NavigatorUtil.push(context, page);
+      },
     );
   }
 }

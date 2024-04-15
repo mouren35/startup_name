@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:startup_namer/util/navigator_util.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
@@ -12,19 +14,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late NoteDb noteDb;
-
-  @override
-  void initState() {
-    super.initState();
-    noteDb = NoteDb();
-    noteDb.initializeDB().whenComplete(() async {
-      setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<NoteDb>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('首页')),
       body: Column(
@@ -33,61 +26,64 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: noteDb.queryNote(),
+                future: provider.getNote(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<NoteModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data?.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Dismissible(
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: const Icon(Icons.delete_forever),
-                          ),
-                          key: UniqueKey(),
-                          onDismissed: (DismissDirection direction) async {
-                            await noteDb.deleteNote(snapshot.data![index].id!);
-                            SnackBar snackbar = SnackBar(
-                              content: const Text('已删除'),
-                              action: SnackBarAction(
-                                label: '撤销',
-                                onPressed: () {
-                                  setState(() {
-                                    noteDb.insertNote(snapshot.data![index]);
-                                  });
-                                },
-                              ),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackbar);
-                            await noteDb.deleteNote(snapshot.data![index].id!);
-                          },
-                          child: Column(
-                            children: [
-                              ListTile(
-                                onTap: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: ((context) =>
-                                          const NoteDetailPage())));
-                                },
-                                title: Text(snapshot.data![index].title),
-                                subtitle: Text(snapshot.data![index].answer),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
                   }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  final data = snapshot.data ?? [];
+
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Dismissible(
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: const Icon(Icons.delete_forever),
+                        ),
+                        key: UniqueKey(),
+                        onDismissed: (DismissDirection direction) async {
+                          await provider.deleteNote(data[index].id!);
+                          SnackBar snackbar = SnackBar(
+                            content: const Text('已删除'),
+                            action: SnackBarAction(
+                              label: '撤销',
+                              onPressed: () {
+                                setState(() {
+                                  provider.addNote(data[index]);
+                                });
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          await provider.deleteNote(data[index].id!);
+                        },
+                        child: Column(
+                          children: [
+                            ListTile(
+                              onTap: () {
+                                NavigatorUtil.push(
+                                  context,
+                                  const NoteDetailPage(),
+                                );
+                              },
+                              title: Text(data[index].title),
+                              subtitle: Text(data[index].answer),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),

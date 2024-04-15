@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/task_detail_page.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
 import 'time_starts_page.dart';
-
-String currentTime = '';
-var nowTime;
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({Key? key}) : super(key: key);
@@ -16,16 +14,13 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
-  late TaskDB thingItem;
-
-  @override
-  void initState() {
-    super.initState();
-    thingItem = TaskDB();
-  }
+  late int currentTime;
+  late DateTime nowTime;
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<TaskDB>(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('事项')),
       body: Column(
@@ -33,60 +28,60 @@ class _TaskListPageState extends State<TaskListPage> {
         children: <Widget>[
           Stack(
             children: const [
-              ListTile(
-                title: Text(
-                  '未完成',
-                  textScaleFactor: 1.5,
-                ),
-              ),
+              ListTile(title: Text('未完成', textScaleFactor: 1.5))
             ],
           ),
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: thingItem.queryTask(),
+                future: provider.getTask(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Dismissible(
-                          direction: DismissDirection.endToStart,
-                          background: Container(
-                            color: Colors.red,
-                            alignment: Alignment.centerRight,
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: const Icon(Icons.delete_forever),
-                          ),
-                          onDismissed: (DismissDirection direction) async {
-                            await thingItem
-                                .deleteThing(snapshot.data![index].id!);
-                            SnackBar snackbar = SnackBar(
-                              content: const Text('已删除'),
-                              action: SnackBarAction(
-                                label: '撤销',
-                                onPressed: () {
-                                  setState(() {
-                                    thingItem.insertTask(snapshot.data![index]);
-                                  });
-                                },
-                              ),
-                            );
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackbar);
-                          },
-                          key: UniqueKey(),
-                          child: Column(
-                            children: [
-                              Scrollbar(
-                                  child: SingleChildScrollView(
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  final data = snapshot.data ?? [];
+
+                  return ListView.builder(
+                    itemCount: data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Dismissible(
+                        direction: DismissDirection.endToStart,
+                        background: Container(
+                          color: Colors.red,
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: const Icon(Icons.delete_forever),
+                        ),
+                        onDismissed: (DismissDirection direction) async {
+                          await provider.deleteThing(data[index].id!);
+                          SnackBar snackbar = SnackBar(
+                            content: const Text('已删除'),
+                            action: SnackBarAction(
+                              label: '撤销',
+                              onPressed: () {
+                                setState(() {
+                                  provider.addTask(data[index]);
+                                });
+                              },
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                        },
+                        key: UniqueKey(),
+                        child: Column(
+                          children: [
+                            Scrollbar(
+                              child: SingleChildScrollView(
                                 child: ListTile(
-                                  leading: Text(snapshot.data![index].taskTime),
-                                  title: Text(snapshot.data![index].title),
-                                  subtitle: Text(
-                                      snapshot.data![index].note.toString()),
+                                  leading: Text('${data[index].taskTime}'),
+                                  title: Text(data[index].title),
+                                  subtitle: Text(data[index].note.toString()),
                                   trailing: IconButton(
                                     icon: const Icon(Icons.play_arrow),
                                     onPressed: () {
@@ -94,8 +89,7 @@ class _TaskListPageState extends State<TaskListPage> {
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) {
-                                            currentTime =
-                                                snapshot.data![index].taskTime;
+                                            currentTime = data[index].taskTime;
 
                                             return const TimeStartPage();
                                           },
@@ -106,23 +100,20 @@ class _TaskListPageState extends State<TaskListPage> {
                                   onTap: () {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const TaskDetailPage(),
+                                        builder: (context) => TaskDetailPage(
+                                          timeValue: data[index].taskTime,
+                                        ),
                                       ),
                                     );
                                   },
                                 ),
-                              ))
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),
@@ -140,37 +131,31 @@ class _TaskListPageState extends State<TaskListPage> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: thingItem.queryTask(),
+                future: provider.getTask(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Scrollbar(
-                            child: SingleChildScrollView(
-                          child: ListTile(
-                            title: const Text('事项2'),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.play_arrow),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => const TimeStartPage(),
-                                  ),
-                                );
-                              },
-                            ),
-                            onTap: () {},
+                  return ListView.builder(
+                    itemCount: 1,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Scrollbar(
+                          child: SingleChildScrollView(
+                        child: ListTile(
+                          title: const Text('事项2'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.play_arrow),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => const TimeStartPage(),
+                                ),
+                              );
+                            },
                           ),
-                        ));
-                      },
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+                          onTap: () {},
+                        ),
+                      ));
+                    },
+                  );
                 },
               ),
             ),

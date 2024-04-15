@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
-import 'add_task_page.dart';
 
 class TaskDetailPage extends StatefulWidget {
-  const TaskDetailPage({Key? key}) : super(key: key);
+  final int timeValue;
+  TaskDetailPage({Key? key, required this.timeValue}) : super(key: key);
 
   @override
   State<TaskDetailPage> createState() => _TaskDetailPageState();
@@ -24,7 +24,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: thingItem.queryTask(),
+        future: thingItem.getTask(),
         builder:
             (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.hasData) {
@@ -42,7 +42,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                                 border: InputBorder.none,
                               ),
                             ),
-                            subtitle: Text('预计时间$timeValue'),
+                            subtitle: Text('预计时间${widget.timeValue}'),
                           )
                         ],
                       ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:startup_namer/model/note_model.dart';
 
 import '../db/note_db.dart';
 
@@ -10,8 +12,6 @@ class AddNotePage extends StatefulWidget {
 }
 
 class _AddNotePageState extends State<AddNotePage> {
-  late NoteDb handler;
-
   TextEditingController titleController = TextEditingController();
   TextEditingController answerController = TextEditingController();
 
@@ -24,17 +24,9 @@ class _AddNotePageState extends State<AddNotePage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    handler = NoteDb();
-    handler.initializeDB().whenComplete(() async {
-      setState(() {});
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+    final provider = Provider.of<NoteDb>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +37,7 @@ class _AddNotePageState extends State<AddNotePage> {
               String answer = answerController.text;
 
               if (formKey.currentState!.validate()) {
-                _insert(title, answer);
+                provider.addNote(NoteModel(title: title, answer: answer));
                 titleController.clear();
                 answerController.clear();
               } else {

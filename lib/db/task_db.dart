@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:startup_namer/model/task_model.dart';
 
-class TaskDB {
+class TaskDB extends ChangeNotifier {
   static const id = 'id';
   static const title = 'title';
   static const note = 'note';
@@ -10,9 +11,11 @@ class TaskDB {
   static const taskTime = 'time';
   static const taskStatus = 'taskStatus';
 
-  Future<Database> initializeDB() async {
+  late Database _db;
+
+  Future<void> init() async {
     String path = await getDatabasesPath();
-    return openDatabase(
+    _db = await openDatabase(
       join(path, 'task.db'),
       onCreate: (database, version) async {
         await database.execute(
@@ -23,38 +26,32 @@ class TaskDB {
     );
   }
 
-  Future<int> insertTask(TaskModel task) async {
-    Database db = await initializeDB();
-    return await db.insert('task', task.toMap());
+  Future<void> addTask(TaskModel task) async {
+    await _db.insert('task', task.toMap());
+    notifyListeners();
   }
 
-  Future<List<TaskModel>> queryTask() async {
-    final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query('task');
+  Future<List<TaskModel>> getTask() async {
+    final List<Map<String, Object?>> queryResult = await _db.query('task');
     return queryResult.map((e) => TaskModel.fromMap(e)).toList();
   }
 
-  changeState() async {
-    Database db = await initializeDB();
-    db.update('task', {taskStatus: 1});
-  }
-
   Future<void> deleteThing(int id) async {
-    final db = await initializeDB();
-    await db.delete(
+    await _db.delete(
       'task',
       where: "id = ?",
       whereArgs: [id],
     );
+    notifyListeners();
   }
 
-  Future<void> updateThing(TaskModel thing) async {
-    final db = await initializeDB();
-    await db.update(
+  Future<void> updateTask(TaskModel thing) async {
+    await _db.update(
       'task',
       thing.toMap(),
       where: 'id = ?',
       whereArgs: [thing.id],
     );
+    notifyListeners();
   }
 }

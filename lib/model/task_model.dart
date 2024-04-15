@@ -5,7 +5,7 @@ class TaskModel {
   final String title;
   final String note;
   final String steps;
-  final String taskTime;
+  final int taskTime;
   int? taskStatus;
 
   TaskModel({

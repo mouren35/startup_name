@@ -21,7 +21,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
   List queryData = [];
 
   void chushihua() async {
-    final queryData = await handler.queryNote();
+    final queryData = await handler.getNote();
     setState(() {
       dataList = queryData;
     });
@@ -37,7 +37,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
   void initState() {
     super.initState();
     chushihua();
-    handler.initializeDB().whenComplete(() async {
+    handler.init().whenComplete(() async {
       setState(() {
         dataList = queryData;
       });
@@ -64,7 +64,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
               child: Column(
                 children: [
                   FutureBuilder(
-                    future: handler.queryNote(),
+                    future: handler.getNote(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<NoteModel>> snapshot) {
                       List<Widget> children;
@@ -109,7 +109,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
                   ),
                   showAnswer
                       ? FutureBuilder(
-                          future: handler.queryNote(),
+                          future: handler.getNote(),
                           builder: (BuildContext context,
                               AsyncSnapshot<List<NoteModel>> snapshot) {
                             List<Widget> children;
