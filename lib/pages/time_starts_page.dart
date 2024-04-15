@@ -19,7 +19,7 @@ class _TimeStartPageState extends State<TimeStartPage>
   late TaskDB thingItem;
 
   Future<List<dynamic>> chushihua() async {
-    return (await thingItem.retrieveThings());
+    return (await thingItem.queryTask());
   }
 
   @override
@@ -32,7 +32,7 @@ class _TimeStartPageState extends State<TimeStartPage>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: thingItem.retrieveThings(),
+      future: thingItem.queryTask(),
       builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
         List<Widget> children;
         if (snapshot.hasData) {

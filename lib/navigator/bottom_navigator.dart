@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/pages/home_page.dart';
 
-import '../pages/home_page.dart';
 import '../pages/tasks_list_page.dart';
 
 class BottomNavigator extends StatefulWidget {

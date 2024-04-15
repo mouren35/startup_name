@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/pages/add_note_page.dart';
 
 import '../db/note_db.dart';
-import '../db/task_db.dart';
 import '../model/note_model.dart';
-import '../model/task_model.dart';
-import 'add_task_page.dart';
-import 'note_list_page.dart';
-import 'start_review.dart';
-import 'tasks_list_page.dart';
+import 'note_detail_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,158 +12,86 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  NoteDb handler = NoteDb();
-  TaskDB thingsItem = TaskDB();
-  List dataList = [];
-  List queryData = [];
-
-  Future<List<dynamic>> chushihua() async {
-    queryData = await handler.retrieveQuestions();
-    return (await handler.retrieveQuestions());
-  }
+  late NoteDb handler;
 
   @override
   void initState() {
     super.initState();
-    chushihua();
+    handler = NoteDb();
+    handler.initializeDB().whenComplete(() async {
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "首页",
-        ),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('首页')),
       body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                FutureBuilder(
-                  future: handler.retrieveQuestions(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<NoteModel>> snapshot) {
-                    List<Widget> children;
-                    if (snapshot.hasData) {
-                      children = <Widget>[
-                        Badge(
-                          label: Text(
-                            snapshot.data!.length.toString(),
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Expanded(
+            child: SizedBox(
+              child: FutureBuilder(
+                future: handler.queryNote(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<NoteModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Dismissible(
+                          direction: DismissDirection.endToStart,
+                          background: Container(
+                            color: Colors.red,
+                            alignment: Alignment.centerRight,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: const Icon(Icons.delete_forever),
                           ),
-                          child: ListTile(
-                            title: const Text('知识点'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: const Icon(Icons.add_circle_outline),
-                                  onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const AddNotePage(),
-                                    ),
-                                  ),
-                                ),
-                                snapshot.data!.isNotEmpty
-                                    ? IconButton(
-                                        onPressed: () => Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const StartReviewPage())),
-                                        icon: const Icon(Icons.play_arrow),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const NoteListPage(),
-                                ),
-                              );
-                            },
+                          key: UniqueKey(),
+                          onDismissed: (DismissDirection direction) async {
+                            await handler.deleteNote(snapshot.data![index].id!);
+                            SnackBar snackbar = SnackBar(
+                              content: const Text('已删除'),
+                              action: SnackBarAction(
+                                label: '撤销',
+                                onPressed: () {
+                                  setState(() {
+                                    handler.insertNote(snapshot.data![index]);
+                                  });
+                                },
+                              ),
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                            await handler.deleteNote(snapshot.data![index].id!);
+                          },
+                          child: Column(
+                            children: [
+                              ListTile(
+                                onTap: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: ((context) =>
+                                          const NoteDetailPage())));
+                                },
+                                title: Text(snapshot.data![index].title),
+                                subtitle: Text(snapshot.data![index].answer),
+                              ),
+                            ],
                           ),
-                        ),
-                      ];
-                    } else if (snapshot.hasError) {
-                      children = <Widget>[
-                        const Text('Error'),
-                      ];
-                    } else {
-                      children = <Widget>[
-                        const SizedBox(
-                          child: CircularProgressIndicator(),
-                        )
-                      ];
-                    }
-                    return Center(
-                      child: Column(
-                        children: children,
-                      ),
+                        );
+                      },
                     );
-                  },
-                ),
-                FutureBuilder(
-                  future: thingsItem.retrieveThings(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<TaskModel>> snapshot) {
-                    List<Widget> children = [];
-                    if (snapshot.hasData) {
-                      children = <Widget>[
-                        Badge(
-                          label: Text(
-                            snapshot.data!.length.toString(),
-                          ),
-                          child: ListTile(
-                            title: const Text('事项'),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                IconButton(
-                                  icon: const Icon(Icons.add_circle_outline),
-                                  onPressed: () => Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => const AddTaskPage(),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const TaskListPage(),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ];
-                    } else if (snapshot.hasError) {
-                      children = <Widget>[
-                        Text('$snapshot'),
-                      ];
-                    } else {
-                      children = <Widget>[
-                        const SizedBox(
-                          child: CircularProgressIndicator(),
-                        )
-                      ];
-                    }
-                    return Center(
-                      child: Column(
-                        children: children,
-                      ),
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  },
-                ),
-              ],
+                  }
+                },
+              ),
             ),
           ),
-          Expanded(child: Container()),
         ],
       ),
     );

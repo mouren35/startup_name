@@ -27,12 +27,12 @@ class TaskModel {
 
   Map<String, Object?> toMap() {
     return {
-      TaskDB.columnId: id,
-      TaskDB.columnTitle: title,
-      TaskDB.columnNote: note,
-      TaskDB.columnSteps: steps,
-      TaskDB.columnTasktime: taskTime,
-      TaskDB.columnTaskStatus: taskStatus,
+      TaskDB.id: id,
+      TaskDB.title: title,
+      TaskDB.note: note,
+      TaskDB.steps: steps,
+      TaskDB.taskTime: taskTime,
+      TaskDB.taskStatus: taskStatus,
     };
   }
 }

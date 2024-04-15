@@ -212,14 +212,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     time,
   ) async {
     Map<String, dynamic> row = {
-      TaskDB.columnTitle: title,
-      TaskDB.columnNote: note,
-      TaskDB.columnSteps: steps,
-      TaskDB.columnTasktime: time
+      TaskDB.title: title,
+      TaskDB.note: note,
+      TaskDB.steps: steps,
+      TaskDB.taskTime: time
     };
 
     TaskModel thing = TaskModel.fromMap(row);
-    await thingsItem.insertThing(thing);
+    await thingsItem.insertTask(thing);
     _showMessageInScaffold('添加成功');
   }
 }

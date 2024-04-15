@@ -3,46 +3,46 @@ import 'package:sqflite/sqflite.dart';
 import 'package:startup_namer/model/task_model.dart';
 
 class TaskDB {
-  static const columnId = 'id';
-  static const columnTitle = 'title';
-  static const columnNote = 'note';
-  static const columnSteps = 'steps';
-  static const columnTasktime = 'time';
-  static const columnTaskStatus = 'taskStatus';
+  static const id = 'id';
+  static const title = 'title';
+  static const note = 'note';
+  static const steps = 'steps';
+  static const taskTime = 'time';
+  static const taskStatus = 'taskStatus';
 
   Future<Database> initializeDB() async {
     String path = await getDatabasesPath();
     return openDatabase(
-      join(path, 'things.db'),
+      join(path, 'task.db'),
       onCreate: (database, version) async {
         await database.execute(
-          'CREATE TABLE things($columnId INTEGER PRIMARY KEY AUTOINCREMENT,$columnTitle TEXT NOT NULL,$columnNote TEXT NOT NULL,$columnSteps TEXT NOT NULL,$columnTasktime TEXT NOT NULL,$columnTaskStatus INTEGER)',
+          'CREATE TABLE task($id INTEGER PRIMARY KEY AUTOINCREMENT,$title TEXT NOT NULL,$note TEXT NOT NULL,$steps TEXT NOT NULL,$taskTime TEXT NOT NULL,$taskStatus INTEGER)',
         );
       },
       version: 1,
     );
   }
 
-  Future<int> insertThing(TaskModel thing) async {
+  Future<int> insertTask(TaskModel task) async {
     Database db = await initializeDB();
-    return await db.insert('things', thing.toMap());
+    return await db.insert('task', task.toMap());
   }
 
-  Future<List<TaskModel>> retrieveThings() async {
+  Future<List<TaskModel>> queryTask() async {
     final Database db = await initializeDB();
-    final List<Map<String, Object?>> queryResult = await db.query('things');
+    final List<Map<String, Object?>> queryResult = await db.query('task');
     return queryResult.map((e) => TaskModel.fromMap(e)).toList();
   }
 
   changeState() async {
     Database db = await initializeDB();
-    db.update('things', {columnTaskStatus: 1});
+    db.update('task', {taskStatus: 1});
   }
 
   Future<void> deleteThing(int id) async {
     final db = await initializeDB();
     await db.delete(
-      'things',
+      'task',
       where: "id = ?",
       whereArgs: [id],
     );
@@ -51,7 +51,7 @@ class TaskDB {
   Future<void> updateThing(TaskModel thing) async {
     final db = await initializeDB();
     await db.update(
-      'things',
+      'task',
       thing.toMap(),
       where: 'id = ?',
       whereArgs: [thing.id],

@@ -27,15 +27,7 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: const Text('事项'),
-      ),
+      appBar: AppBar(title: const Text('事项')),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -52,7 +44,7 @@ class _TaskListPageState extends State<TaskListPage> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: thingItem.retrieveThings(),
+                future: thingItem.queryTask(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {
@@ -77,8 +69,7 @@ class _TaskListPageState extends State<TaskListPage> {
                                 label: '撤销',
                                 onPressed: () {
                                   setState(() {
-                                    thingItem
-                                        .insertThing(snapshot.data![index]);
+                                    thingItem.insertTask(snapshot.data![index]);
                                   });
                                 },
                               ),
@@ -149,7 +140,7 @@ class _TaskListPageState extends State<TaskListPage> {
           Expanded(
             child: SizedBox(
               child: FutureBuilder(
-                future: thingItem.retrieveThings(),
+                future: thingItem.queryTask(),
                 builder: (BuildContext context,
                     AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {

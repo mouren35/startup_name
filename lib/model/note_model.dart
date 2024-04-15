@@ -18,9 +18,9 @@ class NoteModel {
 
   Map<String, Object?> toMap() {
     return {
-      NoteDb.columnId: id,
-      NoteDb.columnTitle: title,
-      NoteDb.columnAnswer: answer,
+      NoteDb.id: id,
+      NoteDb.title: title,
+      NoteDb.answer: answer,
     };
   }
 }

@@ -38,10 +38,6 @@ class _AddNotePageState extends State<AddNotePage> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
         actions: [
           TextButton(
             onPressed: () {

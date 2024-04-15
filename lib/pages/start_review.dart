@@ -21,7 +21,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
   List queryData = [];
 
   void chushihua() async {
-    final queryData = await handler.retrieveQuestions();
+    final queryData = await handler.queryNote();
     setState(() {
       dataList = queryData;
     });
@@ -29,7 +29,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
 
   void downShowAgain(bool knowAnswer, int global) {
     if (knowAnswer) {
-      handler.deleteQuestion(global);
+      handler.deleteNote(global);
     }
   }
 
@@ -48,10 +48,6 @@ class _StartReviewPageState extends State<StartReviewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text('复习'),
         actions: [
           IconButton(
@@ -68,7 +64,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
               child: Column(
                 children: [
                   FutureBuilder(
-                    future: handler.retrieveQuestions(),
+                    future: handler.queryNote(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<NoteModel>> snapshot) {
                       List<Widget> children;
@@ -113,7 +109,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
                   ),
                   showAnswer
                       ? FutureBuilder(
-                          future: handler.retrieveQuestions(),
+                          future: handler.queryNote(),
                           builder: (BuildContext context,
                               AsyncSnapshot<List<NoteModel>> snapshot) {
                             List<Widget> children;
