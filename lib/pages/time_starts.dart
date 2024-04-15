@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/things.dart';
-import 'package:startup_namer/Database/things_helper.dart';
+
+import '../model/things.dart';
+import '../model/things_helper.dart';
 import 'countdown_timer.dart';
 
 var pauseTime;

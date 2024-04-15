@@ -1,6 +1,6 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:startup_namer/Database/questions.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:startup_namer/model/questions.dart';
 
 class DatabaseHandler {
   static const columnId = 'id';

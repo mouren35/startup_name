@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/question_helper.dart';
-import 'package:startup_namer/Database/questions.dart';
+
+import '../model/question_helper.dart';
+import '../model/questions.dart';
 
 class StartReviewing extends StatelessWidget {
   const StartReviewing({Key? key}) : super(key: key);

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/things.dart';
-import 'package:startup_namer/Database/things_helper.dart';
-import 'package:startup_namer/view/task_details.dart';
+import 'package:startup_namer/pages/task_details.dart';
+
+import '../model/things.dart';
+import '../model/things_helper.dart';
 import 'time_starts.dart';
 
 String currentTime = '';
@@ -49,8 +50,8 @@ class _ItemsState extends State<Items> {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          const Stack(
-            children: [
+          Stack(
+            children: const [
               ListTile(
                 title: Text(
                   '未完成',
@@ -146,8 +147,8 @@ class _ItemsState extends State<Items> {
               ),
             ),
           ),
-          const Stack(
-            children: [
+          Stack(
+            children: const [
               ListTile(
                 title: Text(
                   '已完成',

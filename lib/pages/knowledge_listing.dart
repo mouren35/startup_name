@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/question_helper.dart';
-import 'package:startup_namer/Database/questions.dart';
-import 'package:startup_namer/view/knowledge_details.dart';
+
+import '../model/question_helper.dart';
+import '../model/questions.dart';
+import 'knowledge_details.dart';
 
 class KnowledgeListing extends StatelessWidget {
   const KnowledgeListing({Key? key}) : super(key: key);

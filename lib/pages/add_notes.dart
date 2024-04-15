@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/question_helper.dart';
+
+import '../model/question_helper.dart';
 
 class AddNotes extends StatelessWidget {
   const AddNotes({Key? key}) : super(key: key);

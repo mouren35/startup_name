@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:simple_timer/simple_timer.dart';
-import 'package:startup_namer/Database/things_helper.dart';
+
+import '../model/things_helper.dart';
 
 class CitcleCount extends StatelessWidget {
   const CitcleCount({Key? key}) : super(key: key);

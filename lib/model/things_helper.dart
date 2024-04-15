@@ -1,6 +1,6 @@
-import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:startup_namer/Database/things.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:startup_namer/model/things.dart';
 
 class ThingsHandler {
   static const columnId = 'id';

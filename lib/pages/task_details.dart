@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/things.dart';
-import 'package:startup_namer/Database/things_helper.dart';
+
+import '../model/things.dart';
+import '../model/things_helper.dart';
 import 'add_tasks.dart';
 
 class TaskDetails extends StatelessWidget {
@@ -64,9 +65,9 @@ class _TaskDetailState extends State<TaskDetail> {
                         ],
                       ),
                     ),
-                    const Card(
+                    Card(
                       child: Column(
-                        children: [
+                        children: const [
                           TextField(),
                           TextField(),
                         ],

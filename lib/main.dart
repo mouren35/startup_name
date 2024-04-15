@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/Database/things.dart';
-import 'package:startup_namer/Database/things_helper.dart';
-import 'package:startup_namer/view/add_notes.dart';
-import 'package:startup_namer/view/add_tasks.dart';
-import 'package:startup_namer/view/items_list.dart';
-import 'package:startup_namer/view/knowledge_listing.dart';
-import 'package:startup_namer/view/start_review.dart';
-import 'Database/question_helper.dart';
-import 'Database/questions.dart';
+
+import 'model/question_helper.dart';
+import 'model/questions.dart';
+import 'model/things.dart';
+import 'model/things_helper.dart';
+import 'pages/add_notes.dart';
+import 'pages/add_tasks.dart';
+import 'pages/items_list.dart';
+import 'pages/knowledge_listing.dart';
+import 'pages/start_review.dart';
 
 void main(List<String> args) {
   runApp(const KnowledgeTime());
