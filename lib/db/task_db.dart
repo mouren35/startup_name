@@ -1,8 +1,8 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:startup_namer/model/things.dart';
+import 'package:startup_namer/model/task_model.dart';
 
-class ThingsHandler {
+class TaskDB {
   static const columnId = 'id';
   static const columnTitle = 'title';
   static const columnNote = 'note';
@@ -23,15 +23,15 @@ class ThingsHandler {
     );
   }
 
-  Future<int> insertThing(Things thing) async {
+  Future<int> insertThing(TaskModel thing) async {
     Database db = await initializeDB();
     return await db.insert('things', thing.toMap());
   }
 
-  Future<List<Things>> retrieveThings() async {
+  Future<List<TaskModel>> retrieveThings() async {
     final Database db = await initializeDB();
     final List<Map<String, Object?>> queryResult = await db.query('things');
-    return queryResult.map((e) => Things.fromMap(e)).toList();
+    return queryResult.map((e) => TaskModel.fromMap(e)).toList();
   }
 
   changeState() async {
@@ -48,7 +48,7 @@ class ThingsHandler {
     );
   }
 
-  Future<void> updateThing(Things thing) async {
+  Future<void> updateThing(TaskModel thing) async {
     final db = await initializeDB();
     await db.update(
       'things',

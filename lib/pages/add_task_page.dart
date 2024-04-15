@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../model/things.dart';
-import '../model/things_helper.dart';
+import '../db/task_db.dart';
+import '../model/task_model.dart';
 
 int timeValue = 0;
 
-class AddTasks extends StatelessWidget {
-  const AddTasks({Key? key}) : super(key: key);
+class AddTaskPage extends StatefulWidget {
+  const AddTaskPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: AddTaskForm(),
-    );
-  }
+  State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class AddTaskForm extends StatefulWidget {
-  const AddTaskForm({Key? key}) : super(key: key);
-
-  @override
-  State<AddTaskForm> createState() => _AddTaskFormState();
-}
-
-class _AddTaskFormState extends State<AddTaskForm> {
-  late ThingsHandler thingsItem;
+class _AddTaskPageState extends State<AddTaskPage> {
+  late TaskDB thingsItem;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController noteController = TextEditingController();
@@ -41,7 +30,7 @@ class _AddTaskFormState extends State<AddTaskForm> {
   @override
   void initState() {
     super.initState();
-    thingsItem = ThingsHandler();
+    thingsItem = TaskDB();
   }
 
   @override
@@ -223,13 +212,13 @@ class _AddTaskFormState extends State<AddTaskForm> {
     time,
   ) async {
     Map<String, dynamic> row = {
-      ThingsHandler.columnTitle: title,
-      ThingsHandler.columnNote: note,
-      ThingsHandler.columnSteps: steps,
-      ThingsHandler.columnTasktime: time
+      TaskDB.columnTitle: title,
+      TaskDB.columnNote: note,
+      TaskDB.columnSteps: steps,
+      TaskDB.columnTasktime: time
     };
 
-    Things thing = Things.fromMap(row);
+    TaskModel thing = TaskModel.fromMap(row);
     await thingsItem.insertThing(thing);
     _showMessageInScaffold('添加成功');
   }

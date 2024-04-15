@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../model/question_helper.dart';
-import '../model/questions.dart';
+import '../db/note_db.dart';
+import '../model/note_model.dart';
 
-class StartReviewing extends StatelessWidget {
-  const StartReviewing({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class StartReviewPage extends StatefulWidget {
+  const StartReviewPage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<StartReviewPage> createState() => _StartReviewPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _StartReviewPageState extends State<StartReviewPage> {
   int i = 0;
   bool showAnswer = false;
 
   bool knowAnswer = false;
   int? global;
-  DatabaseHandler handler = DatabaseHandler();
+  NoteDb handler = NoteDb();
   List dataList = [];
   List queryData = [];
 
@@ -81,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   FutureBuilder(
                     future: handler.retrieveQuestions(),
                     builder: (BuildContext context,
-                        AsyncSnapshot<List<Question>> snapshot) {
+                        AsyncSnapshot<List<NoteModel>> snapshot) {
                       List<Widget> children;
                       if (snapshot.hasData) {
                         children = i < dataList.length
@@ -126,7 +115,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       ? FutureBuilder(
                           future: handler.retrieveQuestions(),
                           builder: (BuildContext context,
-                              AsyncSnapshot<List<Question>> snapshot) {
+                              AsyncSnapshot<List<NoteModel>> snapshot) {
                             List<Widget> children;
 
                             if (snapshot.hasData) {

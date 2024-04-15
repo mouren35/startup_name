@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/pages/tasks_list.dart';
 
 import '../pages/home_page.dart';
+import '../pages/tasks_list_page.dart';
 
 class BottomNavigator extends StatefulWidget {
   const BottomNavigator({super.key});
@@ -26,7 +26,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           });
         },
         physics: const NeverScrollableScrollPhysics(),
-        children: const [HomePage(), TaskList()],
+        children: const [HomePage(), TaskListPage()],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _currentIndex,

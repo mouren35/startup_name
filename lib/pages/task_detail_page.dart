@@ -1,42 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../model/things.dart';
-import '../model/things_helper.dart';
-import 'add_tasks.dart';
+import '../db/task_db.dart';
+import '../model/task_model.dart';
+import 'add_task_page.dart';
 
-class TaskDetails extends StatelessWidget {
-  const TaskDetails({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: const TaskDetail(),
-    );
-  }
-}
-
-class TaskDetail extends StatefulWidget {
-  const TaskDetail({Key? key}) : super(key: key);
+class TaskDetailPage extends StatefulWidget {
+  const TaskDetailPage({Key? key}) : super(key: key);
 
   @override
-  State<TaskDetail> createState() => _TaskDetailState();
+  State<TaskDetailPage> createState() => _TaskDetailPageState();
 }
 
-class _TaskDetailState extends State<TaskDetail> {
-  late ThingsHandler thingItem;
+class _TaskDetailPageState extends State<TaskDetailPage> {
+  late TaskDB thingItem;
 
   @override
   void initState() {
     super.initState();
-    thingItem = ThingsHandler();
+    thingItem = TaskDB();
   }
 
   @override
@@ -44,7 +25,8 @@ class _TaskDetailState extends State<TaskDetail> {
     return Scaffold(
       body: FutureBuilder(
         future: thingItem.retrieveThings(),
-        builder: (BuildContext context, AsyncSnapshot<List<Things>> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
               itemCount: 1,

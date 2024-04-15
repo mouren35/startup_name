@@ -3,29 +3,18 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:simple_timer/simple_timer.dart';
 
-import '../model/things_helper.dart';
+import '../db/task_db.dart';
 
-class CitcleCount extends StatelessWidget {
-  const CitcleCount({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: CitcleCountTimer(title: 'Simple Timer Widget Demo'),
-    );
-  }
-}
-
-class CitcleCountTimer extends StatefulWidget {
-  const CitcleCountTimer({Key? key, required this.title}) : super(key: key);
+class CitcleCount extends StatefulWidget {
+  const CitcleCount({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _CitcleCountTimerState createState() => _CitcleCountTimerState();
+  _CitcleCountState createState() => _CitcleCountState();
 }
 
-class _CitcleCountTimerState extends State<CitcleCountTimer>
+class _CitcleCountState extends State<CitcleCount>
     with SingleTickerProviderStateMixin {
   late TimerController _timerController;
   final TimerProgressIndicatorDirection _progressIndicatorDirection =
@@ -33,11 +22,11 @@ class _CitcleCountTimerState extends State<CitcleCountTimer>
   final TimerProgressTextCountDirection _progressTextCountDirection =
       TimerProgressTextCountDirection.count_down;
 
-  late ThingsHandler thingsItem;
+  late TaskDB thingsItem;
 
   @override
   void initState() {
-    thingsItem = ThingsHandler();
+    thingsItem = TaskDB();
 
     _timerController = TimerController(this);
     super.initState();

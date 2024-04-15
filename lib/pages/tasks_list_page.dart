@@ -1,38 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/pages/task_details.dart';
+import 'package:startup_namer/pages/task_detail_page.dart';
 
-import '../model/things.dart';
-import '../model/things_helper.dart';
-import 'time_starts.dart';
+import '../db/task_db.dart';
+import '../model/task_model.dart';
+import 'time_starts_page.dart';
 
 String currentTime = '';
 var nowTime;
 
-class TaskList extends StatelessWidget {
-  const TaskList({Key? key}) : super(key: key);
+class TaskListPage extends StatefulWidget {
+  const TaskListPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Items(),
-    );
-  }
+  State<TaskListPage> createState() => _TaskListPageState();
 }
 
-class Items extends StatefulWidget {
-  const Items({Key? key}) : super(key: key);
-
-  @override
-  State<Items> createState() => _ItemsState();
-}
-
-class _ItemsState extends State<Items> {
-  late ThingsHandler thingItem;
+class _TaskListPageState extends State<TaskListPage> {
+  late TaskDB thingItem;
 
   @override
   void initState() {
     super.initState();
-    thingItem = ThingsHandler();
+    thingItem = TaskDB();
   }
 
   @override
@@ -65,7 +54,7 @@ class _ItemsState extends State<Items> {
               child: FutureBuilder(
                 future: thingItem.retrieveThings(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Things>> snapshot) {
+                    AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
@@ -117,7 +106,7 @@ class _ItemsState extends State<Items> {
                                             currentTime =
                                                 snapshot.data![index].taskTime;
 
-                                            return const TimeStarts();
+                                            return TimeStartPage();
                                           },
                                         ),
                                       );
@@ -127,7 +116,7 @@ class _ItemsState extends State<Items> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const TaskDetails(),
+                                            const TaskDetailPage(),
                                       ),
                                     );
                                   },
@@ -162,7 +151,7 @@ class _ItemsState extends State<Items> {
               child: FutureBuilder(
                 future: thingItem.retrieveThings(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Things>> snapshot) {
+                    AsyncSnapshot<List<TaskModel>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: 1,
@@ -176,7 +165,7 @@ class _ItemsState extends State<Items> {
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => const TimeStarts(),
+                                    builder: (context) => const TimeStartPage(),
                                   ),
                                 );
                               },

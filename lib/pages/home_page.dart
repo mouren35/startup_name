@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:startup_namer/pages/add_note_page.dart';
 
-import '../model/question_helper.dart';
-import '../model/questions.dart';
-import '../model/things.dart';
-import '../model/things_helper.dart';
-import 'add_notes.dart';
-import 'add_tasks.dart';
-import 'tasks_list.dart';
-import 'knowledge_listing.dart';
+import '../db/note_db.dart';
+import '../db/task_db.dart';
+import '../model/note_model.dart';
+import '../model/task_model.dart';
+import 'add_task_page.dart';
+import 'note_list_page.dart';
 import 'start_review.dart';
+import 'tasks_list_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,8 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  DatabaseHandler handler = DatabaseHandler();
-  ThingsHandler thingsItem = ThingsHandler();
+  NoteDb handler = NoteDb();
+  TaskDB thingsItem = TaskDB();
   List dataList = [];
   List queryData = [];
 
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                 FutureBuilder(
                   future: handler.retrieveQuestions(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<Question>> snapshot) {
+                      AsyncSnapshot<List<NoteModel>> snapshot) {
                     List<Widget> children;
                     if (snapshot.hasData) {
                       children = <Widget>[
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                                   icon: const Icon(Icons.add_circle_outline),
                                   onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const AddNotes(),
+                                      builder: (context) => const AddNotePage(),
                                     ),
                                   ),
                                 ),
@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> {
                                         onPressed: () => Navigator.of(context)
                                             .push(MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const StartReviewing())),
+                                                    const StartReviewPage())),
                                         icon: const Icon(Icons.play_arrow),
                                       )
                                     : Container(),
@@ -87,8 +87,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const KnowledgeListing(),
+                                  builder: (context) => const NoteListPage(),
                                 ),
                               );
                             },
@@ -116,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                 FutureBuilder(
                   future: thingsItem.retrieveThings(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<Things>> snapshot) {
+                      AsyncSnapshot<List<TaskModel>> snapshot) {
                     List<Widget> children = [];
                     if (snapshot.hasData) {
                       children = <Widget>[
@@ -133,7 +132,7 @@ class _HomePageState extends State<HomePage> {
                                   icon: const Icon(Icons.add_circle_outline),
                                   onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
-                                      builder: (context) => const AddTasks(),
+                                      builder: (context) => const AddTaskPage(),
                                     ),
                                   ),
                                 ),
@@ -142,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => const TaskList(),
+                                  builder: (context) => const TaskListPage(),
                                 ),
                               );
                             },

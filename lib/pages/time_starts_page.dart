@@ -1,40 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../model/things.dart';
-import '../model/things_helper.dart';
+import '../db/task_db.dart';
+import '../model/task_model.dart';
 import 'countdown_timer.dart';
 
 var pauseTime;
-late Things thing1;
+late TaskModel thing1;
 
-class TimeStarts extends StatelessWidget {
-  const TimeStarts({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        title: const Text('计时'),
-      ),
-      body: const CircleTime(),
-    );
-  }
-}
-
-class CircleTime extends StatefulWidget {
-  const CircleTime({Key? key}) : super(key: key);
+class TimeStartPage extends StatefulWidget {
+  const TimeStartPage({Key? key}) : super(key: key);
 
   @override
-  State<CircleTime> createState() => _CircleTimeState();
+  State<TimeStartPage> createState() => _TimeStartPageState();
 }
 
-class _CircleTimeState extends State<CircleTime>
+class _TimeStartPageState extends State<TimeStartPage>
     with SingleTickerProviderStateMixin {
-  late ThingsHandler thingItem;
+  late TaskDB thingItem;
 
   Future<List<dynamic>> chushihua() async {
     return (await thingItem.retrieveThings());
@@ -42,7 +24,7 @@ class _CircleTimeState extends State<CircleTime>
 
   @override
   void initState() {
-    thingItem = ThingsHandler();
+    thingItem = TaskDB();
     super.initState();
     chushihua();
   }
@@ -51,12 +33,14 @@ class _CircleTimeState extends State<CircleTime>
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: thingItem.retrieveThings(),
-      builder: (BuildContext context, AsyncSnapshot<List<Things>> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<TaskModel>> snapshot) {
         List<Widget> children;
         if (snapshot.hasData) {
           children = [
             const Expanded(
-              child: CitcleCount(),
+              child: CitcleCount(
+                title: '',
+              ),
             ),
             Expanded(child: Container()),
           ];

@@ -1,6 +1,6 @@
-import 'things_helper.dart';
+import '../db/task_db.dart';
 
-class Things {
+class TaskModel {
   final int? id;
   final String title;
   final String note;
@@ -8,7 +8,7 @@ class Things {
   final String taskTime;
   int? taskStatus;
 
-  Things({
+  TaskModel({
     this.id,
     required this.title,
     required this.note,
@@ -17,7 +17,7 @@ class Things {
     this.taskStatus = 0,
   });
 
-  Things.fromMap(Map<String, dynamic> res)
+  TaskModel.fromMap(Map<String, dynamic> res)
       : id = res["id"],
         title = res["title"],
         note = res['note'],
@@ -27,12 +27,12 @@ class Things {
 
   Map<String, Object?> toMap() {
     return {
-      ThingsHandler.columnId: id,
-      ThingsHandler.columnTitle: title,
-      ThingsHandler.columnNote: note,
-      ThingsHandler.columnSteps: steps,
-      ThingsHandler.columnTasktime: taskTime,
-      ThingsHandler.columnTaskStatus: taskStatus,
+      TaskDB.columnId: id,
+      TaskDB.columnTitle: title,
+      TaskDB.columnNote: note,
+      TaskDB.columnSteps: steps,
+      TaskDB.columnTasktime: taskTime,
+      TaskDB.columnTaskStatus: taskStatus,
     };
   }
 }

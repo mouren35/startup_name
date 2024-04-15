@@ -1,34 +1,23 @@
 import 'package:flutter/material.dart';
 
-import '../model/question_helper.dart';
-import '../model/questions.dart';
-import 'knowledge_details.dart';
+import '../db/note_db.dart';
+import '../model/note_model.dart';
+import 'note_detail_page.dart';
 
-class KnowledgeListing extends StatelessWidget {
-  const KnowledgeListing({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: ShowKnowledge(),
-    );
-  }
-}
-
-class ShowKnowledge extends StatefulWidget {
-  const ShowKnowledge({Key? key}) : super(key: key);
+class NoteListPage extends StatefulWidget {
+  const NoteListPage({Key? key}) : super(key: key);
 
   @override
-  State<ShowKnowledge> createState() => _ShowKnowledgeState();
+  State<NoteListPage> createState() => _NoteListPageState();
 }
 
-class _ShowKnowledgeState extends State<ShowKnowledge> {
-  late DatabaseHandler handler;
+class _NoteListPageState extends State<NoteListPage> {
+  late NoteDb handler;
 
   @override
   void initState() {
     super.initState();
-    handler = DatabaseHandler();
+    handler = NoteDb();
     handler.initializeDB().whenComplete(() async {
       setState(() {});
     });
@@ -55,7 +44,7 @@ class _ShowKnowledgeState extends State<ShowKnowledge> {
               child: FutureBuilder(
                 future: handler.retrieveQuestions(),
                 builder: (BuildContext context,
-                    AsyncSnapshot<List<Question>> snapshot) {
+                    AsyncSnapshot<List<NoteModel>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
                       itemCount: snapshot.data?.length,
@@ -96,7 +85,7 @@ class _ShowKnowledgeState extends State<ShowKnowledge> {
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: ((context) =>
-                                          const KnowledgeDetails())));
+                                          const NoteDetailPage())));
                                 },
                                 title: Text(snapshot.data![index].title),
                                 subtitle: Text(snapshot.data![index].answer),

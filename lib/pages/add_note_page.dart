@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../model/question_helper.dart';
+import '../db/note_db.dart';
 
-class AddNotes extends StatelessWidget {
-  const AddNotes({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: AddNotesForm(),
-    );
-  }
-}
-
-class AddNotesForm extends StatefulWidget {
-  const AddNotesForm({Key? key}) : super(key: key);
+class AddNotePage extends StatefulWidget {
+  const AddNotePage({Key? key}) : super(key: key);
 
   @override
-  State<AddNotesForm> createState() => _AddNotesFormState();
+  State<AddNotePage> createState() => _AddNotePageState();
 }
 
-class _AddNotesFormState extends State<AddNotesForm> {
-  late DatabaseHandler handler;
+class _AddNotePageState extends State<AddNotePage> {
+  late NoteDb handler;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController answerController = TextEditingController();
@@ -37,7 +26,7 @@ class _AddNotesFormState extends State<AddNotesForm> {
   @override
   void initState() {
     super.initState();
-    handler = DatabaseHandler();
+    handler = NoteDb();
     handler.initializeDB().whenComplete(() async {
       setState(() {});
     });

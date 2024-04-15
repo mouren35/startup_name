@@ -1,26 +1,26 @@
-import 'question_helper.dart';
+import '../db/note_db.dart';
 
-class Question {
+class NoteModel {
   final int? id;
   final String title;
   final String answer;
 
-  Question({
+  NoteModel({
     this.id,
     required this.title,
     required this.answer,
   });
 
-  Question.fromMap(Map<String, dynamic> res)
+  NoteModel.fromMap(Map<String, dynamic> res)
       : id = res["id"],
         title = res["title"],
         answer = res["answer"];
 
   Map<String, Object?> toMap() {
     return {
-      DatabaseHandler.columnId: id,
-      DatabaseHandler.columnTitle: title,
-      DatabaseHandler.columnAnswer: answer,
+      NoteDb.columnId: id,
+      NoteDb.columnTitle: title,
+      NoteDb.columnAnswer: answer,
     };
   }
 }
