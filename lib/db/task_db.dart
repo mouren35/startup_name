@@ -26,8 +26,8 @@ class TaskDB extends ChangeNotifier {
     );
   }
 
-  Future<void> addTask(TaskModel task) async {
-    await _db.insert('task', task.toMap());
+  Future<void> addTask(TaskModel taskModel) async {
+    await _db.insert('task', taskModel.toMap());
     notifyListeners();
   }
 
@@ -45,12 +45,12 @@ class TaskDB extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTask(TaskModel thing) async {
+  Future<void> updateTask(TaskModel taskModel) async {
     await _db.update(
       'task',
-      thing.toMap(),
+      taskModel.toMap(),
       where: 'id = ?',
-      whereArgs: [thing.id],
+      whereArgs: [taskModel.id],
     );
     notifyListeners();
   }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/task_detail_page.dart';
+import 'package:startup_namer/util/navigator_util.dart';
+import 'package:startup_namer/widget/show_snack_bar.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
-import 'time_starts_page.dart';
+import 'timer_page.dart';
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({Key? key}) : super(key: key);
@@ -14,9 +16,6 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
-  late int currentTime;
-  late DateTime nowTime;
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
@@ -60,18 +59,12 @@ class _TaskListPageState extends State<TaskListPage> {
                         ),
                         onDismissed: (DismissDirection direction) async {
                           await provider.deleteThing(data[index].id!);
-                          SnackBar snackbar = SnackBar(
-                            content: const Text('已删除'),
-                            action: SnackBarAction(
-                              label: '撤销',
-                              onPressed: () {
-                                setState(() {
-                                  provider.addTask(data[index]);
-                                });
-                              },
-                            ),
+                          showSnackBar(
+                            context,
+                            '删除成功',
+                            '撤销',
+                            () => provider.addTask(data[index]),
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         },
                         key: UniqueKey(),
                         child: Column(
@@ -85,24 +78,20 @@ class _TaskListPageState extends State<TaskListPage> {
                                   trailing: IconButton(
                                     icon: const Icon(Icons.play_arrow),
                                     onPressed: () {
-                                      nowTime = DateTime.now();
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            currentTime = data[index].taskTime;
-
-                                            return const TimeStartPage();
-                                          },
+                                      NavigatorUtil.push(
+                                        context,
+                                        TimerPage(
+                                          title: data[index].title,
+                                          seconds: data[index].taskTime,
                                         ),
                                       );
                                     },
                                   ),
                                   onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (context) => TaskDetailPage(
-                                          timeValue: data[index].taskTime,
-                                        ),
+                                    NavigatorUtil.push(
+                                      context,
+                                      TaskDetailPage(
+                                        timeValue: data[index].taskTime,
                                       ),
                                     );
                                   },
@@ -138,22 +127,13 @@ class _TaskListPageState extends State<TaskListPage> {
                     itemCount: 1,
                     itemBuilder: (BuildContext context, int index) {
                       return Scrollbar(
-                          child: SingleChildScrollView(
-                        child: ListTile(
-                          title: const Text('事项2'),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.play_arrow),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => const TimeStartPage(),
-                                ),
-                              );
-                            },
+                        child: SingleChildScrollView(
+                          child: ListTile(
+                            title: const Text('事项2'),
+                            onTap: () {},
                           ),
-                          onTap: () {},
                         ),
-                      ));
+                      );
                     },
                   );
                 },

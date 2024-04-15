@@ -16,32 +16,14 @@ class _StartReviewPageState extends State<StartReviewPage> {
 
   bool knowAnswer = false;
   int? global;
-  NoteDb handler = NoteDb();
+  NoteDb noteDb = NoteDb();
   List dataList = [];
   List queryData = [];
 
-  void chushihua() async {
-    final queryData = await handler.getNote();
-    setState(() {
-      dataList = queryData;
-    });
-  }
-
-  void downShowAgain(bool knowAnswer, int global) {
+  void dontShowAgain(bool knowAnswer, int global) {
     if (knowAnswer) {
-      handler.deleteNote(global);
+      noteDb.deleteNote(global);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    chushihua();
-    handler.init().whenComplete(() async {
-      setState(() {
-        dataList = queryData;
-      });
-    });
   }
 
   @override
@@ -64,7 +46,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
               child: Column(
                 children: [
                   FutureBuilder(
-                    future: handler.getNote(),
+                    future: noteDb.getNote(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<NoteModel>> snapshot) {
                       List<Widget> children;
@@ -109,7 +91,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
                   ),
                   showAnswer
                       ? FutureBuilder(
-                          future: handler.getNote(),
+                          future: noteDb.getNote(),
                           builder: (BuildContext context,
                               AsyncSnapshot<List<NoteModel>> snapshot) {
                             List<Widget> children;
@@ -171,7 +153,7 @@ class _StartReviewPageState extends State<StartReviewPage> {
                             i++;
                             showAnswer = !showAnswer;
                             knowAnswer = !knowAnswer;
-                            downShowAgain(knowAnswer, global!);
+                            dontShowAgain(knowAnswer, global!);
                             knowAnswer = false;
                           });
                         },

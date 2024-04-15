@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/util/navigator_util.dart';
+import 'package:startup_namer/widget/show_snack_bar.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
@@ -30,7 +31,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (BuildContext context,
                     AsyncSnapshot<List<NoteModel>> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
 
                   if (snapshot.hasError) {
@@ -53,19 +54,12 @@ class _HomePageState extends State<HomePage> {
                         key: UniqueKey(),
                         onDismissed: (DismissDirection direction) async {
                           await provider.deleteNote(data[index].id!);
-                          SnackBar snackbar = SnackBar(
-                            content: const Text('已删除'),
-                            action: SnackBarAction(
-                              label: '撤销',
-                              onPressed: () {
-                                setState(() {
-                                  provider.addNote(data[index]);
-                                });
-                              },
-                            ),
+                          showSnackBar(
+                            context,
+                            '删除成功',
+                            '撤销',
+                            () => provider.addNote(data[index]),
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
-                          await provider.deleteNote(data[index].id!);
                         },
                         child: Column(
                           children: [

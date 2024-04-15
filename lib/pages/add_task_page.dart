@@ -1,5 +1,7 @@
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/widget/show_toast.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
@@ -16,116 +18,98 @@ class _AddTaskPageState extends State<AddTaskPage> {
   TextEditingController noteController = TextEditingController();
   TextEditingController stepsController = TextEditingController();
 
-  void _showMessageInScaffold(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    double timeValue = 0;
+    double time = 0;
     final formKey = GlobalKey<FormState>();
     final provider = Provider.of<TaskDB>(context);
 
-    Widget _buildslider = Slider(
-      min: 0,
-      value: timeValue,
-      max: 60,
-      divisions: 60,
-      onChanged: (newValue) {
-        setState(() => timeValue = newValue);
-      },
-      label: '$timeValue分钟',
-    );
-
+    Duration duration = Duration(seconds: 0);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Form(
-            key: formKey,
-            child: TextFormField(
-              minLines: 1,
-              maxLines: 2,
-              controller: titleController,
-              decoration: const InputDecoration(labelText: '在此添加事项标题'),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "标题输入不能为空";
-                }
-                return null;
-              },
-            ),
+          title: TextFormField(
+            minLines: 1,
+            maxLines: 2,
+            controller: titleController,
+            decoration: const InputDecoration(labelText: '在此添加事项标题'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "标题输入不能为空";
+              }
+              return null;
+            },
           ),
           bottom: const TabBar(tabs: [Tab(text: '步骤'), Tab(text: '笔记')]),
         ),
         body: TabBarView(
           children: [
-            Column(
-              children: [
-                TextField(
-                  keyboardType: TextInputType.multiline,
-                  minLines: 1,
-                  maxLines: 9,
-                  controller: noteController,
-                  cursorColor: Colors.black,
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    labelText: '在此添加事项步骤',
+            Padding(
+              padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
+              child: Column(
+                children: [
+                  TextField(
+                    keyboardType: TextInputType.multiline,
+                    minLines: 1,
+                    maxLines: 9,
+                    controller: noteController,
+                    cursorColor: Colors.black,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      labelText: '在此添加内容',
+                    ),
                   ),
-                ),
-                _buildslider,
-                Expanded(child: Container()),
-                Row(
-                  children: [
-                    Expanded(
-                      child: MaterialButton(
-                        child: const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text('添加'),
-                        ),
-                        onPressed: () {
-                          String title = titleController.text;
-                          String note = noteController.text;
-                          String steps = stepsController.text;
+                  DurationPicker(
+                    baseUnit: BaseUnit.minute,
+                    duration: duration,
+                    onChange: (val) {
+                      setState(() => duration = val);
+                    },
+                    snapToMins: 5.0,
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: MaterialButton(
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text('添加'),
+                          ),
+                          onPressed: () {
+                            String title = titleController.text;
+                            String note = noteController.text;
+                            String steps = stepsController.text;
 
-                          int currentTime = timeValue.floor();
-                          if (formKey.currentState!.validate() &&
-                              timeValue != 0) {
-                            provider.addTask(
-                              TaskModel(
-                                title: title,
-                                note: note,
-                                steps: steps,
-                                taskTime: currentTime,
-                              ),
-                            );
-                            titleController.clear();
-                            noteController.clear();
-                            stepsController.clear();
-                          } else {
-                            if (timeValue == 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('时间不能为0')),
+                            int currentTime = time.floor();
+                            if (formKey.currentState!.validate() && time != 0) {
+                              provider.addTask(
+                                TaskModel(
+                                  title: title,
+                                  note: note,
+                                  steps: steps,
+                                  taskTime: currentTime,
+                                ),
                               );
+                              titleController.clear();
+                              noteController.clear();
+                              stepsController.clear();
+                            } else {
+                              if (time == 0) {
+                                ShowToast().showToast(
+                                  msg: "时间不能为0",
+                                  backgroundColor: Colors.red,
+                                );
+                              }
                             }
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('添加失败')),
-                            );
-                          }
-                          timeValue = 0;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-              ],
+                            time = 0;
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             Column(
               children: [
@@ -139,7 +123,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     labelText: '在此添加笔记',
                   ),
                 ),
-                _buildslider,
+                // _buildslider,
                 Expanded(child: Container()),
                 Row(
                   children: [
@@ -154,10 +138,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           String note = noteController.text;
                           String steps = stepsController.text;
 
-                          int time1 = timeValue.floor();
+                          int time1 = time.floor();
 
-                          if (formKey.currentState!.validate() &&
-                              timeValue != 0) {
+                          if (formKey.currentState!.validate() && time != 0) {
                             provider.addTask(TaskModel(
                                 title: title,
                                 note: note,
@@ -167,16 +150,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             noteController.clear();
                             stepsController.clear();
                           } else {
-                            if (timeValue == 0) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('时间不能为0')),
+                            if (time == 0) {
+                              ShowToast().showToast(
+                                msg: "时间不能为0",
+                                backgroundColor: Colors.red,
                               );
                             }
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('添加失败')),
-                            );
                           }
-                          timeValue = 0;
+                          time = 0;
                         },
                       ),
                     )

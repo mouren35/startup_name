@@ -27,8 +27,8 @@ class NoteDb extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addNote(NoteModel note) async {
-    await _db.insert('note', note.toMap());
+  Future<void> addNote(NoteModel noteModel) async {
+    await _db.insert('note', noteModel.toMap());
     notifyListeners();
   }
 
@@ -46,12 +46,12 @@ class NoteDb extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> update(NoteModel note) async {
+  Future<void> update(NoteModel noteModel) async {
     await _db.update(
       'note',
-      note.toMap(),
+      noteModel.toMap(),
       where: 'id = ?',
-      whereArgs: [note.id],
+      whereArgs: [noteModel.id],
     );
     notifyListeners();
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/model/note_model.dart';
+import 'package:startup_namer/widget/show_toast.dart';
 
 import '../db/note_db.dart';
 
@@ -14,14 +15,6 @@ class AddNotePage extends StatefulWidget {
 class _AddNotePageState extends State<AddNotePage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController answerController = TextEditingController();
-
-  void _showMessageInScaffold(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,81 +31,64 @@ class _AddNotePageState extends State<AddNotePage> {
 
               if (formKey.currentState!.validate()) {
                 provider.addNote(NoteModel(title: title, answer: answer));
+
+                ShowToast().showToast(
+                  msg: "添加成功",
+                  backgroundColor: Colors.green,
+                );
+
                 titleController.clear();
                 answerController.clear();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('添加失败')),
-                );
               }
             },
-            child: const Text(
-              '添加',
-              style: TextStyle(
-                color: Color.fromARGB(255, 14, 75, 132),
-              ),
-            ),
+            child: const Text('添加'),
           )
         ],
         title: const Text('添加笔记'),
       ),
-      body: Column(
-        children: <Widget>[
-          Form(
-            key: formKey,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: TextFormField(
-                    minLines: 1,
-                    maxLines: 4,
-                    controller: titleController,
-                    decoration: const InputDecoration(
-                      labelText: "Font",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "输入不能为空";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: TextFormField(
-                    cursorColor: Colors.black,
-                    minLines: 1,
-                    maxLines: 5,
-                    controller: answerController,
-                    decoration: const InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
-                      ),
-                      labelStyle: TextStyle(color: Colors.grey),
-                      labelText: "Back",
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "输入不能为空";
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-              ],
+      body: Padding(
+        padding: const EdgeInsets.only(left: 28.0, right: 28.0, top: 15.0),
+        child: Column(
+          children: <Widget>[
+            TextFormField(
+              minLines: 1,
+              maxLines: 4,
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: "Font",
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "输入不能为空";
+                }
+                return null;
+              },
             ),
-          ),
-        ],
+            TextFormField(
+              // cursorColor: Colors.black,
+              minLines: 1,
+              maxLines: 5,
+              controller: answerController,
+              decoration: const InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                labelStyle: TextStyle(color: Colors.grey),
+                labelText: "Back",
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "输入不能为空";
+                }
+                return null;
+              },
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  void _insert(title, answer) async {
-    _showMessageInScaffold('添加成功');
   }
 }
