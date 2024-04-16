@@ -24,24 +24,27 @@ class _AddNotePageState extends State<AddNotePage> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          TextButton(
-            onPressed: () {
-              String title = titleController.text;
-              String answer = answerController.text;
+          Form(
+            key: formKey,
+            child: TextButton(
+              onPressed: () {
+                String title = titleController.text;
+                String answer = answerController.text;
 
-              if (formKey.currentState!.validate()) {
-                provider.addNote(NoteModel(title: title, answer: answer));
+                if (formKey.currentState!.validate()) {
+                  provider.addNote(NoteModel(title: title, answer: answer));
 
-                ShowToast().showToast(
-                  msg: "添加成功",
-                  backgroundColor: Colors.green,
-                );
+                  ShowToast().showToast(
+                    msg: "添加成功",
+                    backgroundColor: Colors.green,
+                  );
 
-                titleController.clear();
-                answerController.clear();
-              }
-            },
-            child: const Text('添加'),
+                  titleController.clear();
+                  answerController.clear();
+                }
+              },
+              child: const Text('添加'),
+            ),
           )
         ],
         title: const Text('添加笔记'),

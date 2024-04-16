@@ -25,14 +25,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.2.1"
-  circular_countdown_timer:
-    dependency: "direct main"
-    description:
-      name: circular_countdown_timer
-      sha256: "9ba5fbc076cedbcbf6190ed86762e679f43d7c67cdd903ea34df059dabdc08d4"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "0.2.3"
   clock:
     dependency: transitive
     description:
@@ -57,14 +49,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
-  duration_picker:
+  duration_picker_dialog_box:
     dependency: "direct main"
     description:
-      name: duration_picker
-      sha256: "052b34dac04c29f3849bb3817a26c5aebe9e5f0697c3a374be87db2b84d75753"
+      name: duration_picker_dialog_box
+      sha256: "4ef0295e2934fcde6dddd9f98f5419f15976b2e5b8d22c5cdfc7602dee491a38"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "1.1.1"
+    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -94,6 +86,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.3"
+  flutter_slidable:
+    dependency: "direct main"
+    description:
+      name: flutter_slidable
+      sha256: "673403d2eeef1f9e8483bd6d8d92aae73b1d8bd71f382bc3930f699c731bc27c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.1.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -263,4 +263,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.0 <3.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.7.0"

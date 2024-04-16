@@ -3,17 +3,17 @@ import '../db/task_db.dart';
 class TaskModel {
   final int? id;
   final String title;
-  final String note;
-  final String steps;
-  final int taskTime;
-  int? taskStatus;
+  final String? note;
+  final String? steps;
+  final int? taskTime;
+  final int taskStatus;
 
   TaskModel({
     this.id,
     required this.title,
-    required this.note,
-    required this.steps,
-    required this.taskTime,
+    this.note,
+    this.steps,
+    this.taskTime = 25,
     this.taskStatus = 0,
   });
 

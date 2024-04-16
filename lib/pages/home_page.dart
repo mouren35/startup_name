@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:startup_namer/widget/show_snack_bar.dart';
@@ -43,35 +44,39 @@ class _HomePageState extends State<HomePage> {
                   return ListView.builder(
                     itemCount: data.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Dismissible(
-                        direction: DismissDirection.endToStart,
-                        background: Container(
-                          color: Colors.red,
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: const Icon(Icons.delete_forever),
+                      return Slidable(
+                        child: ListTile(
+                          onTap: () {
+                            NavigatorUtil.push(
+                              context,
+                              const NoteDetailPage(),
+                            );
+                          },
+                          title: Text(data[index].title),
+                          subtitle: Text(data[index].answer),
                         ),
-                        key: UniqueKey(),
-                        onDismissed: (DismissDirection direction) async {
-                          await provider.deleteNote(data[index].id!);
-                          showSnackBar(
-                            context,
-                            '删除成功',
-                            '撤销',
-                            () => provider.addNote(data[index]),
-                          );
-                        },
-                        child: Column(
+                        endActionPane: ActionPane(
+                          motion: const ScrollMotion(),
                           children: [
-                            ListTile(
-                              onTap: () {
-                                NavigatorUtil.push(
+                            SlidableAction(
+                              label: '提前完成',
+                              backgroundColor: Colors.blue,
+                              icon: Icons.check,
+                              onPressed: (context) {},
+                            ),
+                            SlidableAction(
+                              label: '删除',
+                              backgroundColor: Colors.red,
+                              icon: Icons.delete_forever,
+                              onPressed: (context) async {
+                                await provider.deleteNote(data[index].id!);
+                                showSnackBar(
                                   context,
-                                  const NoteDetailPage(),
+                                  '删除成功',
+                                  '撤销',
+                                  () => provider.addNote(data[index]),
                                 );
                               },
-                              title: Text(data[index].title),
-                              subtitle: Text(data[index].answer),
                             ),
                           ],
                         ),

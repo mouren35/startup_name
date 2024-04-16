@@ -69,6 +69,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     return FloatingActionButton.small(
       heroTag: heroTag,
       child: Icon(icon),
+      tooltip: heroTag,
       onPressed: () {
         NavigatorUtil.push(context, page);
       },

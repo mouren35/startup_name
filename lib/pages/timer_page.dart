@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import '../widget/circular_timer.dart';
 
 class TimerPage extends StatelessWidget {
-  String title;
-  int seconds;
+  final String title;
+  final int seconds;
 
-  TimerPage({super.key, required this.title, required this.seconds});
+  const TimerPage({super.key, required this.title, required this.seconds});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

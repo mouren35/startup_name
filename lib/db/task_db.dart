@@ -18,12 +18,18 @@ class TaskDB extends ChangeNotifier {
     _db = await openDatabase(
       join(path, 'task.db'),
       onCreate: (database, version) async {
-        await database.execute(
-          'CREATE TABLE task($id INTEGER PRIMARY KEY AUTOINCREMENT,$title TEXT NOT NULL,$note TEXT NOT NULL,$steps TEXT NOT NULL,$taskTime TEXT NOT NULL,$taskStatus INTEGER)',
-        );
+        await database.execute("""
+          CREATE TABLE task (
+            $id INTEGER PRIMARY KEY AUTOINCREMENT,
+            $title TEXT NOT NULL,
+            $note TEXT NOT NULL,
+            $steps TEXT NOT NULL,
+            $taskTime INTEGER NOT NULL,
+            $taskStatus INTEGER)""");
       },
       version: 1,
     );
+    notifyListeners();
   }
 
   Future<void> addTask(TaskModel taskModel) async {
@@ -32,11 +38,13 @@ class TaskDB extends ChangeNotifier {
   }
 
   Future<List<TaskModel>> getTask() async {
-    final List<Map<String, Object?>> queryResult = await _db.query('task');
+    final List<Map<String, dynamic>> queryResult = await _db.query('task');
+
+    // print("result123:${queryResult[0]['time'].runtimeType}");
     return queryResult.map((e) => TaskModel.fromMap(e)).toList();
   }
 
-  Future<void> deleteThing(int id) async {
+  Future<void> deleteTask(int id) async {
     await _db.delete(
       'task',
       where: "id = ?",
