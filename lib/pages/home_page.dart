@@ -45,16 +45,6 @@ class _HomePageState extends State<HomePage> {
                     itemCount: data.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Slidable(
-                        child: ListTile(
-                          onTap: () {
-                            NavigatorUtil.push(
-                              context,
-                              const NoteDetailPage(),
-                            );
-                          },
-                          title: Text(data[index].title),
-                          subtitle: Text(data[index].answer),
-                        ),
                         endActionPane: ActionPane(
                           motion: const ScrollMotion(),
                           children: [
@@ -70,15 +60,27 @@ class _HomePageState extends State<HomePage> {
                               icon: Icons.delete_forever,
                               onPressed: (context) async {
                                 await provider.deleteNote(data[index].id!);
-                                showSnackBar(
-                                  context,
-                                  '删除成功',
-                                  '撤销',
-                                  () => provider.addNote(data[index]),
-                                );
+                                if (context.mounted) {
+                                  showSnackBar(
+                                    context,
+                                    '删除成功',
+                                    '撤销',
+                                    () => provider.addNote(data[index]),
+                                  );
+                                }
                               },
                             ),
                           ],
+                        ),
+                        child: ListTile(
+                          onTap: () {
+                            NavigatorUtil.push(
+                              context,
+                              const NoteDetailPage(),
+                            );
+                          },
+                          title: Text(data[index].title),
+                          subtitle: Text(data[index].answer),
                         ),
                       );
                     },

@@ -16,7 +16,7 @@ class CircularTimer extends StatefulWidget {
   });
 
   @override
-  _CircularTimerState createState() => _CircularTimerState();
+  State<CircularTimer> createState() => _CircularTimerState();
 }
 
 class _CircularTimerState extends State<CircularTimer> {

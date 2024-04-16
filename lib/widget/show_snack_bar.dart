@@ -13,5 +13,5 @@ void showSnackBar(
       onPressed: onUndo,
     ),
   );
-  if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

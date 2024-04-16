@@ -53,12 +53,12 @@ class TaskDB extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTask(TaskModel taskModel) async {
+  Future<void> updateTask(int id, int newStatus) async {
     await _db.update(
       'task',
-      taskModel.toMap(),
+      {'taskStatus': newStatus},
       where: 'id = ?',
-      whereArgs: [taskModel.id],
+      whereArgs: [id],
     );
     notifyListeners();
   }

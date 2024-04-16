@@ -123,7 +123,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     labelText: '在此添加笔记',
                   ),
                 ),
-                // _buildslider,
                 Expanded(child: Container()),
                 Row(
                   children: [
@@ -139,7 +138,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           String steps = stepsController.text;
 
                           if (formKey.currentState!.validate() &&
-                              _duration != 0) {
+                              _duration != const Duration()) {
                             provider.addTask(TaskModel(
                                 title: title,
                                 note: note,
@@ -149,7 +148,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             noteController.clear();
                             stepsController.clear();
                           } else {
-                            if (_duration == 0) {
+                            if (_duration == const Duration()) {
                               ShowToast().showToast(
                                 msg: "时间不能为0",
                                 backgroundColor: Colors.red,

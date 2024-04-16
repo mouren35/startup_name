@@ -68,11 +68,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   _buildFab(String heroTag, IconData icon, Widget page) {
     return FloatingActionButton.small(
       heroTag: heroTag,
-      child: Icon(icon),
       tooltip: heroTag,
       onPressed: () {
         NavigatorUtil.push(context, page);
       },
+      child: Icon(icon),
     );
   }
 }
