@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/widget/show_snack_bar.dart';
+import 'package:startup_namer/util/color.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
 import '../pages/task_detail_page.dart';
 import '../pages/timer_page.dart';
 import '../util/navigator_util.dart';
+import 'show_snack_bar.dart';
 
 class TaskExpansionTile extends StatelessWidget {
   final String title;
@@ -40,7 +41,7 @@ class TaskExpansionTile extends StatelessWidget {
                   if (title == '未完成') ...[
                     SlidableAction(
                       label: '计时',
-                      backgroundColor: Colors.blue,
+                      backgroundColor: AppColors.startColor,
                       icon: Icons.timer_outlined,
                       onPressed: (context) {
                         NavigatorUtil.push(
@@ -55,7 +56,7 @@ class TaskExpansionTile extends StatelessWidget {
                   ],
                   SlidableAction(
                     label: '删除',
-                    backgroundColor: Colors.red,
+                    backgroundColor: AppColors.errorColor,
                     icon: Icons.delete_forever,
                     onPressed: (context) async {
                       await provider.deleteTask(task.id!);
@@ -71,21 +72,21 @@ class TaskExpansionTile extends StatelessWidget {
                   ),
                 ],
               ),
-              startActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  if (title == '未完成') ...[
-                    SlidableAction(
-                      label: '完成',
-                      backgroundColor: Colors.green,
-                      icon: Icons.check,
-                      onPressed: (context) async {
-                        await provider.updateTask(task.id!, 1);
-                      },
-                    ),
-                  ],
-                ],
-              ),
+              startActionPane: title == '未完成'
+                  ? ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          label: '完成',
+                          backgroundColor: AppColors.successColor,
+                          icon: Icons.check,
+                          onPressed: (context) async {
+                            await provider.updateTask(task.id!, 1);
+                          },
+                        ),
+                      ],
+                    )
+                  : null,
               child: ListTile(
                 leading: Text('${task.taskTime}'),
                 title: Text(task.title),
