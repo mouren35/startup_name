@@ -6,7 +6,7 @@ class ShowToast {
     required String msg,
     ToastGravity gravity = ToastGravity.BOTTOM,
     required Color backgroundColor,
-    Color textColor = Colors.white,
+    Color textColor = Colors.black54,
     double fontSize = 16.0,
     Toast length = Toast.LENGTH_SHORT,
   }) {

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/model/note_model.dart';
-import 'package:startup_namer/widget/show_toast.dart';
+import 'package:startup_namer/util/color.dart';
 
 import '../db/note_db.dart';
+import '../model/note_model.dart';
+import '../widget/show_toast.dart';
 
 class AddNotePage extends StatefulWidget {
   const AddNotePage({Key? key}) : super(key: key);
@@ -36,7 +37,7 @@ class _AddNotePageState extends State<AddNotePage> {
 
                   ShowToast().showToast(
                     msg: "添加成功",
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppColors.successColor,
                   );
 
                   titleController.clear();

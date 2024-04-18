@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:startup_namer/model/task_model.dart';
+
+import '../model/task_model.dart';
 
 class TaskDB extends ChangeNotifier {
   static const id = 'id';

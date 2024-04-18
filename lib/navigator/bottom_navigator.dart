@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:startup_namer/pages/add_task_page.dart';
-import 'package:startup_namer/pages/home_page.dart';
-import 'package:startup_namer/util/navigator_util.dart';
 
 import '../pages/add_note_page.dart';
+import '../pages/add_task_page.dart';
+import '../pages/home_page.dart';
 import '../pages/tasks_list_page.dart';
+import '../util/navigator_util.dart';
 
 class BottomNavigator extends StatefulWidget {
   const BottomNavigator({super.key});
@@ -50,9 +50,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       ),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
+        distance: 60,
+        type: ExpandableFabType.up,
         children: [
-          _buildFab('添加任务', Icons.playlist_add_rounded, const AddTaskPage()),
-          _buildFab('添加笔记', Icons.note_add_outlined, const AddNotePage())
+          _buildFab(Icons.playlist_add_rounded, AddTaskPage()),
+          _buildFab(Icons.note_add_outlined, const AddNotePage())
         ],
       ),
     );
@@ -65,10 +67,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     );
   }
 
-  _buildFab(String heroTag, IconData icon, Widget page) {
+  _buildFab(IconData icon, Widget page) {
     return FloatingActionButton.small(
-      heroTag: heroTag,
-      tooltip: heroTag,
+      heroTag: UniqueKey(),
       onPressed: () {
         NavigatorUtil.push(context, page);
       },

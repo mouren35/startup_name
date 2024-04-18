@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/util/navigator_util.dart';
-import 'package:startup_namer/widget/show_snack_bar.dart';
+import 'package:startup_namer/util/color.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
+import '../util/navigator_util.dart';
+import '../widget/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -50,13 +51,13 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             SlidableAction(
                               label: '提前完成',
-                              backgroundColor: Colors.blue,
+                              backgroundColor: AppColors.successColor,
                               icon: Icons.check,
                               onPressed: (context) {},
                             ),
                             SlidableAction(
                               label: '删除',
-                              backgroundColor: Colors.red,
+                              backgroundColor: AppColors.errorColor,
                               icon: Icons.delete_forever,
                               onPressed: (context) async {
                                 await provider.deleteNote(data[index].id!);

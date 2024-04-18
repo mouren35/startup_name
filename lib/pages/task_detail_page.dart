@@ -6,7 +6,10 @@ import '../model/task_model.dart';
 
 class TaskDetailPage extends StatefulWidget {
   final int timeValue;
-  const TaskDetailPage({Key? key, required this.timeValue}) : super(key: key);
+  const TaskDetailPage({
+    Key? key,
+    required this.timeValue,
+  }) : super(key: key);
 
   @override
   State<TaskDetailPage> createState() => _TaskDetailPageState();
@@ -17,6 +20,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
     return Scaffold(
+      appBar: AppBar(title: Text('')),
       body: FutureBuilder(
         future: provider.getTask(),
         builder:
