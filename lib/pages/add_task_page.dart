@@ -1,6 +1,5 @@
 import 'package:duration_picker_dialog_box/duration_picker_dialog_box.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
 import 'package:provider/provider.dart';
 import 'package:startup_namer/util/color.dart';
 
@@ -21,7 +20,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
   TextEditingController stepsController = TextEditingController();
 
   Duration _duration = const Duration(minutes: 25);
-  final QuillController _controller = QuillController.basic();
 
   @override
   Widget build(BuildContext context) {
@@ -87,8 +85,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
               icon: const Icon(Icons.check))
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
+      body: const Padding(
+        padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
         child: Column(
           children: [
             // TextField(
@@ -111,20 +109,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
             //     labelText: '在此添加笔记',
             //   ),
             // ),
-            QuillToolbar.basic(
-              controller: _controller,
-              showBoldButton: true,
-              showItalicButton: true,
-              showUnderLineButton: true,
-              showBackgroundColorButton: false,
-              showClearFormat: false,
-              showColorButton: false,
-            ),
-            QuillEditor.basic(
-              controller: _controller,
-              readOnly: false,
-              keyboardAppearance: Brightness.light,
-            ),
+            // QuillToolbar.basic(
+            //   controller: _controller,
+            //   showBoldButton: true,
+            //   showItalicButton: true,
+            //   showUnderLineButton: true,
+            //   showBackgroundColorButton: false,
+            //   showClearFormat: false,
+            //   showColorButton: false,
+            // ),
+            // QuillEditor.basic(
+            //   controller: _controller,
+            //   readOnly: false,
+            //   keyboardAppearance: Brightness.light,
+            // ),
           ],
         ),
       ),

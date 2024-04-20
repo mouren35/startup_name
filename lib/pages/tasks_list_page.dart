@@ -17,43 +17,40 @@ class _TaskListPageState extends State<TaskListPage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('任务')),
-      body: FutureBuilder(
-        future: provider.getTask(),
-        builder: (
-          BuildContext context,
-          AsyncSnapshot<List<TaskModel>> snapshot,
-        ) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+    return FutureBuilder(
+      future: provider.getTask(),
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<TaskModel>> snapshot,
+      ) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
 
-          final data = snapshot.data ?? [];
-          final undoTask = data.where((task) => task.taskStatus == 0).toList();
-          final completedTask =
-              data.where((task) => task.taskStatus == 1).toList();
+        final data = snapshot.data ?? [];
+        final undoTask = data.where((task) => task.taskStatus == 0).toList();
+        final completedTask =
+            data.where((task) => task.taskStatus == 1).toList();
 
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                TaskExpansionTile(
-                  title: '未完成',
-                  tasks: undoTask,
-                ),
-                TaskExpansionTile(
-                  title: '完成',
-                  tasks: completedTask,
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+        return SingleChildScrollView(
+          child: Column(
+            children: [
+              TaskExpansionTile(
+                title: '未完成',
+                tasks: undoTask,
+              ),
+              TaskExpansionTile(
+                title: '完成',
+                tasks: completedTask,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

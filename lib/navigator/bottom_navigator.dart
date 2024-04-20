@@ -1,3 +1,4 @@
+import 'package:chinese_number/chinese_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 
@@ -19,9 +20,18 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   final PageController _controller = PageController(
     initialPage: 0,
   );
+
+  final dateTime = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // 当天时间
+        title: Text(
+          '${dateTime.year}年${dateTime.month}月${dateTime.day + 1}日 星期${(dateTime.weekday + 1).toSimplifiedChineseNumber()}',
+        ),
+      ),
       body: PageView(
         controller: _controller,
         onPageChanged: (index) {
@@ -44,8 +54,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           });
         },
         destinations: [
-          _bottomItem("首页", Icons.home, 0),
-          _bottomItem("任务", Icons.list, 1),
+          _bottomItem("首页", Icons.home_outlined, 0),
+          _bottomItem("任务", Icons.list_alt_outlined, 1),
         ],
       ),
       floatingActionButtonLocation: ExpandableFab.location,
@@ -53,7 +63,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         distance: 60,
         type: ExpandableFabType.up,
         children: [
-          _buildFab(Icons.playlist_add_rounded, AddTaskPage()),
+          _buildFab(Icons.playlist_add_rounded, const AddTaskPage()),
           _buildFab(Icons.note_add_outlined, const AddNotePage())
         ],
       ),

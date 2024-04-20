@@ -20,7 +20,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
     return Scaffold(
-      appBar: AppBar(title: Text('')),
+      appBar: AppBar(title: const Text('')),
       body: FutureBuilder(
         future: provider.getTask(),
         builder:
@@ -45,9 +45,9 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                         ],
                       ),
                     ),
-                    Card(
+                    const Card(
                       child: Column(
-                        children: const [
+                        children: [
                           TextField(),
                           TextField(),
                         ],

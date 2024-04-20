@@ -40,7 +40,7 @@ dependencies:
   fluttertoast: ^8.2.4
   duration_picker_dialog_box: ^1.0.1
   flutter_slidable: ^3.1.0
-  flutter_quill: ^6.1.6
+  chinese_number: ^1.0.1
 
 
 
