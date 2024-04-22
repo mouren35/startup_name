@@ -85,30 +85,30 @@ class _AddTaskPageState extends State<AddTaskPage> {
               icon: const Icon(Icons.check))
         ],
       ),
-      body: const Padding(
-        padding: EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
+      body: Padding(
+        padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
         child: Column(
           children: [
-            // TextField(
-            //   keyboardType: TextInputType.multiline,
-            //   minLines: 1,
-            //   maxLines: 9,
-            //   controller: noteController,
-            //   cursorColor: Colors.black,
-            //   decoration: const InputDecoration(
-            //     border: InputBorder.none,
-            //     labelText: '在此添加内容',
-            //   ),
-            // ),
-            // TextField(
-            //   minLines: 1,
-            //   controller: stepsController,
-            //   cursorColor: Colors.black,
-            //   decoration: const InputDecoration(
-            //     border: InputBorder.none,
-            //     labelText: '在此添加笔记',
-            //   ),
-            // ),
+            TextField(
+              keyboardType: TextInputType.multiline,
+              minLines: 1,
+              maxLines: 9,
+              controller: noteController,
+              cursorColor: Colors.black,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                labelText: '在此添加内容',
+              ),
+            ),
+            TextField(
+              minLines: 1,
+              controller: stepsController,
+              cursorColor: Colors.black,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                labelText: '在此添加笔记',
+              ),
+            ),
             // QuillToolbar.basic(
             //   controller: _controller,
             //   showBoldButton: true,

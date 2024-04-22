@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:startup_namer/util/color.dart';
 
 class CircularTimer extends StatefulWidget {
   final int? durationInSeconds;
@@ -12,7 +13,7 @@ class CircularTimer extends StatefulWidget {
     super.key,
     this.durationInSeconds,
     this.size = 200.0,
-    this.color = Colors.blue,
+    this.color = AppColors.startColor,
   });
 
   @override
@@ -95,7 +96,7 @@ class _CircularTimerPainter extends CustomPainter {
         text: text,
         style: const TextStyle(
           color: Colors.black,
-          fontSize: 20.0,
+          fontSize: 40.0,
           fontWeight: FontWeight.bold,
         ),
       ),

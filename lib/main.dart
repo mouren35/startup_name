@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/provider/card_provider.dart';
 
 import 'db/note_db.dart';
 import 'db/task_db.dart';
@@ -11,6 +12,7 @@ void main(List<String> args) {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskDB()..init()),
         ChangeNotifierProvider(create: (_) => NoteDb()..init()),
+        ChangeNotifierProvider(create: (_) => CardProvider()),
       ],
       child: const MyApp(),
     ),
@@ -22,10 +24,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xffefedfa)),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 16, color: Color(0xff333333)),
+        ),
+      ),
       title: 'time_review',
       debugShowCheckedModeBanner: false,
-      home: BottomNavigator(),
+      home: const BottomNavigator(),
     );
   }
 }

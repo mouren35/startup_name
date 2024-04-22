@@ -1,6 +1,7 @@
 import 'package:chinese_number/chinese_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:startup_namer/pages/review_page.dart';
 
 import '../pages/add_note_page.dart';
 import '../pages/add_task_page.dart';
@@ -29,7 +30,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       appBar: AppBar(
         // 当天时间
         title: Text(
-          '${dateTime.year}年${dateTime.month}月${dateTime.day + 1}日 星期${(dateTime.weekday + 1).toSimplifiedChineseNumber()}',
+          '${dateTime.year}年${dateTime.month}月${dateTime.day + 1}日 星期${(dateTime.weekday + 1) == 7 ? "日" : (dateTime.weekday + 1).toSimplifiedChineseNumber()}',
         ),
       ),
       body: PageView(
@@ -64,7 +65,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         type: ExpandableFabType.up,
         children: [
           _buildFab(Icons.playlist_add_rounded, const AddTaskPage()),
-          _buildFab(Icons.note_add_outlined, const AddNotePage())
+          _buildFab(Icons.note_add_outlined, const AddNotePage()),
+          _buildFab(Icons.play_circle_outline, const ReviewPage()),
         ],
       ),
     );

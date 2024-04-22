@@ -50,6 +50,8 @@ class TaskExpansionTile extends StatelessWidget {
                               id: task.id!,
                               title: task.title,
                               seconds: task.taskTime!,
+                              note: task.note ?? '没有内容',
+                              step: task.steps ?? '没有内容',
                             ));
                       },
                     ),
