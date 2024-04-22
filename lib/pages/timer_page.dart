@@ -24,62 +24,103 @@ class TimerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
     final cardWidth = MediaQuery.of(context).size.width - 30;
-    final cardHeight = cardWidth;
 
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Card(
-              margin:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 18.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircularTimer(
-                      durationInSeconds: seconds * 60, // 设定总时间（以秒为单位）
-                      size: 200.0, // 设定圆形进度条的大小
-                      color: Colors.blue, // 设定圆形进度条的颜色
+                      durationInSeconds: seconds * 60,
+                      size: cardWidth * 0.6,
+                      color: Colors.blue,
                     ),
-                    IconButton(
-                      onPressed: () {
-                        provider.updateTask(id, 1);
-                        Navigator.pop(context);
-                      },
+                    const SizedBox(height: 20),
+                    ElevatedButton.icon(
+                      onPressed: () => _updateTaskStatus(context, provider),
                       icon: const Icon(Icons.check_circle_outline),
+                      label: const Text('完成任务'),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(
-              width: cardWidth,
-              height: cardHeight,
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        step,
-                        style: const TextStyle(fontSize: 20.0),
+            const SizedBox(height: 20),
+            Card(
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '步骤:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        note,
-                        style: const TextStyle(fontSize: 20.0),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      step,
+                      style: TextStyle(
+                        fontSize: 16,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '备注:',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      note,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _updateTaskStatus(BuildContext context, TaskDB provider) async {
+    try {
+      await provider.updateTask(id, 1);
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('更新任务状态失败: $e')),
+      );
+    }
   }
 }

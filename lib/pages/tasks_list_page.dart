@@ -13,44 +13,73 @@ class TaskListPage extends StatefulWidget {
 }
 
 class _TaskListPageState extends State<TaskListPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      // Reached the bottom of the list, load more data
+      final provider = Provider.of<TaskDB>(context, listen: false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
 
-    return FutureBuilder(
+    return FutureBuilder<List<TaskModel>?>(
       future: provider.getTask(),
       builder: (
         BuildContext context,
-        AsyncSnapshot<List<TaskModel>> snapshot,
+        AsyncSnapshot<List<TaskModel>?> snapshot,
       ) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+          return _buildLoadingWidget();
         }
 
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         }
 
-        final data = snapshot.data ?? [];
-        final undoTask = data.where((task) => task.taskStatus == 0).toList();
+        final data = snapshot.data;
+        final undoTask = data?.where((task) => task.taskStatus == 0).toList();
         final completedTask =
-            data.where((task) => task.taskStatus == 1).toList();
+            data?.where((task) => task.taskStatus == 1).toList();
 
         return SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
             children: [
               TaskExpansionTile(
                 title: '未完成',
-                tasks: undoTask,
+                tasks: undoTask!,
               ),
               TaskExpansionTile(
                 title: '完成',
-                tasks: completedTask,
+                tasks: completedTask!,
               ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildLoadingWidget() {
+    return Center(
+      child: CircularProgressIndicator(),
     );
   }
 }

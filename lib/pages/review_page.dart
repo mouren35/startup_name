@@ -23,7 +23,7 @@ class _ReviewPageState extends State<ReviewPage> {
       ),
       body: Consumer<NoteDb>(
         builder: (context, noteDb, _) {
-          return FutureBuilder<List<NoteModel>>(
+          return FutureBuilder<List<NoteModel>?>(
             future: noteDb.getNote(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {

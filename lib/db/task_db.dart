@@ -12,7 +12,7 @@ class TaskDB extends ChangeNotifier {
   static const taskTime = 'time';
   static const taskStatus = 'taskStatus';
 
-  late Database _db;
+  Database? _db;
 
   Future<void> init() async {
     String path = await getDatabasesPath();
@@ -34,19 +34,19 @@ class TaskDB extends ChangeNotifier {
   }
 
   Future<void> addTask(TaskModel taskModel) async {
-    await _db.insert('task', taskModel.toMap());
+    await _db?.insert('task', taskModel.toMap());
     notifyListeners();
   }
 
-  Future<List<TaskModel>> getTask() async {
-    final List<Map<String, dynamic>> queryResult = await _db.query('task');
+  Future<List<TaskModel>?> getTask() async {
+    final List<Map<String, Object?>>? queryResult = await _db?.query('task');
 
     // print("result123:${queryResult[0]['time'].runtimeType}");
-    return queryResult.map((e) => TaskModel.fromMap(e)).toList();
+    return queryResult?.map((e) => TaskModel.fromMap(e)).toList();
   }
 
   Future<void> deleteTask(int id) async {
-    await _db.delete(
+    await _db?.delete(
       'task',
       where: "id = ?",
       whereArgs: [id],
@@ -55,7 +55,7 @@ class TaskDB extends ChangeNotifier {
   }
 
   Future<void> updateTask(int id, int newStatus) async {
-    await _db.update(
+    await _db?.update(
       'task',
       {'taskStatus': newStatus},
       where: 'id = ?',

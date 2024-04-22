@@ -10,7 +10,7 @@ class NoteDb extends ChangeNotifier {
   static const answer = 'answer';
   static const status = 'state';
 
-  late Database _db;
+  Database? _db;
 
   Future<void> init() async {
     String path = await getDatabasesPath();
@@ -29,17 +29,17 @@ class NoteDb extends ChangeNotifier {
   }
 
   Future<void> addNote(NoteModel noteModel) async {
-    await _db.insert('note', noteModel.toMap());
+    await _db?.insert('note', noteModel.toMap());
     notifyListeners();
   }
 
-  Future<List<NoteModel>> getNote() async {
-    final List<Map<String, dynamic>> queryResult = await _db.query('note');
-    return queryResult.map((e) => NoteModel.fromMap(e)).toList();
+  Future<List<NoteModel>?> getNote() async {
+    final List<Map<String, dynamic>>? queryResult = await _db?.query('note');
+    return queryResult?.map((e) => NoteModel.fromMap(e)).toList();
   }
 
   Future<void> deleteNote(int id) async {
-    await _db.delete(
+    await _db?.delete(
       'note',
       where: "id = ?",
       whereArgs: [id],
@@ -48,7 +48,7 @@ class NoteDb extends ChangeNotifier {
   }
 
   Future<void> update(NoteModel noteModel) async {
-    await _db.update(
+    await _db?.update(
       'note',
       noteModel.toMap(),
       where: 'id = ?',

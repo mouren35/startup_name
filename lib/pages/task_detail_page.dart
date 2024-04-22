@@ -20,7 +20,7 @@ class TaskDetailPage extends StatelessWidget {
           return FutureBuilder(
             future: provider.getTask(),
             builder: (BuildContext context,
-                AsyncSnapshot<List<TaskModel>> snapshot) {
+                AsyncSnapshot<List<TaskModel>?> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {

@@ -14,85 +14,109 @@ class AddNotePage extends StatefulWidget {
 }
 
 class _AddNotePageState extends State<AddNotePage> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController answerController = TextEditingController();
+  late TextEditingController _titleController;
+  late TextEditingController _answerController;
+  late GlobalKey<FormState> _formKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController = TextEditingController();
+    _answerController = TextEditingController();
+    _formKey = GlobalKey<FormState>();
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _answerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     final provider = Provider.of<NoteDb>(context);
 
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          Form(
-            key: formKey,
-            child: TextButton(
-              onPressed: () {
-                String title = titleController.text;
-                String answer = answerController.text;
-
-                if (formKey.currentState!.validate()) {
-                  provider.addNote(NoteModel(title: title, answer: answer));
-
-                  ShowToast().showToast(
-                    msg: "添加成功",
-                    backgroundColor: AppColors.successColor,
-                  );
-
-                  titleController.clear();
-                  answerController.clear();
-                }
-              },
-              child: const Text('添加'),
-            ),
-          )
-        ],
         title: const Text('添加笔记'),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(left: 28.0, right: 28.0, top: 15.0),
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              minLines: 1,
-              maxLines: 4,
-              controller: titleController,
-              decoration: const InputDecoration(
-                labelText: "Font",
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "输入不能为空";
-                }
-                return null;
-              },
-            ),
-            TextFormField(
-              // cursorColor: Colors.black,
-              minLines: 1,
-              maxLines: 5,
-              controller: answerController,
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              TextFormField(
+                minLines: 1,
+                maxLines: 4,
+                controller: _titleController,
+                decoration: InputDecoration(
+                  labelText: "标题",
+                  hintText: "请输入标题",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
                 ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
-                ),
-                labelStyle: TextStyle(color: Colors.grey),
-                labelText: "Back",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "标题不能为空";
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return "输入不能为空";
-                }
-                return null;
-              },
-            ),
-          ],
+              const SizedBox(height: 10),
+              TextFormField(
+                minLines: 3,
+                maxLines: 8,
+                controller: _answerController,
+                decoration: InputDecoration(
+                  labelText: "内容",
+                  hintText: "请输入内容",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "内容不能为空";
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _addNote(provider),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text('添加笔记'),
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void _addNote(NoteDb provider) {
+    if (_formKey.currentState!.validate()) {
+      final title = _titleController.text;
+      final answer = _answerController.text;
+
+      provider.addNote(NoteModel(title: title, answer: answer));
+
+      ShowToast().showToast(
+        msg: "添加成功",
+        backgroundColor: AppColors.successColor,
+      );
+
+      _titleController.clear();
+      _answerController.clear();
+    }
   }
 }

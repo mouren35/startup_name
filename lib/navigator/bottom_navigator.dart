@@ -10,7 +10,7 @@ import '../pages/tasks_list_page.dart';
 import '../util/navigator_util.dart';
 
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({super.key});
+  const BottomNavigator({Key? key}) : super(key: key);
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
@@ -18,47 +18,28 @@ class BottomNavigator extends StatefulWidget {
 
 class _BottomNavigatorState extends State<BottomNavigator> {
   int _currentIndex = 0;
-  final PageController _controller = PageController(
-    initialPage: 0,
-  );
+  final PageController _controller = PageController(initialPage: 0);
 
-  final dateTime = DateTime.now();
+  final DateTime _dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // 当天时间
         title: Text(
-          '${dateTime.year}年${dateTime.month}月${dateTime.day}日 星期${(dateTime.weekday) == 7 ? "日" : (dateTime.weekday).toSimplifiedChineseNumber()}',
+          '${_dateTime.year}年${_dateTime.month}月${_dateTime.day}日 星期${_dateTime.weekday.toSimplifiedChineseNumber()}',
         ),
       ),
       body: PageView(
         controller: _controller,
-        onPageChanged: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
         children: const [
           HomePage(),
           TaskListPage(),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (index) {
-          _controller.jumpToPage(index);
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        destinations: [
-          _bottomItem("首页", Icons.home_outlined, 0),
-          _bottomItem("任务", Icons.list_alt_outlined, 1),
-        ],
-      ),
+      bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         distance: 60,
@@ -72,14 +53,34 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     );
   }
 
-  _bottomItem(String label, IconData icon, int index) {
-    return NavigationDestination(
-      icon: Icon(icon),
-      label: label,
+  void _onPageChanged(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return NavigationBar(
+      selectedIndex: _currentIndex,
+      onDestinationSelected: _onDestinationSelected,
+      destinations: const [
+        NavigationDestination(
+          icon: Icon(Icons.home_outlined),
+          label: '首页',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.list_alt_outlined),
+          label: '任务',
+        ),
+      ],
     );
   }
 
-  _buildFab(IconData icon, Widget page) {
+  void _onDestinationSelected(int index) {
+    _controller.jumpToPage(index);
+  }
+
+  Widget _buildFab(IconData icon, Widget page) {
     return FloatingActionButton.small(
       heroTag: UniqueKey(),
       onPressed: () {

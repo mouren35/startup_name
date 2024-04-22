@@ -15,9 +15,9 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController noteController = TextEditingController();
-  TextEditingController stepsController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  final TextEditingController stepsController = TextEditingController();
 
   Duration _duration = const Duration(minutes: 25);
 
@@ -27,120 +27,128 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: TextFormField(
-          minLines: 1,
-          controller: titleController,
-          decoration: const InputDecoration(labelText: '在此添加事项标题'),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "标题输入不能为空";
-            }
-            return null;
-          },
-        ),
+        title: const Text('添加任务'),
         actions: [
-          TextButton(
+          IconButton(
             onPressed: () async {
-              final selectedDuration = _showDurationPickerDialog(context);
+              final selectedDuration = await _showDurationPickerDialog(context);
               if (selectedDuration != null) {
                 setState(() {
                   _duration = selectedDuration;
                 });
               }
             },
-            child: Text('${_duration.inMinutes} 分钟'),
+            icon: const Icon(Icons.access_time),
           ),
           IconButton(
-              onPressed: () {
-                String title = titleController.text;
-                String note = noteController.text;
-                String steps = stepsController.text;
-
-                if (_duration != const Duration()) {
-                  provider.addTask(
-                    TaskModel(
-                      title: title,
-                      note: note,
-                      steps: steps,
-                      taskTime: _duration.inMinutes,
-                    ),
-                  );
-                  titleController.clear();
-                  noteController.clear();
-                  stepsController.clear();
-                  ShowToast().showToast(
-                    msg: "添加成功",
-                    backgroundColor: AppColors.successColor,
-                  );
-                } else {
-                  if (_duration == const Duration()) {
-                    ShowToast().showToast(
-                      msg: "时间不能为0",
-                      backgroundColor: Colors.red,
-                    );
-                  }
-                }
-                _duration = const Duration(minutes: 25);
-              },
-              icon: const Icon(Icons.check))
+            onPressed: () {
+              _addTask(provider);
+            },
+            icon: const Icon(Icons.check),
+          ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 18.0, right: 18.0, top: 8.0),
-        child: Column(
-          children: [
-            TextField(
-              keyboardType: TextInputType.multiline,
-              minLines: 1,
-              maxLines: 9,
-              controller: noteController,
-              cursorColor: Colors.black,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                labelText: '在此添加内容',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '任务标题',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-            TextField(
-              minLines: 1,
-              controller: stepsController,
-              cursorColor: Colors.black,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                labelText: '在此添加笔记',
+              TextField(
+                controller: titleController,
+                decoration: const InputDecoration(
+                  hintText: '请输入任务标题',
+                  border: OutlineInputBorder(),
+                ),
               ),
-            ),
-            // QuillToolbar.basic(
-            //   controller: _controller,
-            //   showBoldButton: true,
-            //   showItalicButton: true,
-            //   showUnderLineButton: true,
-            //   showBackgroundColorButton: false,
-            //   showClearFormat: false,
-            //   showColorButton: false,
-            // ),
-            // QuillEditor.basic(
-            //   controller: _controller,
-            //   readOnly: false,
-            //   keyboardAppearance: Brightness.light,
-            // ),
-          ],
+              const SizedBox(height: 16.0),
+              const Text(
+                '任务内容',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: noteController,
+                minLines: 3,
+                maxLines: 6,
+                decoration: const InputDecoration(
+                  hintText: '请输入任务内容',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text(
+                '任务笔记',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              TextField(
+                controller: stepsController,
+                minLines: 2,
+                maxLines: 4,
+                decoration: const InputDecoration(
+                  hintText: '请输入任务笔记',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () async {
+                  final selectedDuration =
+                      await _showDurationPickerDialog(context);
+                  if (selectedDuration != null) {
+                    setState(() {
+                      _duration = selectedDuration;
+                    });
+                  }
+                },
+                child: Text('设置任务时长 (${_duration.inMinutes} 分钟)'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  _showDurationPickerDialog(BuildContext context) async {
-    showDurationPicker(
+  Future<Duration?> _showDurationPickerDialog(BuildContext context) async {
+    return showDurationPicker(
       context: context,
       initialDuration: _duration,
       confirmText: '确定',
       cancelText: '取消',
-    ).then((value) {
-      if (value != null) {
-        setState(() {
-          _duration = value;
-        });
-      }
-    });
+    );
+  }
+
+  void _addTask(TaskDB provider) {
+    final title = titleController.text;
+    final note = noteController.text;
+    final steps = stepsController.text;
+
+    if (_duration != Duration.zero) {
+      provider.addTask(
+        TaskModel(
+          title: title,
+          note: note,
+          steps: steps,
+          taskTime: _duration.inMinutes,
+        ),
+      );
+      titleController.clear();
+      noteController.clear();
+      stepsController.clear();
+      ShowToast().showToast(
+        msg: "添加成功",
+        backgroundColor: AppColors.successColor,
+      );
+    } else {
+      ShowToast().showToast(
+        msg: "时间不能为0",
+        backgroundColor: Colors.red,
+      );
+    }
+    _duration = const Duration(minutes: 25);
   }
 }

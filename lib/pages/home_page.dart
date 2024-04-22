@@ -9,80 +9,87 @@ import '../util/navigator_util.dart';
 import '../widget/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<NoteDb>(context);
+    return Scaffold(
+      body: Consumer<NoteDb>(
+        builder: (context, provider, _) {
+          return FutureBuilder<List<NoteModel>?>(
+            future: provider.getNote(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-    return Column(
-      mainAxisSize: MainAxisSize.max,
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(
-            child: FutureBuilder(
-              future: provider.getNote(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<NoteModel>> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
 
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
+              final data = snapshot.data ?? [];
 
-                final data = snapshot.data ?? [];
-
-                return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Slidable(
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            label: '删除',
-                            backgroundColor: AppColors.errorColor,
-                            icon: Icons.delete_forever,
-                            onPressed: (context) async {
-                              await provider.deleteNote(data[index].id!);
-                              if (context.mounted) {
-                                showSnackBar(
-                                  context,
-                                  '删除成功',
-                                  '撤销',
-                                  () => provider.addNote(data[index]),
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        onTap: () {
-                          NavigatorUtil.push(
-                            context,
-                            const NoteDetailPage(),
-                          );
-                        },
-                        title: Text(data[index].title),
-                        subtitle: Text(data[index].answer),
-                      ),
-                    );
-                  },
+              if (data.isEmpty) {
+                return Center(
+                  child: Text('没有可用的笔记'),
                 );
-              },
-            ),
-          ),
-        ),
-      ],
+              }
+
+              return ListView.separated(
+                itemCount: data.length,
+                separatorBuilder: (context, index) => const Divider(),
+                itemBuilder: (context, index) {
+                  final note = data[index];
+                  return _buildSlidableNoteItem(context, note);
+                },
+              );
+            },
+          );
+        },
+      ),
     );
+  }
+
+  Widget _buildSlidableNoteItem(BuildContext context, NoteModel note) {
+    return Slidable(
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        children: [
+          SlidableAction(
+            label: '删除',
+            backgroundColor: AppColors.errorColor,
+            icon: Icons.delete_forever,
+            onPressed: (context) async {
+              await _deleteNoteAndShowSnackBar(context, note);
+            },
+          ),
+        ],
+      ),
+      child: ListTile(
+        onTap: () {
+          NavigatorUtil.push(
+            context,
+            const NoteDetailPage(),
+          );
+        },
+        title: Text(note.title),
+        subtitle: Text(note.answer),
+      ),
+    );
+  }
+
+  Future<void> _deleteNoteAndShowSnackBar(
+      BuildContext context, NoteModel note) async {
+    final provider = Provider.of<NoteDb>(context, listen: false);
+    await provider.deleteNote(note.id!);
+    if (context.mounted) {
+      showSnackBar(
+        context,
+        '删除成功',
+        '撤销',
+        () => provider.addNote(note),
+      );
+    }
   }
 }
