@@ -30,7 +30,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       appBar: AppBar(
         // 当天时间
         title: Text(
-          '${dateTime.year}年${dateTime.month}月${dateTime.day + 1}日 星期${(dateTime.weekday + 1) == 7 ? "日" : (dateTime.weekday + 1).toSimplifiedChineseNumber()}',
+          '${dateTime.year}年${dateTime.month}月${dateTime.day}日 星期${(dateTime.weekday) == 7 ? "日" : (dateTime.weekday).toSimplifiedChineseNumber()}',
         ),
       ),
       body: PageView(
