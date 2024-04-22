@@ -97,7 +97,8 @@ class TaskExpansionTile extends StatelessWidget {
                   NavigatorUtil.push(
                     context,
                     TaskDetailPage(
-                      timeValue: task.taskTime!,
+                      title: task.title,
+                      time: task.taskTime!,
                     ),
                   );
                 },
