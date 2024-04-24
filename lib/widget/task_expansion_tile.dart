@@ -12,12 +12,12 @@ import 'show_snack_bar.dart';
 
 class TaskExpansionTile extends StatelessWidget {
   final String title;
-  final List<TaskModel> tasks;
+  final List<TaskModel>? tasks;
 
   const TaskExpansionTile({
     Key? key,
     required this.title,
-    required this.tasks,
+    this.tasks,
   }) : super(key: key);
 
   @override
@@ -29,11 +29,11 @@ class TaskExpansionTile extends StatelessWidget {
       title: Text(title),
       children: [
         ListView.builder(
-          itemCount: tasks.length,
+          itemCount: tasks?.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final task = tasks[index];
+            final task = tasks![index];
             return Slidable(
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
@@ -99,6 +99,9 @@ class TaskExpansionTile extends StatelessWidget {
                     TaskDetailPage(
                       title: task.title,
                       time: task.taskTime!,
+                      step: task.steps ?? '',
+                      note: task.note ?? '',
+                      id: task.id,
                     ),
                   );
                 },

@@ -5,7 +5,7 @@ import '../db/task_db.dart';
 import '../widget/circular_timer.dart';
 
 class TimerPage extends StatelessWidget {
-  final int id;
+  final int? id;
   final String title;
   final int seconds;
   final String note;
@@ -15,7 +15,7 @@ class TimerPage extends StatelessWidget {
     Key? key,
     required this.title,
     required this.seconds,
-    required this.id,
+    this.id,
     required this.note,
     required this.step,
   }) : super(key: key);
@@ -71,36 +71,42 @@ class TimerPage extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      '步骤:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      step,
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      '备注:',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      note,
-                      style: TextStyle(
-                        fontSize: 16,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '步骤:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            step,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            '备注:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            note,
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -115,7 +121,7 @@ class TimerPage extends StatelessWidget {
 
   Future<void> _updateTaskStatus(BuildContext context, TaskDB provider) async {
     try {
-      await provider.updateTask(id, 1);
+      await provider.updateTask(id!, 1);
       Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

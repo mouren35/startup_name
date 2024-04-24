@@ -31,7 +31,7 @@ class HomePage extends StatelessWidget {
               final data = snapshot.data ?? [];
 
               if (data.isEmpty) {
-                return Center(
+                return const Center(
                   child: Text('没有可用的笔记'),
                 );
               }
