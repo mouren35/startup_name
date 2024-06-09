@@ -1,13 +1,9 @@
-import 'package:chinese_number/chinese_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
-import 'package:startup_namer/pages/post/create_post_screen.dart';
+
 import 'package:startup_namer/pages/post/post_main_page.dart';
-import 'package:startup_namer/pages/review_page.dart';
-import 'package:startup_namer/pages/task/calendar.dart/calendar_page.dart';
-import 'package:startup_namer/pages/task/search/search_page.dart';
+
 import 'package:startup_namer/pages/task/stats_page.dart';
-import 'package:startup_namer/widget/custom_appbar.dart';
 
 import '../pages/add_note_page.dart';
 import '../pages/add_task_page.dart';

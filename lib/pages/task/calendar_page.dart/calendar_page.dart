@@ -1,120 +1,111 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:startup_namer/db/task_db.dart';
 import 'package:startup_namer/model/task_model.dart';
-import 'package:startup_namer/pages/task_detail_page.dart';
-import 'package:startup_namer/widget/custom_appbar.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:provider/provider.dart';
 
 class CalendarPage extends StatefulWidget {
-  const CalendarPage({Key? key}) : super(key: key);
-
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
 
 class _CalendarPageState extends State<CalendarPage> {
-  late Map<DateTime, List<TaskModel>> _tasksByDate;
+  ValueNotifier<List<TaskModel>>? _selectedTasks;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
   @override
   void initState() {
     super.initState();
-    _tasksByDate = {};
-    _loadTasks();
+    _selectedDay = _focusedDay;
+    _selectedTasks = ValueNotifier([]);
+    _loadTasksForSelectedDay();
   }
 
-  void _loadTasks() async {
-    final provider = Provider.of<TaskDB>(context, listen: false);
-    final tasks = await provider.getTask();
-
-    setState(() {
-      _tasksByDate = {};
-      for (var task in tasks ?? []) {
-        final taskDate = DateTime(
-          task.taskTime!.year,
-          task.taskTime!.month,
-          task.taskTime!.day,
-        );
-        if (_tasksByDate[taskDate] == null) {
-          _tasksByDate[taskDate] = [];
-        }
-        _tasksByDate[taskDate]!.add(task);
-      }
-    });
+  void _loadTasksForSelectedDay() async {
+    final taskDB = Provider.of<TaskDB>(context, listen: false);
+    final tasks = await taskDB.getTasksByDate(_selectedDay!);
+    _selectedTasks?.value = tasks;
   }
 
-  List<TaskModel> _getTasksForDay(DateTime day) {
-    return _tasksByDate[day] ?? [];
+  @override
+  void dispose() {
+    _selectedTasks?.dispose();
+    super.dispose();
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+      });
+      _loadTasksForSelectedDay();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("日历"),
+        title: Text('日历'),
       ),
       body: Column(
         children: [
-          TableCalendar(
-            firstDay: DateTime.utc(2000, 1, 1),
-            lastDay: DateTime.utc(2100, 12, 31),
+          TableCalendar<TaskModel>(
+            firstDay: DateTime.utc(2020, 10, 16),
+            lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
-            selectedDayPredicate: (day) {
-              return isSameDay(_selectedDay, day);
-            },
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            },
-            eventLoader: _getTasksForDay,
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+            calendarFormat: _calendarFormat,
+            eventLoader: (day) => [],
+            startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: CalendarStyle(
-              markersMaxCount: 1,
+              outsideDaysVisible: false,
             ),
+            onDaySelected: _onDaySelected,
+            onFormatChanged: (format) {
+              if (_calendarFormat != format) {
+                setState(() {
+                  _calendarFormat = format;
+                });
+              }
+            },
             onPageChanged: (focusedDay) {
               _focusedDay = focusedDay;
             },
           ),
           const SizedBox(height: 8.0),
           Expanded(
-            child: _buildTaskList(),
+            child: ValueListenableBuilder<List<TaskModel>>(
+              valueListenable: _selectedTasks!,
+              builder: (context, value, _) {
+                return ListView.builder(
+                  itemCount: value.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 4.0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),
+                      child: ListTile(
+                        onTap: () => print('${value[index].title}'),
+                        title: Text('${value[index].title}'),
+                        subtitle: Text('${value[index].note ?? ''}'),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildTaskList() {
-    final tasks = _getTasksForDay(_selectedDay ?? _focusedDay);
-    if (tasks.isEmpty) {
-      return const Center(child: Text('这一天没有任务'));
-    }
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (context, index) {
-        final task = tasks[index];
-        return ListTile(
-          title: Text(task.title),
-          subtitle: Text(task.note ?? '无备注'),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TaskDetailPage(
-                  title: task.title,
-                  time: task.taskDuration!,
-                  step: task.steps ?? '',
-                  note: task.note ?? '',
-                  id: task.id,
-                ),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

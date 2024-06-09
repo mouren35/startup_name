@@ -10,6 +10,7 @@ class TaskDB extends ChangeNotifier {
   static const steps = 'steps';
   static const taskDuration = 'time';
   static const taskStatus = 'taskStatus';
+  static const createdAt = 'createdAt';
 
   Database? _db;
 
@@ -22,10 +23,11 @@ class TaskDB extends ChangeNotifier {
           CREATE TABLE task (
             $id INTEGER PRIMARY KEY AUTOINCREMENT,
             $title TEXT NOT NULL,
-            $note TEXT NOT NULL,
-            $steps TEXT NOT NULL,
+            $note TEXT,
+            $steps TEXT,
             $taskDuration INTEGER NOT NULL,
-            $taskStatus INTEGER)""");
+            $taskStatus INTEGER,
+            $createdAt TEXT NOT NULL)""");
       },
       version: 1,
     );
@@ -77,7 +79,7 @@ class TaskDB extends ChangeNotifier {
 
   Future<Map<String, int>> getDailyTimeSpent() async {
     final result = await _db!.rawQuery(
-      'SELECT DATE(time, "unixepoch") as date, SUM(time) as totalTime FROM task GROUP BY date',
+      'SELECT DATE($createdAt) as date, SUM($taskDuration) as totalTime FROM task GROUP BY date',
     );
     return Map.fromIterable(result,
         key: (e) => e['date'] as String, value: (e) => e['totalTime'] as int);
@@ -88,6 +90,15 @@ class TaskDB extends ChangeNotifier {
       'task',
       where: 'title LIKE ? OR note LIKE ? OR steps LIKE ?',
       whereArgs: ['%$query%', '%$query%', '%$query%'],
+    );
+    return result.map((e) => TaskModel.fromMap(e)).toList();
+  }
+
+  Future<List<TaskModel>> getTasksByDate(DateTime date) async {
+    final result = await _db!.query(
+      'task',
+      where: 'DATE($createdAt) = ?',
+      whereArgs: [date.toIso8601String().split('T').first],
     );
     return result.map((e) => TaskModel.fromMap(e)).toList();
   }

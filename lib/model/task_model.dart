@@ -7,6 +7,7 @@ class TaskModel {
   final String? steps;
   final int? taskDuration;
   final int taskStatus;
+  final DateTime createdAt;
 
   TaskModel({
     this.id,
@@ -15,6 +16,7 @@ class TaskModel {
     this.steps,
     this.taskDuration = 25,
     this.taskStatus = 0,
+    required this.createdAt,
   });
 
   TaskModel.fromMap(Map<String, dynamic> res)
@@ -22,8 +24,9 @@ class TaskModel {
         title = res["title"],
         note = res['note'],
         steps = res['steps'],
-        taskDuration = res['time'], //列名不要搞错了
-        taskStatus = res['taskStatus'];
+        taskDuration = res['time'],
+        taskStatus = res['taskStatus'],
+        createdAt = DateTime.parse(res['createdAt']);
 
   Map<String, Object?> toMap() {
     return {
@@ -33,6 +36,7 @@ class TaskModel {
       TaskDB.steps: steps,
       TaskDB.taskDuration: taskDuration,
       TaskDB.taskStatus: taskStatus,
+      TaskDB.createdAt: createdAt.toIso8601String(),
     };
   }
 }

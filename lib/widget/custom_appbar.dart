@@ -1,6 +1,6 @@
 import 'package:chinese_number/chinese_number.dart';
 import 'package:flutter/material.dart';
-import 'package:startup_namer/pages/task/calendar.dart/calendar_page.dart';
+import 'package:startup_namer/pages/task/calendar_page.dart/calendar_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       title: TextButton(
-        onPressed: () => NavigatorUtil.push(context, const CalendarPage()),
+        onPressed: () => NavigatorUtil.push(context, CalendarPage()),
         child: Text(
           '${_dateTime.year}年${_dateTime.month}月${_dateTime.day}日 星期${_dateTime.weekday.toSimplifiedChineseNumber()}',
           style: const TextStyle(color: Colors.black, fontSize: 20.0),

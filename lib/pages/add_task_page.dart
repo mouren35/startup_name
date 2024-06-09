@@ -135,6 +135,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           note: note,
           steps: steps,
           taskDuration: _duration.inMinutes,
+          createdAt: DateTime.now(),
         ),
       );
       titleController.clear();
