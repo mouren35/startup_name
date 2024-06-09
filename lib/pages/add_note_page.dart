@@ -123,7 +123,7 @@ class _AddNotePageState extends State<AddNotePage> {
       provider.addNote(NoteModel(id: id, title: title, answer: answer));
       ShowToast().showToast(
         msg: "添加成功",
-        // backgroundColor: AppColors.successColor,
+        backgroundColor: Colors.green,
       );
 
       _titleController.clear();
@@ -144,6 +144,7 @@ class _AddNotePageState extends State<AddNotePage> {
       if (context.mounted) {
         ShowToast().showToast(
           msg: "更新成功",
+          backgroundColor: Colors.green,
         );
       }
     }

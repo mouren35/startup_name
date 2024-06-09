@@ -134,7 +134,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           title: title,
           note: note,
           steps: steps,
-          taskTime: _duration.inMinutes,
+          taskDuration: _duration.inMinutes,
         ),
       );
       titleController.clear();
@@ -142,12 +142,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
       stepsController.clear();
       ShowToast().showToast(
         msg: "添加成功",
-        // backgroundColor: AppColors.successColor,
+        backgroundColor: Colors.green,
       );
     } else {
       ShowToast().showToast(
         msg: "时间不能为0",
-        // backgroundColor: Colors.red,
+        backgroundColor: Colors.red,
       );
     }
     _duration = const Duration(minutes: 25);

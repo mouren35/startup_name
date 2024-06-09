@@ -4,7 +4,10 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:startup_namer/pages/post/create_post_screen.dart';
 import 'package:startup_namer/pages/post/post_main_page.dart';
 import 'package:startup_namer/pages/review_page.dart';
+import 'package:startup_namer/pages/task/calendar.dart/calendar_page.dart';
+import 'package:startup_namer/pages/task/search/search_page.dart';
 import 'package:startup_namer/pages/task/stats_page.dart';
+import 'package:startup_namer/widget/custom_appbar.dart';
 
 import '../pages/add_note_page.dart';
 import '../pages/add_task_page.dart';
@@ -23,16 +26,9 @@ class _BottomNavigatorState extends State<BottomNavigator> {
   int _currentIndex = 0;
   final PageController _controller = PageController(initialPage: 0);
 
-  final DateTime _dateTime = DateTime.now();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '${_dateTime.year}年${_dateTime.month}月${_dateTime.day}日 星期${_dateTime.weekday.toSimplifiedChineseNumber()}',
-        ),
-      ),
       body: PageView(
         controller: _controller,
         onPageChanged: _onPageChanged,
@@ -52,8 +48,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         children: [
           _buildFab(Icons.playlist_add_rounded, const AddTaskPage()),
           _buildFab(Icons.note_add_outlined, const AddNotePage()),
-          _buildFab(Icons.play_circle_outline, const ReviewPage()),
-          _buildFab(Icons.post_add, CreatePostScreen())
         ],
       ),
     );
@@ -71,8 +65,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       onDestinationSelected: _onDestinationSelected,
       destinations: const [
         NavigationDestination(
-          icon: Icon(Icons.home_outlined),
-          label: '首页',
+          icon: Icon(Icons.edit_note_rounded),
+          label: '笔记',
         ),
         NavigationDestination(
           icon: Icon(Icons.list_alt_outlined),

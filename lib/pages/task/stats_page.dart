@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/db/task_db.dart';
+import 'package:startup_namer/widget/custom_appbar.dart';
 
 class TaskStatisticsPage extends StatelessWidget {
   const TaskStatisticsPage({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class TaskStatisticsPage extends StatelessWidget {
     final provider = Provider.of<TaskDB>(context);
 
     return Scaffold(
+      appBar: CustomAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

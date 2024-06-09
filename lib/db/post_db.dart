@@ -3,7 +3,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:startup_namer/model/post_comment_mo.dart';
 import 'package:startup_namer/model/post_mo.dart';
 
-
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -22,7 +21,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'forum.db');
     return await openDatabase(
       path,
-      version: 2, // 更新版本号
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -32,7 +31,6 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE posts (
         id TEXT PRIMARY KEY,
-        avatarUrl TEXT,
         username TEXT,
         dateTime TEXT,
         title TEXT,
@@ -54,10 +52,14 @@ class DatabaseHelper {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
+    if (oldVersion < 3) {
       await db.execute('ALTER TABLE posts ADD COLUMN title TEXT');
       await db
           .execute('UPDATE posts SET title = "Untitled" WHERE title IS NULL');
+      await db.execute(
+          'CREATE TABLE new_posts AS SELECT id, username, dateTime, title, content, likes FROM posts');
+      await db.execute('DROP TABLE posts');
+      await db.execute('ALTER TABLE new_posts RENAME TO posts');
     }
   }
 
@@ -77,12 +79,11 @@ class DatabaseHelper {
     List<Post> posts = List.generate(maps.length, (i) {
       return Post(
         id: maps[i]['id'],
-        avatarUrl: maps[i]['avatarUrl'],
         username: maps[i]['username'],
         dateTime: DateTime.parse(maps[i]['dateTime']),
-        title: maps[i]['title'] ?? 'Untitled', // 确保title不是null
+        title: maps[i]['title'] ?? 'Untitled',
         content: maps[i]['content'],
-        likes: maps[i]['likes'],
+        likes: maps[i]['likes'], avatarUrl: '',
       );
     });
 
@@ -125,6 +126,15 @@ class DatabaseHelper {
     await db.update(
       'posts',
       {'likes': likes},
+      where: 'id = ?',
+      whereArgs: [postId],
+    );
+  }
+
+  Future<void> deletePost(String postId) async {
+    final db = await database;
+    await db.delete(
+      'posts',
       where: 'id = ?',
       whereArgs: [postId],
     );

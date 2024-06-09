@@ -8,7 +8,7 @@ class TaskDB extends ChangeNotifier {
   static const title = 'title';
   static const note = 'note';
   static const steps = 'steps';
-  static const taskTime = 'time';
+  static const taskDuration = 'time';
   static const taskStatus = 'taskStatus';
 
   Database? _db;
@@ -24,7 +24,7 @@ class TaskDB extends ChangeNotifier {
             $title TEXT NOT NULL,
             $note TEXT NOT NULL,
             $steps TEXT NOT NULL,
-            $taskTime INTEGER NOT NULL,
+            $taskDuration INTEGER NOT NULL,
             $taskStatus INTEGER)""");
       },
       version: 1,
@@ -81,5 +81,14 @@ class TaskDB extends ChangeNotifier {
     );
     return Map.fromIterable(result,
         key: (e) => e['date'] as String, value: (e) => e['totalTime'] as int);
+  }
+
+  Future<List<TaskModel>> searchTasks(String query) async {
+    final result = await _db!.query(
+      'task',
+      where: 'title LIKE ? OR note LIKE ? OR steps LIKE ?',
+      whereArgs: ['%$query%', '%$query%', '%$query%'],
+    );
+    return result.map((e) => TaskModel.fromMap(e)).toList();
   }
 }

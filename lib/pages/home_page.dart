@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/review_page.dart';
+import 'package:startup_namer/widget/custom_appbar.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
@@ -14,6 +16,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(
+        actions: [Icon(Icons.quiz_outlined)],
+        onActionPressed: [
+          () {
+            NavigatorUtil.push(context, const ReviewPage());
+          }
+        ],
+      ),
       body: Consumer<NoteDb>(
         builder: (context, provider, _) {
           return FutureBuilder<List<NoteModel>?>(
@@ -57,7 +67,7 @@ class HomePage extends StatelessWidget {
         children: [
           SlidableAction(
             label: '删除',
-            // backgroundColor: AppColors.errorColor,
+            backgroundColor: Colors.red,
             icon: Icons.delete_forever,
             onPressed: (context) async {
               await _deleteNoteAndShowSnackBar(context, note);

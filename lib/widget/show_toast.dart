@@ -5,7 +5,7 @@ class ShowToast {
   void showToast({
     required String msg,
     ToastGravity gravity = ToastGravity.BOTTOM,
-    // required Color backgroundColor,
+    required Color backgroundColor,
     Color textColor = Colors.black54,
     double fontSize = 16.0,
     Toast length = Toast.LENGTH_SHORT,
@@ -15,7 +15,7 @@ class ShowToast {
       toastLength: length,
       gravity: gravity,
       timeInSecForIosWeb: 1,
-      // backgroundColor: backgroundColor,
+      backgroundColor: backgroundColor,
       textColor: textColor,
       fontSize: fontSize,
     );

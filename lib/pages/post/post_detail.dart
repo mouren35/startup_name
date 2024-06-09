@@ -5,7 +5,6 @@ import 'package:startup_namer/model/post_mo.dart';
 import 'package:startup_namer/provider/post_provider.dart';
 import 'package:startup_namer/widget/post/comment_widget.dart';
 
-
 class PostScreen extends StatelessWidget {
   final Post post;
 
@@ -28,7 +27,7 @@ class PostScreen extends StatelessWidget {
               children: [
                 ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: NetworkImage(post.avatarUrl),
+                    child: Text(post.username[0].toUpperCase()),
                   ),
                   title: Text(post.username),
                   subtitle: Text(post.dateTime.toLocal().toString()),
@@ -44,18 +43,21 @@ class PostScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 Text(post.content),
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.thumb_up),
-                      onPressed: () {
-                        Provider.of<PostProvider>(context, listen: false)
-                            .toggleLike(post.id);
-                      },
-                    ),
-                    Text(post.likes.toString()),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.thumb_up),
+                        onPressed: () {
+                          Provider.of<PostProvider>(context, listen: false)
+                              .toggleLike(post.id);
+                        },
+                      ),
+                      Text(post.likes.toString()),
+                    ],
+                  ),
                 ),
               ],
             ),

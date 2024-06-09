@@ -4,7 +4,6 @@ import 'package:startup_namer/model/post_mo.dart';
 import 'package:startup_namer/pages/post/post_detail.dart';
 import 'package:startup_namer/provider/post_provider.dart';
 
-
 class PostWidget extends StatelessWidget {
   final Post post;
 
@@ -20,6 +19,9 @@ class PostWidget extends StatelessWidget {
           ),
         );
       },
+      onLongPress: () {
+        _showDeleteDialog(context);
+      },
       child: Card(
         margin: EdgeInsets.all(10),
         child: Column(
@@ -27,7 +29,7 @@ class PostWidget extends StatelessWidget {
           children: [
             ListTile(
               leading: CircleAvatar(
-                backgroundImage: NetworkImage(post.avatarUrl),
+                child: Text(post.username[0].toUpperCase()),
               ),
               title: Text(post.username),
               subtitle: Text(post.dateTime.toLocal().toString()),
@@ -61,6 +63,32 @@ class PostWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text('Delete Post'),
+        content: Text('Are you sure you want to delete this post?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Provider.of<PostProvider>(context, listen: false)
+                  .deletePost(post.id);
+              Navigator.of(ctx).pop();
+            },
+            child: Text('Delete'),
+          ),
+        ],
       ),
     );
   }

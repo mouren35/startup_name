@@ -40,7 +40,7 @@ class TaskExpansionTile extends StatelessWidget {
                   if (title == '未完成') ...[
                     SlidableAction(
                       label: '计时',
-                      // backgroundColor: AppColors.startColor,
+                      backgroundColor: Colors.blue,
                       icon: Icons.timer_outlined,
                       onPressed: (context) {
                         NavigatorUtil.push(
@@ -48,7 +48,7 @@ class TaskExpansionTile extends StatelessWidget {
                             TimerPage(
                               id: task.id!,
                               title: task.title,
-                              seconds: task.taskTime!,
+                              seconds: task.taskDuration!,
                               note: task.note ?? '没有内容',
                               step: task.steps ?? '没有内容',
                             ));
@@ -57,7 +57,7 @@ class TaskExpansionTile extends StatelessWidget {
                   ],
                   SlidableAction(
                     label: '删除',
-                    // backgroundColor: AppColors.errorColor,
+                    backgroundColor: Colors.red,
                     icon: Icons.delete_forever,
                     onPressed: (context) async {
                       await provider.deleteTask(task.id!);
@@ -79,7 +79,7 @@ class TaskExpansionTile extends StatelessWidget {
                       children: [
                         SlidableAction(
                           label: '完成',
-                          // backgroundColor: AppColors.successColor,
+                          backgroundColor: Colors.green,
                           icon: Icons.check,
                           onPressed: (context) async {
                             await provider.updateTask(task.id!, 1);
@@ -89,7 +89,7 @@ class TaskExpansionTile extends StatelessWidget {
                     )
                   : null,
               child: ListTile(
-                leading: Text('${task.taskTime}'),
+                leading: Text('${task.taskDuration}'),
                 title: Text(task.title),
                 subtitle: Text(task.note.toString()),
                 onTap: () {
@@ -97,7 +97,7 @@ class TaskExpansionTile extends StatelessWidget {
                     context,
                     TaskDetailPage(
                       title: task.title,
-                      time: task.taskTime!,
+                      time: task.taskDuration!,
                       step: task.steps ?? '',
                       note: task.note ?? '',
                       id: task.id,

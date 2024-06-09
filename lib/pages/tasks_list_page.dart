@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/task/search/search_page.dart';
+import 'package:startup_namer/util/navigator_util.dart';
+import 'package:startup_namer/widget/custom_appbar.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
@@ -58,19 +61,29 @@ class _TaskListPageState extends State<TaskListPage> {
         final completedTask =
             data?.where((task) => task.taskStatus == 1).toList();
 
-        return SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              TaskExpansionTile(
-                title: '未完成',
-                tasks: undoTask ?? [],
-              ),
-              TaskExpansionTile(
-                title: '完成',
-                tasks: completedTask ?? [],
-              ),
+        return Scaffold(
+          appBar: CustomAppBar(
+            actions: [Icon(Icons.search)],
+            onActionPressed: [
+              () {
+                NavigatorUtil.push(context, SearchPage());
+              }
             ],
+          ),
+          body: SingleChildScrollView(
+            controller: _scrollController,
+            child: Column(
+              children: [
+                TaskExpansionTile(
+                  title: '未完成',
+                  tasks: undoTask ?? [],
+                ),
+                TaskExpansionTile(
+                  title: '完成',
+                  tasks: completedTask ?? [],
+                ),
+              ],
+            ),
           ),
         );
       },

@@ -5,7 +5,7 @@ class TaskModel {
   final String title;
   final String? note;
   final String? steps;
-  final int? taskTime;
+  final int? taskDuration;
   final int taskStatus;
 
   TaskModel({
@@ -13,7 +13,7 @@ class TaskModel {
     required this.title,
     this.note,
     this.steps,
-    this.taskTime = 25,
+    this.taskDuration = 25,
     this.taskStatus = 0,
   });
 
@@ -22,7 +22,7 @@ class TaskModel {
         title = res["title"],
         note = res['note'],
         steps = res['steps'],
-        taskTime = res['time'], //列名不要搞错了
+        taskDuration = res['time'], //列名不要搞错了
         taskStatus = res['taskStatus'];
 
   Map<String, Object?> toMap() {
@@ -31,7 +31,7 @@ class TaskModel {
       TaskDB.title: title,
       TaskDB.note: note,
       TaskDB.steps: steps,
-      TaskDB.taskTime: taskTime,
+      TaskDB.taskDuration: taskDuration,
       TaskDB.taskStatus: taskStatus,
     };
   }
