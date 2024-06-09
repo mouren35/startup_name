@@ -64,11 +64,11 @@ class _TaskListPageState extends State<TaskListPage> {
             children: [
               TaskExpansionTile(
                 title: '未完成',
-                tasks: undoTask,
+                tasks: undoTask ?? [],
               ),
               TaskExpansionTile(
                 title: '完成',
-                tasks: completedTask,
+                tasks: completedTask ?? [],
               ),
             ],
           ),

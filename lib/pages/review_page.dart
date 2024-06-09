@@ -68,7 +68,7 @@ class _ReviewCardsState extends State<ReviewCards> {
         Text(
           _reviewCompleted
               ? "复习完成"
-              : "Question ${_currentIndexNumber + 1} of ${widget.noteList.length} Completed",
+              : "问题 ${_currentIndexNumber + 1} / ${widget.noteList.length} ",
           style: TextStyle(
             fontSize: 24,
             fontWeight: _reviewCompleted ? FontWeight.bold : FontWeight.normal,

@@ -47,10 +47,13 @@ class NoteDb extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> update(NoteModel noteModel) async {
+  Future<void> update(int id, NoteModel noteModel) async {
     await _db?.update(
       'note',
-      noteModel.toMap(),
+      {
+        title: noteModel.title,
+        answer: noteModel.answer,
+      },
       where: 'id = ?',
       whereArgs: [noteModel.id],
     );

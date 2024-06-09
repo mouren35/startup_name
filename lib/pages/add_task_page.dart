@@ -1,7 +1,6 @@
 import 'package:duration_picker_dialog_box/duration_picker_dialog_box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/util/color.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
@@ -126,10 +125,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
     final title = titleController.text;
     final note = noteController.text;
     final steps = stepsController.text;
+    final id = DateTime.now().millisecondsSinceEpoch;
 
     if (_duration != Duration.zero) {
       provider.addTask(
         TaskModel(
+          id: id,
           title: title,
           note: note,
           steps: steps,
@@ -141,12 +142,12 @@ class _AddTaskPageState extends State<AddTaskPage> {
       stepsController.clear();
       ShowToast().showToast(
         msg: "添加成功",
-        backgroundColor: AppColors.successColor,
+        // backgroundColor: AppColors.successColor,
       );
     } else {
       ShowToast().showToast(
         msg: "时间不能为0",
-        backgroundColor: Colors.red,
+        // backgroundColor: Colors.red,
       );
     }
     _duration = const Duration(minutes: 25);

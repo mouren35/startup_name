@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/util/color.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
 import '../widget/show_toast.dart';
 
 class AddNotePage extends StatefulWidget {
-  const AddNotePage({Key? key}) : super(key: key);
+  final NoteModel? note;
+  const AddNotePage({Key? key, this.note}) : super(key: key);
 
   @override
   State<AddNotePage> createState() => _AddNotePageState();
@@ -21,8 +21,8 @@ class _AddNotePageState extends State<AddNotePage> {
   @override
   void initState() {
     super.initState();
-    _titleController = TextEditingController();
-    _answerController = TextEditingController();
+    _titleController = TextEditingController(text: widget.note?.title);
+    _answerController = TextEditingController(text: widget.note?.answer);
     _formKey = GlobalKey<FormState>();
   }
 
@@ -36,6 +36,13 @@ class _AddNotePageState extends State<AddNotePage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<NoteDb>(context);
+    var note = widget.note;
+    if (note?.title != null) {
+      note = NoteModel(
+          title: widget.note!.title,
+          answer: widget.note!.answer,
+          id: widget.note!.id);
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -87,14 +94,18 @@ class _AddNotePageState extends State<AddNotePage> {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => _addNote(provider),
+                onPressed: note?.title != null
+                    ? () => _updateNote(context, note!, provider)
+                    : () => _addNote(provider),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                child: const Text('添加笔记'),
+                child: note?.title != null
+                    ? const Text('更新笔记')
+                    : const Text('添加笔记'),
               ),
             ],
           ),
@@ -107,16 +118,34 @@ class _AddNotePageState extends State<AddNotePage> {
     if (_formKey.currentState!.validate()) {
       final title = _titleController.text;
       final answer = _answerController.text;
+      final id = DateTime.now().millisecondsSinceEpoch;
 
-      provider.addNote(NoteModel(title: title, answer: answer));
-
+      provider.addNote(NoteModel(id: id, title: title, answer: answer));
       ShowToast().showToast(
         msg: "添加成功",
-        backgroundColor: AppColors.successColor,
+        // backgroundColor: AppColors.successColor,
       );
 
       _titleController.clear();
       _answerController.clear();
+    }
+  }
+
+  _updateNote(BuildContext context, NoteModel note, NoteDb provider) async {
+    if (_formKey.currentState!.validate()) {
+      final title = _titleController.text;
+
+      final answer = _answerController.text;
+
+      await provider.update(
+        note.id ?? 1111,
+        NoteModel(title: title, answer: answer, id: note.id),
+      );
+      if (context.mounted) {
+        ShowToast().showToast(
+          msg: "更新成功",
+        );
+      }
     }
   }
 }

@@ -2,18 +2,17 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:startup_namer/util/color.dart';
 
 class CircularTimer extends StatefulWidget {
   final int? durationInSeconds;
   final double size;
-  final Color color;
+  // final Color color;
 
   const CircularTimer({
     super.key,
     this.durationInSeconds,
     this.size = 200.0,
-    this.color = AppColors.startColor,
+    // this.color = AppColors.startColor,
   });
 
   @override
@@ -53,7 +52,7 @@ class _CircularTimerState extends State<CircularTimer> {
         height: widget.size,
         child: CustomPaint(
           painter: _CircularTimerPainter(
-            color: widget.color,
+            color: Theme.of(context).colorScheme.primaryContainer,
             progress: widget.durationInSeconds != null
                 ? 1.0 - _elapsedSeconds / widget.durationInSeconds!
                 : 1.0,

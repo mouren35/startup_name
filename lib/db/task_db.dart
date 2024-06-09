@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../model/task_model.dart';
 
 class TaskDB extends ChangeNotifier {
@@ -40,8 +39,6 @@ class TaskDB extends ChangeNotifier {
 
   Future<List<TaskModel>?> getTask() async {
     final List<Map<String, Object?>>? queryResult = await _db?.query('task');
-
-    // print("result123:${queryResult[0]['time'].runtimeType}");
     return queryResult?.map((e) => TaskModel.fromMap(e)).toList();
   }
 
@@ -62,5 +59,27 @@ class TaskDB extends ChangeNotifier {
       whereArgs: [id],
     );
     notifyListeners();
+  }
+
+  Future<int> getCompletedTaskCount() async {
+    final count = Sqflite.firstIntValue(
+      await _db!.rawQuery('SELECT COUNT(*) FROM task WHERE taskStatus = 1'),
+    );
+    return count ?? 0;
+  }
+
+  Future<int> getTotalTaskCount() async {
+    final count = Sqflite.firstIntValue(
+      await _db!.rawQuery('SELECT COUNT(*) FROM task'),
+    );
+    return count ?? 0;
+  }
+
+  Future<Map<String, int>> getDailyTimeSpent() async {
+    final result = await _db!.rawQuery(
+      'SELECT DATE(time, "unixepoch") as date, SUM(time) as totalTime FROM task GROUP BY date',
+    );
+    return Map.fromIterable(result,
+        key: (e) => e['date'] as String, value: (e) => e['totalTime'] as int);
   }
 }

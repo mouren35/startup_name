@@ -1,0 +1,67 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:startup_namer/model/post_mo.dart';
+import 'package:startup_namer/pages/post/post_detail.dart';
+import 'package:startup_namer/provider/post_provider.dart';
+
+
+class PostWidget extends StatelessWidget {
+  final Post post;
+
+  PostWidget(this.post);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => PostScreen(post),
+          ),
+        );
+      },
+      child: Card(
+        margin: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(post.avatarUrl),
+              ),
+              title: Text(post.username),
+              subtitle: Text(post.dateTime.toLocal().toString()),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                post.title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(post.content),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.thumb_up),
+                  onPressed: () {
+                    Provider.of<PostProvider>(context, listen: false)
+                        .toggleLike(post.id);
+                  },
+                ),
+                Text(post.likes.toString()),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

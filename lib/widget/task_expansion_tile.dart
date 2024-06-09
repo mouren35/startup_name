@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/util/color.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
@@ -12,12 +11,12 @@ import 'show_snack_bar.dart';
 
 class TaskExpansionTile extends StatelessWidget {
   final String title;
-  final List<TaskModel>? tasks;
+  final List<TaskModel> tasks;
 
   const TaskExpansionTile({
     Key? key,
     required this.title,
-    this.tasks,
+    required this.tasks,
   }) : super(key: key);
 
   @override
@@ -29,11 +28,11 @@ class TaskExpansionTile extends StatelessWidget {
       title: Text(title),
       children: [
         ListView.builder(
-          itemCount: tasks?.length,
+          itemCount: tasks.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
-            final task = tasks![index];
+            final task = tasks[index];
             return Slidable(
               endActionPane: ActionPane(
                 motion: const ScrollMotion(),
@@ -41,7 +40,7 @@ class TaskExpansionTile extends StatelessWidget {
                   if (title == '未完成') ...[
                     SlidableAction(
                       label: '计时',
-                      backgroundColor: AppColors.startColor,
+                      // backgroundColor: AppColors.startColor,
                       icon: Icons.timer_outlined,
                       onPressed: (context) {
                         NavigatorUtil.push(
@@ -58,7 +57,7 @@ class TaskExpansionTile extends StatelessWidget {
                   ],
                   SlidableAction(
                     label: '删除',
-                    backgroundColor: AppColors.errorColor,
+                    // backgroundColor: AppColors.errorColor,
                     icon: Icons.delete_forever,
                     onPressed: (context) async {
                       await provider.deleteTask(task.id!);
@@ -80,7 +79,7 @@ class TaskExpansionTile extends StatelessWidget {
                       children: [
                         SlidableAction(
                           label: '完成',
-                          backgroundColor: AppColors.successColor,
+                          // backgroundColor: AppColors.successColor,
                           icon: Icons.check,
                           onPressed: (context) async {
                             await provider.updateTask(task.id!, 1);

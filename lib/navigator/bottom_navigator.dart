@@ -1,7 +1,10 @@
 import 'package:chinese_number/chinese_number.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:startup_namer/pages/post/create_post_screen.dart';
+import 'package:startup_namer/pages/post/post_main_page.dart';
 import 'package:startup_namer/pages/review_page.dart';
+import 'package:startup_namer/pages/task/stats_page.dart';
 
 import '../pages/add_note_page.dart';
 import '../pages/add_task_page.dart';
@@ -34,9 +37,11 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         controller: _controller,
         onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
+        children: [
           HomePage(),
           TaskListPage(),
+          PostMainPage(),
+          TaskStatisticsPage(),
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -48,6 +53,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           _buildFab(Icons.playlist_add_rounded, const AddTaskPage()),
           _buildFab(Icons.note_add_outlined, const AddNotePage()),
           _buildFab(Icons.play_circle_outline, const ReviewPage()),
+          _buildFab(Icons.post_add, CreatePostScreen())
         ],
       ),
     );
@@ -71,6 +77,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         NavigationDestination(
           icon: Icon(Icons.list_alt_outlined),
           label: '任务',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.forum_outlined),
+          label: '树洞',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.bar_chart),
+          label: '统计',
         ),
       ],
     );

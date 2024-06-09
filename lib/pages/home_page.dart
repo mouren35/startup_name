@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/util/color.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
@@ -58,7 +57,7 @@ class HomePage extends StatelessWidget {
         children: [
           SlidableAction(
             label: '删除',
-            backgroundColor: AppColors.errorColor,
+            // backgroundColor: AppColors.errorColor,
             icon: Icons.delete_forever,
             onPressed: (context) async {
               await _deleteNoteAndShowSnackBar(context, note);
@@ -70,7 +69,7 @@ class HomePage extends StatelessWidget {
         onTap: () {
           NavigatorUtil.push(
             context,
-            const NoteDetailPage(),
+            NoteDetailPage(note: note), // 传递NoteModel对象给详情页
           );
         },
         title: Text(note.title),
@@ -82,7 +81,7 @@ class HomePage extends StatelessWidget {
   Future<void> _deleteNoteAndShowSnackBar(
       BuildContext context, NoteModel note) async {
     final provider = Provider.of<NoteDb>(context, listen: false);
-    await provider.deleteNote(note.id!);
+    await provider.deleteNote(note.id);
     if (context.mounted) {
       showSnackBar(
         context,

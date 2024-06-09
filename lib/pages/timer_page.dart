@@ -45,7 +45,7 @@ class TimerPage extends StatelessWidget {
                     CircularTimer(
                       durationInSeconds: seconds * 60,
                       size: cardWidth * 0.6,
-                      color: Colors.blue,
+                      // color: Colors.blue,
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton.icon(

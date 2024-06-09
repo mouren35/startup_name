@@ -1,26 +1,34 @@
-import '../db/note_db.dart';
-
 class NoteModel {
-  final int? id;
+  final int id;
   final String title;
   final String answer;
+  final String idField;
+  final String titleField;
+  final String answerField;
 
   NoteModel({
-    this.id,
+    required this.id,
     required this.title,
     required this.answer,
+    this.idField = 'id',
+    this.titleField = 'title',
+    this.answerField = 'answer',
   });
 
-  NoteModel.fromMap(Map<String, dynamic> res)
-      : id = res["id"],
-        title = res["title"],
-        answer = res["answer"];
+  NoteModel.fromMap(
+    Map<String, dynamic> res, {
+    this.idField = 'id',
+    this.titleField = 'title',
+    this.answerField = 'answer',
+  })  : id = res[idField],
+        title = res[titleField],
+        answer = res[answerField];
 
   Map<String, Object?> toMap() {
     return {
-      NoteDb.id: id,
-      NoteDb.title: title,
-      NoteDb.answer: answer,
+      idField: id,
+      titleField: title,
+      answerField: answer,
     };
   }
 }
