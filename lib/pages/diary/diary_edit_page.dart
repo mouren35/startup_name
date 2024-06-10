@@ -7,7 +7,7 @@ import 'package:startup_namer/provider/diary_provider.dart';
 class EditScreen extends StatefulWidget {
   final DiaryEntry? entry;
 
-  EditScreen({this.entry});
+  const EditScreen({super.key, this.entry});
 
   @override
   _EditScreenState createState() => _EditScreenState();
@@ -40,14 +40,14 @@ class _EditScreenState extends State<EditScreen> {
         title: Text(widget.entry == null ? 'Add Entry' : 'Edit Entry'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
                 initialValue: _title,
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 onSaved: (value) {
                   _title = value!;
                 },
@@ -60,7 +60,7 @@ class _EditScreenState extends State<EditScreen> {
               ),
               TextFormField(
                 initialValue: _content,
-                decoration: InputDecoration(labelText: 'Content'),
+                decoration: const InputDecoration(labelText: 'Content'),
                 onSaved: (value) {
                   _content = value!;
                 },
@@ -73,8 +73,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
               DropdownButtonFormField(
                 value: _emotion,
-                decoration: InputDecoration(labelText: 'Emotion'),
-                items: [
+                decoration: const InputDecoration(labelText: 'Emotion'),
+                items: const [
                   DropdownMenuItem(value: 'Happy', child: Text('😊 Happy')),
                   DropdownMenuItem(value: 'Sad', child: Text('😢 Sad')),
                   DropdownMenuItem(value: 'Angry', child: Text('😡 Angry')),
@@ -92,7 +92,7 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -114,7 +114,7 @@ class _EditScreenState extends State<EditScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Save'),
+                child: const Text('Save'),
               ),
             ],
           ),

@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'tn-flutter-334b0.appspot.com',
     iosBundleId: 'com.StuTime.startupNamer',
   );
+
 }

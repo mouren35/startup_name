@@ -6,19 +6,21 @@ import 'package:startup_namer/provider/diary_provider.dart';
 
 
 class DiaryListPage extends StatelessWidget {
+  const DiaryListPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emotion Diary'),
+        title: const Text('Emotion Diary'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditScreen(entry: null)),
+                    builder: (context) => const EditScreen(entry: null)),
               );
             },
           ),
@@ -27,7 +29,7 @@ class DiaryListPage extends StatelessWidget {
       body: Consumer<DiaryProvider>(
         builder: (context, diaryProvider, child) {
           return GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // 两列网格
               childAspectRatio: 3 / 2, // 调整比例以适应内容
             ),
@@ -40,16 +42,13 @@ class DiaryListPage extends StatelessWidget {
                   header: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(entry.title,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                   ),
-                  child: Center(
-                      child: Text(
-                          '${getEmotionEmoji(entry.emotion)} ${entry.emotion}')),
                   footer: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -59,7 +58,7 @@ class DiaryListPage extends StatelessWidget {
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () {
                           Provider.of<DiaryProvider>(context, listen: false)
                               .deleteEntry(entry.id!);
@@ -67,6 +66,9 @@ class DiaryListPage extends StatelessWidget {
                       ),
                     ],
                   ),
+                  child: Center(
+                      child: Text(
+                          '${getEmotionEmoji(entry.emotion)} ${entry.emotion}')),
                 ),
               );
             },

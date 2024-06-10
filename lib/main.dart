@@ -9,8 +9,14 @@ import 'db/note_db.dart';
 import 'db/task_db.dart';
 import 'navigator/bottom_navigator.dart';
 
-void main(List<String> args) {
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
+void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(
     MultiProvider(
       providers: [

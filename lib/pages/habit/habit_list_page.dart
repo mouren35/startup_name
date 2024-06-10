@@ -5,18 +5,20 @@ import 'package:startup_namer/pages/habit/add_habit_page.dart';
 import 'package:startup_namer/provider/habit_provider.dart';
 
 class HabitListScreen extends StatelessWidget {
+  const HabitListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Habit Tracker'),
+        title: const Text('Habit Tracker'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => AddHabitScreen(),
+                  builder: (context) => const AddHabitScreen(),
                 ),
               );
             },

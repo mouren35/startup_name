@@ -5,6 +5,8 @@ import 'package:startup_namer/provider/habit_provider.dart';
 
 
 class AddHabitScreen extends StatefulWidget {
+  const AddHabitScreen({super.key});
+
   @override
   _AddHabitScreenState createState() => _AddHabitScreenState();
 }
@@ -34,16 +36,16 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Habit'),
+        title: const Text('Add New Habit'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Habit Name'),
+                decoration: const InputDecoration(labelText: 'Habit Name'),
                 validator: (value) {
                   if (value!.isEmpty) {
                     return 'Please enter a habit name';
@@ -55,13 +57,13 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                 },
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Description'),
+                decoration: const InputDecoration(labelText: 'Description'),
                 onSaved: (value) {
                   _description = value!;
                 },
               ),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Frequency'),
+                decoration: const InputDecoration(labelText: 'Frequency'),
                 value: _frequency,
                 items: ['daily', 'weekly'].map((String value) {
                   return DropdownMenuItem<String>(
@@ -75,10 +77,10 @@ class _AddHabitScreenState extends State<AddHabitScreen> {
                   });
                 },
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _submit,
-                child: Text('Add Habit'),
+                child: const Text('Add Habit'),
               ),
             ],
           ),

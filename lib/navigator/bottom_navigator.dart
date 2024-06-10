@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/pages/diary/diary_list_page.dart';
 import 'package:startup_namer/pages/habit/habit_list_page.dart';
+import 'package:startup_namer/pages/login/login_page.dart';
 
-import 'package:startup_namer/pages/post/post_main_page.dart';
 
 import 'package:startup_namer/pages/task/stats_page.dart';
 
@@ -27,10 +27,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         controller: _controller,
         onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
+        children: const [
           TaskListPage(),
           NoteListPage(),
-          PostMainPage(),
+          // PostMainPage(),
+          // PostScreen(),
+          AuthScreen(),
           TaskStatisticsPage(),
           DiaryListPage(),
           HabitListScreen()
