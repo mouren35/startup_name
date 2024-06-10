@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/add_task_page.dart';
 import 'package:startup_namer/pages/task/search/search_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
@@ -63,8 +64,11 @@ class _TaskListPageState extends State<TaskListPage> {
 
         return Scaffold(
           appBar: CustomAppBar(
-            actions: [Icon(Icons.search)],
+            actions: [Icon(Icons.add), Icon(Icons.search)],
             onActionPressed: [
+              () {
+                NavigatorUtil.push(context, AddTaskPage());
+              },
               () {
                 NavigatorUtil.push(context, SearchPage());
               }

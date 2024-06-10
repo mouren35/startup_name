@@ -33,77 +33,90 @@ class TaskExpansionTile extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             final task = tasks[index];
-            return Slidable(
-              endActionPane: ActionPane(
-                motion: const ScrollMotion(),
-                children: [
-                  if (title == '未完成') ...[
+            return Container(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 4.0,
+              ),
+              decoration: BoxDecoration(
+                color: task.taskColor.withOpacity(0.3), // 使用颜色属性
+                border: Border.all(
+                  color: task.taskColor, // 使用颜色属性
+                ),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
+              child: Slidable(
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  children: [
+                    if (title == '未完成') ...[
+                      SlidableAction(
+                        label: '计时',
+                        backgroundColor: Colors.blue,
+                        icon: Icons.timer_outlined,
+                        onPressed: (context) {
+                          NavigatorUtil.push(
+                              context,
+                              TimerPage(
+                                id: task.id!,
+                                title: task.title,
+                                seconds: task.taskDuration!,
+                                note: task.note ?? '没有内容',
+                                step: task.steps ?? '没有内容',
+                              ));
+                        },
+                      ),
+                    ],
                     SlidableAction(
-                      label: '计时',
-                      backgroundColor: Colors.blue,
-                      icon: Icons.timer_outlined,
-                      onPressed: (context) {
-                        NavigatorUtil.push(
+                      label: '删除',
+                      backgroundColor: Colors.red,
+                      icon: Icons.delete_forever,
+                      onPressed: (context) async {
+                        await provider.deleteTask(task.id!);
+                        if (context.mounted) {
+                          showSnackBar(
                             context,
-                            TimerPage(
-                              id: task.id!,
-                              title: task.title,
-                              seconds: task.taskDuration!,
-                              note: task.note ?? '没有内容',
-                              step: task.steps ?? '没有内容',
-                            ));
+                            '删除成功',
+                            '撤销',
+                            () => provider.addTask(task),
+                          );
+                        }
                       },
                     ),
                   ],
-                  SlidableAction(
-                    label: '删除',
-                    backgroundColor: Colors.red,
-                    icon: Icons.delete_forever,
-                    onPressed: (context) async {
-                      await provider.deleteTask(task.id!);
-                      if (context.mounted) {
-                        showSnackBar(
-                          context,
-                          '删除成功',
-                          '撤销',
-                          () => provider.addTask(task),
-                        );
-                      }
-                    },
-                  ),
-                ],
-              ),
-              startActionPane: title == '未完成'
-                  ? ActionPane(
-                      motion: const ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          label: '完成',
-                          backgroundColor: Colors.green,
-                          icon: Icons.check,
-                          onPressed: (context) async {
-                            await provider.updateTask(task.id!, 1);
-                          },
-                        ),
-                      ],
-                    )
-                  : null,
-              child: ListTile(
-                leading: Text('${task.taskDuration}'),
-                title: Text(task.title),
-                subtitle: Text(task.note.toString()),
-                onTap: () {
-                  NavigatorUtil.push(
-                    context,
-                    TaskDetailPage(
-                      title: task.title,
-                      time: task.taskDuration!,
-                      step: task.steps ?? '',
-                      note: task.note ?? '',
-                      id: task.id,
-                    ),
-                  );
-                },
+                ),
+                startActionPane: title == '未完成'
+                    ? ActionPane(
+                        motion: const ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            label: '完成',
+                            backgroundColor: Colors.green,
+                            icon: Icons.check,
+                            onPressed: (context) async {
+                              await provider.updateTask(task.id!, 1);
+                            },
+                          ),
+                        ],
+                      )
+                    : null,
+                child: ListTile(
+                  leading: Text('${task.taskDuration}'),
+                  title: Text(task.title),
+                  subtitle: Text(task.note.toString()),
+                  onTap: () {
+                    NavigatorUtil.push(
+                      context,
+                      TaskDetailPage(
+                        title: task.title,
+                        time: task.taskDuration!,
+                        step: task.steps ?? '',
+                        note: task.note ?? '',
+                        id: task.id,
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           },

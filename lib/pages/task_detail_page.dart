@@ -68,9 +68,10 @@ class TaskDetailContent extends StatelessWidget {
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
               return const Center(child: Text('No data available'));
             } else {
+              final task = snapshot.data!.firstWhere((t) => t.id == id);
               return TaskDetailView(
+                task: task,
                 title: title,
-                task: snapshot.data!.first,
                 time: time,
                 step: step,
                 note: note,
@@ -109,7 +110,7 @@ class TaskDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TaskInfoCard(title: title, time: time),
+          TaskInfoCard(title: title, time: time, color: task.taskColor),
           const SizedBox(height: 20),
           Card(
             child: Padding(
@@ -179,16 +180,19 @@ class TaskDetailView extends StatelessWidget {
 class TaskInfoCard extends StatelessWidget {
   final String title;
   final int time;
+  final Color color; // 添加颜色属性
 
   const TaskInfoCard({
     Key? key,
     required this.title,
     required this.time,
+    required this.color,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: color, // 使用颜色属性
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: ListTile(

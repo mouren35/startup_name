@@ -13,7 +13,7 @@ class PostMainPage extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        actions: [Icon(Icons.post_add)],
+        actions: [Icon(Icons.add)],
         onActionPressed: [
           () {
             Navigator.push(

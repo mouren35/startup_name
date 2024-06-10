@@ -27,33 +27,42 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("搜索"),
+        title: TextField(
+          controller: _searchController,
+          decoration: InputDecoration(
+            hintText: '请输入搜索关键词',
+            // 隐藏border
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            // 设置背景色为透明
+            filled: true,
+            fillColor: Colors.transparent,
+            // 添加清除按钮
+            suffixIcon: IconButton(
+              icon: Icon(Icons.clear, size: 16),
+              onPressed: () {
+                _searchController.clear();
+              },
+            ),
+          ),
+          onSubmitted: _performSearch,
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              _performSearch(_searchController.text);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      hintText: '请输入搜索关键词',
-                      border: OutlineInputBorder(),
-                    ),
-                    onSubmitted: _performSearch,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () {
-                    _performSearch(_searchController.text);
-                  },
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
             Expanded(
               child: _searchResults == null
                   ? const Center(child: Text('请输入搜索关键词'))

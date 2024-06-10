@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/db/task_db.dart';
 import 'package:startup_namer/model/task_model.dart';
+import 'package:startup_namer/pages/task_detail_page.dart';
+import 'package:startup_namer/util/navigator_util.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
@@ -90,11 +92,24 @@ class _CalendarPageState extends State<CalendarPage> {
                         vertical: 4.0,
                       ),
                       decoration: BoxDecoration(
-                        border: Border.all(),
+                        color:
+                            value[index].taskColor.withOpacity(0.3), // 使用颜色属性
+                        border: Border.all(
+                          color: value[index].taskColor, // 使用颜色属性
+                        ),
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       child: ListTile(
-                        onTap: () => print('${value[index].title}'),
+                        onTap: () => NavigatorUtil.push(
+                          context,
+                          TaskDetailPage(
+                            title: value[index].title,
+                            time: value[index].taskDuration!,
+                            step: value[index].steps ?? '',
+                            note: value[index].note ?? '',
+                            id: value[index].id,
+                          ),
+                        ),
                         title: Text('${value[index].title}'),
                         subtitle: Text('${value[index].note ?? ''}'),
                       ),

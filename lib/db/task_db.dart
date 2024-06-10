@@ -11,6 +11,7 @@ class TaskDB extends ChangeNotifier {
   static const taskDuration = 'time';
   static const taskStatus = 'taskStatus';
   static const createdAt = 'createdAt';
+  static const taskColor = 'taskColor'; // 新增颜色字段
 
   Database? _db;
 
@@ -27,7 +28,8 @@ class TaskDB extends ChangeNotifier {
             $steps TEXT,
             $taskDuration INTEGER NOT NULL,
             $taskStatus INTEGER,
-            $createdAt TEXT NOT NULL)""");
+            $createdAt TEXT NOT NULL,
+            $taskColor INTEGER NOT NULL)""");
       },
       version: 1,
     );

@@ -1,4 +1,5 @@
 import '../db/task_db.dart';
+import 'package:flutter/material.dart';
 
 class TaskModel {
   final int? id;
@@ -8,6 +9,7 @@ class TaskModel {
   final int? taskDuration;
   final int taskStatus;
   final DateTime createdAt;
+  final Color taskColor; // 新增颜色属性
 
   TaskModel({
     this.id,
@@ -17,6 +19,7 @@ class TaskModel {
     this.taskDuration = 25,
     this.taskStatus = 0,
     required this.createdAt,
+    required this.taskColor, // 更新构造函数
   });
 
   TaskModel.fromMap(Map<String, dynamic> res)
@@ -26,7 +29,8 @@ class TaskModel {
         steps = res['steps'],
         taskDuration = res['time'],
         taskStatus = res['taskStatus'],
-        createdAt = DateTime.parse(res['createdAt']);
+        createdAt = DateTime.parse(res['createdAt']),
+        taskColor = Color(res['taskColor']); // 从Map中读取颜色
 
   Map<String, Object?> toMap() {
     return {
@@ -37,6 +41,7 @@ class TaskModel {
       TaskDB.taskDuration: taskDuration,
       TaskDB.taskStatus: taskStatus,
       TaskDB.createdAt: createdAt.toIso8601String(),
+      TaskDB.taskColor: taskColor.value, // 存储颜色值
     };
   }
 }

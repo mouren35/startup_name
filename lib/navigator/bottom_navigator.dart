@@ -7,7 +7,7 @@ import 'package:startup_namer/pages/task/stats_page.dart';
 
 import '../pages/add_note_page.dart';
 import '../pages/add_task_page.dart';
-import '../pages/home_page.dart';
+import '../pages/note_list_page.dart';
 import '../pages/tasks_list_page.dart';
 import '../util/navigator_util.dart';
 
@@ -30,22 +30,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          HomePage(),
           TaskListPage(),
+          NoteListPage(),
           PostMainPage(),
           TaskStatisticsPage(),
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
-      floatingActionButtonLocation: ExpandableFab.location,
-      floatingActionButton: ExpandableFab(
-        distance: 60,
-        type: ExpandableFabType.up,
-        children: [
-          _buildFab(Icons.playlist_add_rounded, const AddTaskPage()),
-          _buildFab(Icons.note_add_outlined, const AddNotePage()),
-        ],
-      ),
     );
   }
 
@@ -61,12 +52,12 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       onDestinationSelected: _onDestinationSelected,
       destinations: const [
         NavigationDestination(
-          icon: Icon(Icons.edit_note_rounded),
-          label: '笔记',
-        ),
-        NavigationDestination(
           icon: Icon(Icons.list_alt_outlined),
           label: '任务',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.edit_note_rounded),
+          label: '笔记',
         ),
         NavigationDestination(
           icon: Icon(Icons.forum_outlined),

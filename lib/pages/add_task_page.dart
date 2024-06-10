@@ -20,6 +20,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
 
   Duration _duration = const Duration(minutes: 25);
 
+  Color _taskColor = Colors.purple; // 默认任务颜色
+
+  final Map<Color, String> colorMap = {
+    Colors.purple: '工作',
+    Colors.red: '人际',
+    Colors.yellow: '兴趣',
+    Colors.green: '健康',
+    Colors.blue: '心智',
+  };
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
@@ -28,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       appBar: AppBar(
         title: const Text('添加任务'),
         actions: [
-          IconButton(
+          TextButton(
             onPressed: () async {
               final selectedDuration = await _showDurationPickerDialog(context);
               if (selectedDuration != null) {
@@ -37,7 +47,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 });
               }
             },
-            icon: const Icon(Icons.access_time),
+            child: Text('${_duration.inMinutes} 分钟'),
           ),
           IconButton(
             onPressed: () {
@@ -66,7 +76,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               const SizedBox(height: 16.0),
               const Text(
-                '任务内容',
+                '任务步骤',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextField(
@@ -74,13 +84,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 minLines: 3,
                 maxLines: 6,
                 decoration: const InputDecoration(
-                  hintText: '请输入任务内容',
+                  hintText: '请输入任务步骤',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16.0),
               const Text(
-                '任务笔记',
+                '任务备注',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               TextField(
@@ -88,22 +98,41 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 minLines: 2,
                 maxLines: 4,
                 decoration: const InputDecoration(
-                  hintText: '请输入任务笔记',
+                  hintText: '请输入任务备注',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  final selectedDuration =
-                      await _showDurationPickerDialog(context);
-                  if (selectedDuration != null) {
-                    setState(() {
-                      _duration = selectedDuration;
-                    });
-                  }
-                },
-                child: Text('设置任务时长 (${_duration.inMinutes} 分钟)'),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     final selectedDuration =
+              //         await _showDurationPickerDialog(context);
+              //     if (selectedDuration != null) {
+              //       setState(() {
+              //         _duration = selectedDuration;
+              //       });
+              //     }
+              //   },
+              //   child: Text('设置任务时长 (${_duration.inMinutes} 分钟)'),
+              // ),
+              const Text(
+                '选择任务类型',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Wrap(
+                spacing: 7.0,
+                children: colorMap.entries.map((entry) {
+                  return ChoiceChip(
+                    label: Text(entry.value),
+                    selectedColor: entry.key,
+                    selected: _taskColor == entry.key,
+                    onSelected: (selected) {
+                      setState(() {
+                        _taskColor = entry.key;
+                      });
+                    },
+                  );
+                }).toList(),
               ),
             ],
           ),
@@ -126,6 +155,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     final note = noteController.text;
     final steps = stepsController.text;
     final id = DateTime.now().millisecondsSinceEpoch;
+    print('--------${_taskColor}');
 
     if (_duration != Duration.zero) {
       provider.addTask(
@@ -136,6 +166,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           steps: steps,
           taskDuration: _duration.inMinutes,
           createdAt: DateTime.now(),
+          taskColor: _taskColor, // 添加颜色属性
         ),
       );
       titleController.clear();

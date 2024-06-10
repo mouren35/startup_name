@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/add_note_page.dart';
 import 'package:startup_namer/pages/review_page.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
 
@@ -10,15 +11,18 @@ import '../util/navigator_util.dart';
 import '../widget/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class NoteListPage extends StatelessWidget {
+  const NoteListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        actions: [Icon(Icons.quiz_outlined)],
+        actions: [Icon(Icons.add), Icon(Icons.quiz_outlined)],
         onActionPressed: [
+          () {
+            NavigatorUtil.push(context, AddNotePage());
+          },
           () {
             NavigatorUtil.push(context, const ReviewPage());
           }
