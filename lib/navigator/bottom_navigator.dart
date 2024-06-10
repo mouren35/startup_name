@@ -1,8 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/pages/diary/diary_list_page.dart';
 import 'package:startup_namer/pages/habit/habit_list_page.dart';
 import 'package:startup_namer/pages/login/login_page.dart';
-
+import 'package:startup_namer/pages/post/post_page.dart';
 
 import 'package:startup_namer/pages/task/stats_page.dart';
 
@@ -10,7 +11,8 @@ import '../pages/note_list_page.dart';
 import '../pages/tasks_list_page.dart';
 
 class BottomNavigator extends StatefulWidget {
-  const BottomNavigator({Key? key}) : super(key: key);
+  final User user;
+  const BottomNavigator({Key? key, required this.user}) : super(key: key);
 
   @override
   State<BottomNavigator> createState() => _BottomNavigatorState();
@@ -27,15 +29,15 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         controller: _controller,
         onPageChanged: _onPageChanged,
         physics: const NeverScrollableScrollPhysics(),
-        children: const [
-          TaskListPage(),
-          NoteListPage(),
-          // PostMainPage(),
-          // PostScreen(),
-          AuthScreen(),
-          TaskStatisticsPage(),
-          DiaryListPage(),
-          HabitListScreen()
+        children: [
+          TaskListPage(user: widget.user),
+          NoteListPage(user: widget.user),
+
+          PostScreen(user: widget.user),
+
+          TaskStatisticsPage(user: widget.user),
+          DiaryListPage(user: widget.user),
+          HabitListScreen(user: widget.user)
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),

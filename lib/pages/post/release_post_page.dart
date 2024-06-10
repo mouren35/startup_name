@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
+
 
 class NewPostScreen extends StatelessWidget {
   final User user;
@@ -8,13 +10,16 @@ class NewPostScreen extends StatelessWidget {
   final TextEditingController _contentController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  NewPostScreen({super.key, required this.user});
+  NewPostScreen({required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New Post'),
+        title: Text('新帖子'),
+        actions: [
+          UserAvatar(email: user.email!),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -22,14 +27,14 @@ class NewPostScreen extends StatelessWidget {
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(labelText: '标题'),
             ),
             TextField(
               controller: _contentController,
-              decoration: const InputDecoration(labelText: 'Content'),
+              decoration: InputDecoration(labelText: '内容'),
               maxLines: 5,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 if (_titleController.text.isNotEmpty &&
@@ -40,12 +45,12 @@ class NewPostScreen extends StatelessWidget {
                     'userId': user.uid,
                     'email': user.email,
                     'timestamp': FieldValue.serverTimestamp(),
-                    'likes': [], // Initialize likes as an empty array
+                    'likes': [],
                   });
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Post'),
+              child: Text('发布'),
             ),
           ],
         ),

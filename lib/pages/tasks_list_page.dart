@@ -1,16 +1,19 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/add_task_page.dart';
 import 'package:startup_namer/pages/task/search/search_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
 import '../widget/task_expansion_tile.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({Key? key}) : super(key: key);
+  final User user;
+  const TaskListPage({Key? key, required this.user}) : super(key: key);
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -64,14 +67,19 @@ class _TaskListPageState extends State<TaskListPage> {
 
         return Scaffold(
           appBar: CustomAppBar(
-            actions: const [Icon(Icons.add), Icon(Icons.search)],
+            actions: [
+              Icon(Icons.add),
+              Icon(Icons.search),
+              UserAvatar(email: widget.user.email!),
+            ],
             onActionPressed: [
               () {
                 NavigatorUtil.push(context, const AddTaskPage());
               },
               () {
                 NavigatorUtil.push(context, const SearchPage());
-              }
+              },
+              () {}
             ],
           ),
           body: SingleChildScrollView(

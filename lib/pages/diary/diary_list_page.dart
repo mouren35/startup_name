@@ -1,12 +1,15 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/model/diary_model.dart';
 import 'package:startup_namer/pages/diary/diary_edit_page.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 
 class DiaryListPage extends StatelessWidget {
-  const DiaryListPage({super.key});
+  final User user;
+  const DiaryListPage({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +17,7 @@ class DiaryListPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Emotion Diary'),
         actions: [
+          UserAvatar(email: user.email!),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {

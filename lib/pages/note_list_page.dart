@@ -1,9 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/add_note_page.dart';
 import 'package:startup_namer/pages/review_page.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 import '../db/note_db.dart';
 import '../model/note_model.dart';
@@ -12,20 +14,24 @@ import '../widget/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
 class NoteListPage extends StatelessWidget {
-  const NoteListPage({Key? key}) : super(key: key);
+  final User user;
+  const NoteListPage({Key? key, required this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        actions: const [Icon(Icons.add), Icon(Icons.quiz_outlined)],
+        actions: [Icon(Icons.add), Icon(Icons.quiz_outlined),
+          UserAvatar(email: user.email!),
+        ],
         onActionPressed: [
           () {
             NavigatorUtil.push(context, const AddNotePage());
           },
           () {
             NavigatorUtil.push(context, const ReviewPage());
-          }
+          },
+          () {}
         ],
       ),
       body: Consumer<NoteDb>(

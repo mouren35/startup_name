@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart'; // For date formatting
+import 'package:intl/intl.dart';
+import 'package:startup_namer/pages/login/login_page.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart'; // For date formatting
 
 class PostDetailScreen extends StatelessWidget {
   final String postId;
@@ -9,13 +11,26 @@ class PostDetailScreen extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _commentController = TextEditingController();
 
-  PostDetailScreen({super.key, required this.postId, required this.user});
+  PostDetailScreen({required this.postId, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Post Detail'),
+        title: Text('帖子详情'),
+        actions: [
+          UserAvatar(email: user.email!),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => AuthScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -24,65 +39,72 @@ class PostDetailScreen extends StatelessWidget {
               stream: _firestore.collection('posts').doc(postId).snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 }
                 var post = snapshot.data!;
                 bool isLiked = post['likes'].contains(user.uid);
+                int likesCount = post['likes'].length;
+                Timestamp? timestamp = post['timestamp'];
+                String formattedTime = timestamp != null
+                    ? DateFormat('yyyy-MM-dd – kk:mm')
+                        .format(timestamp.toDate())
+                    : '无日期信息';
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: Text(
-                          post['email'].substring(0, 1).toUpperCase(),
-                          style: const TextStyle(fontSize: 24),
-                        ),
-                      ),
+                      leading: UserAvatar(
+                          email: post['email'], radius: 30, fontSize: 24),
                       title: Text(
                         post['title'],
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(post['content'], style: const TextStyle(fontSize: 18)),
-                          Text(DateFormat('yyyy-MM-dd – kk:mm')
-                              .format(post['timestamp'].toDate())),
+                          Text(post['content'], style: TextStyle(fontSize: 14)),
+                          Text(formattedTime),
                         ],
                       ),
-                      trailing: IconButton(
-                        icon: Icon(
-                          isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
-                          color: isLiked ? Colors.blue : null,
-                        ),
-                        onPressed: () async {
-                          if (isLiked) {
-                            // Remove like
-                            await _firestore
-                                .collection('posts')
-                                .doc(postId)
-                                .update({
-                              'likes': FieldValue.arrayRemove([user.uid])
-                            });
-                          } else {
-                            // Add like
-                            await _firestore
-                                .collection('posts')
-                                .doc(postId)
-                                .update({
-                              'likes': FieldValue.arrayUnion([user.uid])
-                            });
-                          }
-                        },
+                      trailing: Column(
+                        children: [
+                          IconButton(
+                            icon: Icon(
+                              isLiked ? Icons.thumb_up : Icons.thumb_up_off_alt,
+                              color: isLiked ? Colors.blue : null,
+                            ),
+                            onPressed: () async {
+                              if (isLiked) {
+                                await _firestore
+                                    .collection('posts')
+                                    .doc(postId)
+                                    .update({
+                                  'likes': FieldValue.arrayRemove([user.uid])
+                                });
+                              } else {
+                                await _firestore
+                                    .collection('posts')
+                                    .doc(postId)
+                                    .update({
+                                  'likes': FieldValue.arrayUnion([user.uid])
+                                });
+                              }
+                            },
+                          ),
+                          Text(
+                            likesCount.toString(),
+                            // style: TextStyle(fontSize: 4),
+                          ),
+                        ],
                       ),
                     ),
-                    const Divider(),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Comments',
+                        '评论',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -98,60 +120,80 @@ class PostDetailScreen extends StatelessWidget {
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
-                            return const Center(child: CircularProgressIndicator());
+                            return Center(child: CircularProgressIndicator());
                           }
                           return ListView(
                             children: snapshot.data!.docs.map((doc) {
                               bool isLiked = doc['likes'].contains(user.uid);
+                              int likesCount = doc['likes'].length;
+                              Timestamp? timestamp = doc['timestamp'];
+                              String formattedTime = timestamp != null
+                                  ? DateFormat('yyyy-MM-dd – kk:mm')
+                                      .format(timestamp.toDate())
+                                  : '无日期信息';
+
                               return ListTile(
-                                leading: CircleAvatar(
-                                  radius: 20,
-                                  child: Text(
-                                    doc['email'].substring(0, 1).toUpperCase(),
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ),
-                                title: Text(
-                                  doc['comment'],
-                                  style: const TextStyle(fontSize: 16),
+                                leading: UserAvatar(
+                                    email: doc['email'],
+                                    radius: 20,
+                                    fontSize: 16),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      doc['email'],
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      formattedTime,
+                                      style: TextStyle(fontSize: 12),
+                                    ),
+                                  ],
                                 ),
                                 subtitle: Text(
-                                  DateFormat('yyyy-MM-dd – kk:mm')
-                                      .format(doc['timestamp'].toDate()),
-                                  style: const TextStyle(fontSize: 12),
+                                  doc['comment'],
+                                  style: TextStyle(fontSize: 16),
                                 ),
-                                trailing: IconButton(
-                                  icon: Icon(
-                                    isLiked
-                                        ? Icons.thumb_up
-                                        : Icons.thumb_up_off_alt,
-                                    color: isLiked ? Colors.blue : null,
-                                  ),
-                                  onPressed: () async {
-                                    if (isLiked) {
-                                      // Remove like
-                                      await _firestore
-                                          .collection('posts')
-                                          .doc(postId)
-                                          .collection('comments')
-                                          .doc(doc.id)
-                                          .update({
-                                        'likes':
-                                            FieldValue.arrayRemove([user.uid])
-                                      });
-                                    } else {
-                                      // Add like
-                                      await _firestore
-                                          .collection('posts')
-                                          .doc(postId)
-                                          .collection('comments')
-                                          .doc(doc.id)
-                                          .update({
-                                        'likes':
-                                            FieldValue.arrayUnion([user.uid])
-                                      });
-                                    }
-                                  },
+                                trailing: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(
+                                        isLiked
+                                            ? Icons.thumb_up
+                                            : Icons.thumb_up_off_alt,
+                                        color: isLiked ? Colors.blue : null,
+                                        size: 16,
+                                      ),
+                                      onPressed: () async {
+                                        if (isLiked) {
+                                          await _firestore
+                                              .collection('posts')
+                                              .doc(postId)
+                                              .collection('comments')
+                                              .doc(doc.id)
+                                              .update({
+                                            'likes': FieldValue.arrayRemove(
+                                                [user.uid])
+                                          });
+                                        } else {
+                                          await _firestore
+                                              .collection('posts')
+                                              .doc(postId)
+                                              .collection('comments')
+                                              .doc(doc.id)
+                                              .update({
+                                            'likes': FieldValue.arrayUnion(
+                                                [user.uid])
+                                          });
+                                        }
+                                      },
+                                    ),
+                                    Text(likesCount.toString(),
+                                        style: TextStyle(fontSize: 12)),
+                                  ],
                                 ),
                               );
                             }).toList(),
@@ -164,6 +206,7 @@ class PostDetailScreen extends StatelessWidget {
               },
             ),
           ),
+          Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -171,24 +214,26 @@ class PostDetailScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: const InputDecoration(labelText: 'Comment'),
+                    decoration: InputDecoration(
+                      labelText: '输入评论',
+                      border: OutlineInputBorder(),
+                    ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send),
+                  icon: Icon(Icons.send),
                   onPressed: () async {
                     if (_commentController.text.isNotEmpty) {
-                      var currentUser = FirebaseAuth.instance.currentUser;
                       await _firestore
                           .collection('posts')
                           .doc(postId)
                           .collection('comments')
                           .add({
                         'comment': _commentController.text,
-                        'userId': currentUser!.uid,
-                        'email': currentUser.email,
+                        'userId': user.uid,
+                        'email': user.email,
                         'timestamp': FieldValue.serverTimestamp(),
-                        'likes': [], // Initialize likes as an empty array
+                        'likes': [],
                       });
                       _commentController.clear();
                     }

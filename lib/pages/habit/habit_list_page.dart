@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/model/habit_model.dart';
 import 'package:startup_namer/pages/habit/add_habit_page.dart';
 import 'package:startup_namer/provider/habit_provider.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 class HabitListScreen extends StatelessWidget {
-  const HabitListScreen({super.key});
+  final User user;
+  const HabitListScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +16,7 @@ class HabitListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Habit Tracker'),
         actions: [
+          UserAvatar(email: user.email!),
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {

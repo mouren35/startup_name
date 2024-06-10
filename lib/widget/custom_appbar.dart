@@ -25,7 +25,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () => NavigatorUtil.push(context, const CalendarPage()),
         child: Text(
           '${_dateTime.year}年${_dateTime.month}月${_dateTime.day}日 星期${_dateTime.weekday.toSimplifiedChineseNumber()}',
-          style: const TextStyle(color: Colors.black, fontSize: 20.0),
+          style: const TextStyle(color: Colors.black, fontSize: 17.0),
         ),
       ),
       actions: actions != null

@@ -1,13 +1,12 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/login/login_page.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
 import 'package:startup_namer/provider/habit_provider.dart';
-import 'package:startup_namer/provider/post_provider.dart';
 
 import 'db/note_db.dart';
 import 'db/task_db.dart';
-import 'navigator/bottom_navigator.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -22,7 +21,6 @@ void main(List<String> args) async {
       providers: [
         ChangeNotifierProvider(create: (_) => TaskDB()..init()),
         ChangeNotifierProvider(create: (_) => NoteDb()..init()),
-        ChangeNotifierProvider(create: (_) => PostProvider()),
         ChangeNotifierProvider(create: (_) => DiaryProvider()),
         ChangeNotifierProvider(create: (context) => HabitProvider())
       ],
@@ -70,7 +68,7 @@ class MyApp extends StatelessWidget {
       ),
       title: 'time_review',
       debugShowCheckedModeBanner: false,
-      home: const BottomNavigator(),
+      home: AuthScreen(),
     );
   }
 }
