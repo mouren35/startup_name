@@ -7,13 +7,15 @@ class CreatePostScreen extends StatelessWidget {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
+  CreatePostScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Post'),
+        title: const Text('Create Post'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -21,15 +23,15 @@ class CreatePostScreen extends StatelessWidget {
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: const InputDecoration(labelText: 'Title'),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextField(
               controller: _contentController,
-              decoration: InputDecoration(labelText: 'Content1'),
+              decoration: const InputDecoration(labelText: 'Content1'),
               maxLines: 5,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 final newPost = Post(
@@ -43,7 +45,7 @@ class CreatePostScreen extends StatelessWidget {
                 postProvider.addPost(newPost);
                 Navigator.of(context).pop();
               },
-              child: Text('Post1'),
+              child: const Text('Post1'),
             ),
           ],
         ),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -18,9 +20,6 @@ class _ReviewPageState extends State<ReviewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("复习"),
-      ),
       body: Consumer<NoteDb>(
         builder: (context, noteDb, _) {
           return FutureBuilder<List<NoteModel>?>(
@@ -55,6 +54,87 @@ class ReviewCards extends StatefulWidget {
 class _ReviewCardsState extends State<ReviewCards> {
   int _currentIndexNumber = 0;
   bool _reviewCompleted = false;
+  int _score = 0;
+  late Timer _timer;
+  int _remainingSeconds = 60;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0) {
+        setState(() {
+          _remainingSeconds--;
+        });
+      } else {
+        _showTimeoutDialog();
+      }
+    });
+  }
+
+  void _showTimeoutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("时间到"),
+        content: const Text("你已用完时间，进入下一个问题"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _nextQuestion();
+            },
+            child: const Text("确定"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _nextQuestion() {
+    if (_currentIndexNumber < widget.noteList.length - 1) {
+      setState(() {
+        _currentIndexNumber++;
+        _remainingSeconds = 60;
+      });
+    } else {
+      setState(() {
+        _reviewCompleted = true;
+      });
+    }
+  }
+
+  Future<void> _showAnswerDialog() async {
+    final isCorrect = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("回答情况"),
+        content: const Text("你答对了吗？"),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text("否"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text("是"),
+          ),
+        ],
+      ),
+    );
+
+    if (isCorrect == true) {
+      setState(() {
+        _score += 10;
+      });
+    }
+
+    _nextQuestion();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,73 +142,66 @@ class _ReviewCardsState extends State<ReviewCards> {
         ? 1.0
         : (_currentIndexNumber + 1) / widget.noteList.length;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          _reviewCompleted
-              ? "复习完成"
-              : "问题 ${_currentIndexNumber + 1} / ${widget.noteList.length} ",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: _reviewCompleted ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        const SizedBox(height: 20),
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: LinearProgressIndicator(
-            minHeight: 5,
-            value: progressValue,
-          ),
-        ),
-        const SizedBox(height: 25),
-        if (!_reviewCompleted)
-          SizedBox(
-            width: 300,
-            height: 300,
-            child: FlipCard(
-              front: ReusableCard(
-                  text: widget.noteList[_currentIndexNumber].title),
-              back: ReusableCard(
-                  text: widget.noteList[_currentIndexNumber].answer),
-            ),
-          ),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            ElevatedButton.icon(
-              onPressed: _currentIndexNumber > 0 && !_reviewCompleted
-                  ? () {
-                      setState(() {
-                        _currentIndexNumber--;
-                      });
-                    }
-                  : null,
-              icon: const Icon(FontAwesomeIcons.handPointLeft, size: 30),
-              label: const Text(""),
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10)),
-                padding: const EdgeInsets.only(
-                    right: 20, left: 25, top: 15, bottom: 15),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("复习"),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Center(
+              child: Text(
+                '$_remainingSeconds 秒',
+                style: const TextStyle(fontSize: 18),
               ),
             ),
+          ),
+        ],
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            _reviewCompleted
+                ? "复习完成，得分：$_score"
+                : "问题 ${_currentIndexNumber + 1} / ${widget.noteList.length}",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight:
+                  _reviewCompleted ? FontWeight.bold : FontWeight.normal,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: LinearProgressIndicator(
+              minHeight: 5,
+              value: progressValue,
+            ),
+          ),
+          const SizedBox(height: 25),
+          if (!_reviewCompleted)
+            SizedBox(
+              width: 300,
+              height: 300,
+              child: FlipCard(
+                front: ReusableCard(
+                    text: widget.noteList[_currentIndexNumber].title),
+                back: ReusableCard(
+                    text: widget.noteList[_currentIndexNumber].answer),
+              ),
+            ),
+          const SizedBox(height: 20),
+          if (!_reviewCompleted)
             ElevatedButton.icon(
-              onPressed: !_reviewCompleted
-                  ? () {
-                      setState(() {
-                        if (_currentIndexNumber < widget.noteList.length - 1) {
-                          _currentIndexNumber++;
-                        } else {
-                          _reviewCompleted = true;
-                        }
-                      });
-                    }
-                  : null,
+              onPressed: () async {
+                _timer.cancel();
+                await _showAnswerDialog();
+                if (!_reviewCompleted) {
+                  _startTimer();
+                }
+              },
               icon: const Icon(FontAwesomeIcons.handPointRight, size: 30),
-              label: const Text(""),
+              label: const Text("回答"),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
@@ -136,16 +209,21 @@ class _ReviewCardsState extends State<ReviewCards> {
                     right: 20, left: 25, top: 15, bottom: 15),
               ),
             ),
-          ],
-        ),
-        if (_reviewCompleted)
-          ElevatedButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text("退出"),
-          ),
-      ],
+          if (_reviewCompleted)
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("退出"),
+            ),
+        ],
+      ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 }

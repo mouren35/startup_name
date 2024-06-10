@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "449805379808",
+    "project_id": "tn-flutter-334b0",
+    "storage_bucket": "tn-flutter-334b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449805379808:android:685f2c067a72d5d8c78885",
+        "android_client_info": {
+          "package_name": "com.Stu_Time.startup_namer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAY1Od6FlBsrtsZLSQiIuwLwvEenOMinY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

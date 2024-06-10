@@ -8,7 +8,7 @@ import 'package:startup_namer/widget/post/comment_widget.dart';
 class PostScreen extends StatelessWidget {
   final Post post;
 
-  PostScreen(this.post);
+  PostScreen(this.post, {super.key});
 
   final TextEditingController _commentController = TextEditingController();
 
@@ -16,7 +16,7 @@ class PostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Post Details'),
+        title: const Text('Post Details'),
       ),
       body: Column(
         children: [
@@ -32,24 +32,24 @@ class PostScreen extends StatelessWidget {
                   title: Text(post.username),
                   subtitle: Text(post.dateTime.toLocal().toString()),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(
                   post.title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Text(post.content),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       IconButton(
-                        icon: Icon(Icons.thumb_up),
+                        icon: const Icon(Icons.thumb_up),
                         onPressed: () {
                           Provider.of<PostProvider>(context, listen: false)
                               .toggleLike(post.id);
@@ -62,7 +62,7 @@ class PostScreen extends StatelessWidget {
               ],
             ),
           ),
-          Divider(),
+          const Divider(),
           Expanded(
             child: ListView.builder(
               itemCount: post.comments.length,
@@ -78,11 +78,11 @@ class PostScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: InputDecoration(labelText: 'Add a comment'),
+                    decoration: const InputDecoration(labelText: 'Add a comment'),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () {
                     final newComment = Comment(
                       id: DateTime.now().toString(),

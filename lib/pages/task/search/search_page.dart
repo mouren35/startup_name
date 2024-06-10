@@ -42,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
             fillColor: Colors.transparent,
             // 添加清除按钮
             suffixIcon: IconButton(
-              icon: Icon(Icons.clear, size: 16),
+              icon: const Icon(Icons.clear, size: 16),
               onPressed: () {
                 _searchController.clear();
               },

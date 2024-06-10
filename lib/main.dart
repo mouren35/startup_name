@@ -1,6 +1,8 @@
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/provider/diary_provider.dart';
+import 'package:startup_namer/provider/habit_provider.dart';
 import 'package:startup_namer/provider/post_provider.dart';
 
 import 'db/note_db.dart';
@@ -15,6 +17,8 @@ void main(List<String> args) {
         ChangeNotifierProvider(create: (_) => TaskDB()..init()),
         ChangeNotifierProvider(create: (_) => NoteDb()..init()),
         ChangeNotifierProvider(create: (_) => PostProvider()),
+        ChangeNotifierProvider(create: (_) => DiaryProvider()),
+        ChangeNotifierProvider(create: (context) => HabitProvider())
       ],
       child: const MyApp(),
     ),

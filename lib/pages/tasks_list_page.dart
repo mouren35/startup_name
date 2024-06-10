@@ -35,7 +35,7 @@ class _TaskListPageState extends State<TaskListPage> {
     if (_scrollController.position.pixels ==
         _scrollController.position.maxScrollExtent) {
       // Reached the bottom of the list, load more data
-      final provider = Provider.of<TaskDB>(context, listen: false);
+      Provider.of<TaskDB>(context, listen: false);
     }
   }
 
@@ -64,13 +64,13 @@ class _TaskListPageState extends State<TaskListPage> {
 
         return Scaffold(
           appBar: CustomAppBar(
-            actions: [Icon(Icons.add), Icon(Icons.search)],
+            actions: const [Icon(Icons.add), Icon(Icons.search)],
             onActionPressed: [
               () {
-                NavigatorUtil.push(context, AddTaskPage());
+                NavigatorUtil.push(context, const AddTaskPage());
               },
               () {
-                NavigatorUtil.push(context, SearchPage());
+                NavigatorUtil.push(context, const SearchPage());
               }
             ],
           ),

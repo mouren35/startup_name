@@ -5,7 +5,7 @@ import 'package:startup_namer/model/post_comment_mo.dart';
 class CommentWidget extends StatelessWidget {
   final Comment comment;
 
-  CommentWidget(this.comment);
+  const CommentWidget(this.comment, {super.key});
 
   @override
   Widget build(BuildContext context) {

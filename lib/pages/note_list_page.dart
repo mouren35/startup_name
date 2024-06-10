@@ -18,10 +18,10 @@ class NoteListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        actions: [Icon(Icons.add), Icon(Icons.quiz_outlined)],
+        actions: const [Icon(Icons.add), Icon(Icons.quiz_outlined)],
         onActionPressed: [
           () {
-            NavigatorUtil.push(context, AddNotePage());
+            NavigatorUtil.push(context, const AddNotePage());
           },
           () {
             NavigatorUtil.push(context, const ReviewPage());

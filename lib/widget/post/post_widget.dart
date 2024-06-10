@@ -7,7 +7,7 @@ import 'package:startup_namer/provider/post_provider.dart';
 class PostWidget extends StatelessWidget {
   final Post post;
 
-  PostWidget(this.post);
+  const PostWidget(this.post, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class PostWidget extends StatelessWidget {
         _showDeleteDialog(context);
       },
       child: Card(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,7 +38,7 @@ class PostWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 post.title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -52,7 +52,7 @@ class PostWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                  icon: Icon(Icons.thumb_up),
+                  icon: const Icon(Icons.thumb_up),
                   onPressed: () {
                     Provider.of<PostProvider>(context, listen: false)
                         .toggleLike(post.id);
@@ -71,14 +71,14 @@ class PostWidget extends StatelessWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Delete Post'),
-        content: Text('Are you sure you want to delete this post?'),
+        title: const Text('Delete Post'),
+        content: const Text('Are you sure you want to delete this post?'),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
@@ -86,7 +86,7 @@ class PostWidget extends StatelessWidget {
                   .deletePost(post.id);
               Navigator.of(ctx).pop();
             },
-            child: Text('Delete'),
+            child: const Text('Delete'),
           ),
         ],
       ),

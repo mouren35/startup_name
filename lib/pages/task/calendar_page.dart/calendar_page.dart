@@ -7,6 +7,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
 class CalendarPage extends StatefulWidget {
+  const CalendarPage({super.key});
+
   @override
   _CalendarPageState createState() => _CalendarPageState();
 }
@@ -51,7 +53,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('日历'),
+        title: const Text('日历'),
       ),
       body: Column(
         children: [
@@ -63,7 +65,7 @@ class _CalendarPageState extends State<CalendarPage> {
             calendarFormat: _calendarFormat,
             eventLoader: (day) => [],
             startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: CalendarStyle(
+            calendarStyle: const CalendarStyle(
               outsideDaysVisible: false,
             ),
             onDaySelected: _onDaySelected,
@@ -110,8 +112,8 @@ class _CalendarPageState extends State<CalendarPage> {
                             id: value[index].id,
                           ),
                         ),
-                        title: Text('${value[index].title}'),
-                        subtitle: Text('${value[index].note ?? ''}'),
+                        title: Text(value[index].title),
+                        subtitle: Text(value[index].note ?? ''),
                       ),
                     );
                   },

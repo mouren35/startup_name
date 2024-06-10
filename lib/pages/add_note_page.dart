@@ -138,7 +138,7 @@ class _AddNotePageState extends State<AddNotePage> {
       final answer = _answerController.text;
 
       await provider.update(
-        note.id ?? 1111,
+        note.id,
         NoteModel(title: title, answer: answer, id: note.id),
       );
       if (context.mounted) {

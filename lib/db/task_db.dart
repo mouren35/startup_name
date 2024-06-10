@@ -83,8 +83,7 @@ class TaskDB extends ChangeNotifier {
     final result = await _db!.rawQuery(
       'SELECT DATE($createdAt) as date, SUM($taskDuration) as totalTime FROM task GROUP BY date',
     );
-    return Map.fromIterable(result,
-        key: (e) => e['date'] as String, value: (e) => e['totalTime'] as int);
+    return {for (var e in result) e['date'] as String: e['totalTime'] as int};
   }
 
   Future<List<TaskModel>> searchTasks(String query) async {

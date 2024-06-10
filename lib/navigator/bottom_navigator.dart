@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:startup_namer/pages/diary/diary_list_page.dart';
+import 'package:startup_namer/pages/habit/habit_list_page.dart';
 
 import 'package:startup_namer/pages/post/post_main_page.dart';
 
 import 'package:startup_namer/pages/task/stats_page.dart';
 
-import '../pages/add_note_page.dart';
-import '../pages/add_task_page.dart';
 import '../pages/note_list_page.dart';
 import '../pages/tasks_list_page.dart';
-import '../util/navigator_util.dart';
 
 class BottomNavigator extends StatefulWidget {
   const BottomNavigator({Key? key}) : super(key: key);
@@ -34,6 +32,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           NoteListPage(),
           PostMainPage(),
           TaskStatisticsPage(),
+          DiaryListPage(),
+          HabitListScreen()
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -67,6 +67,14 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           icon: Icon(Icons.bar_chart),
           label: '统计',
         ),
+        NavigationDestination(
+          icon: Icon(Icons.book),
+          label: '日记',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.check),
+          label: '习惯',
+        ),
       ],
     );
   }
@@ -75,13 +83,13 @@ class _BottomNavigatorState extends State<BottomNavigator> {
     _controller.jumpToPage(index);
   }
 
-  Widget _buildFab(IconData icon, Widget page) {
-    return FloatingActionButton.small(
-      heroTag: UniqueKey(),
-      onPressed: () {
-        NavigatorUtil.push(context, page);
-      },
-      child: Icon(icon),
-    );
-  }
+  // Widget _buildFab(IconData icon, Widget page) {
+  //   return FloatingActionButton.small(
+  //     heroTag: UniqueKey(),
+  //     onPressed: () {
+  //       NavigatorUtil.push(context, page);
+  //     },
+  //     child: Icon(icon),
+  //   );
+  // }
 }

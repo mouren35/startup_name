@@ -7,13 +7,15 @@ import 'package:startup_namer/widget/post/post_widget.dart';
 // 确保导入创建帖子的页面
 
 class PostMainPage extends StatelessWidget {
+  const PostMainPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
 
     return Scaffold(
       appBar: CustomAppBar(
-        actions: [Icon(Icons.add)],
+        actions: const [Icon(Icons.add)],
         onActionPressed: [
           () {
             Navigator.push(

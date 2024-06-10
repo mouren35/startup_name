@@ -155,7 +155,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
     final note = noteController.text;
     final steps = stepsController.text;
     final id = DateTime.now().millisecondsSinceEpoch;
-    print('--------${_taskColor}');
 
     if (_duration != Duration.zero) {
       provider.addTask(
