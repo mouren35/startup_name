@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/add_task_page.dart';
 import 'package:startup_namer/pages/task/search/search_page.dart';
+import 'package:startup_namer/pages/task/stats_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart';
@@ -70,6 +71,7 @@ class _TaskListPageState extends State<TaskListPage> {
             actions: [
               Icon(Icons.add),
               Icon(Icons.search),
+              Icon(Icons.bar_chart_rounded),
               UserAvatar(email: widget.user.email!),
             ],
             onActionPressed: [
@@ -78,6 +80,9 @@ class _TaskListPageState extends State<TaskListPage> {
               },
               () {
                 NavigatorUtil.push(context, const SearchPage());
+              },
+              () {
+                NavigatorUtil.push(context, const TaskStatisticsPage());
               },
               () {}
             ],

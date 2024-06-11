@@ -2,10 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/pages/diary/diary_list_page.dart';
 import 'package:startup_namer/pages/habit/habit_list_page.dart';
-import 'package:startup_namer/pages/login/login_page.dart';
+import 'package:startup_namer/pages/list/list_page.dart';
 import 'package:startup_namer/pages/post/post_page.dart';
-
-import 'package:startup_namer/pages/task/stats_page.dart';
 
 import '../pages/note_list_page.dart';
 import '../pages/tasks_list_page.dart';
@@ -32,12 +30,10 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         children: [
           TaskListPage(user: widget.user),
           NoteListPage(user: widget.user),
-
           PostScreen(user: widget.user),
-
-          TaskStatisticsPage(user: widget.user),
           DiaryListPage(user: widget.user),
-          HabitListScreen(user: widget.user)
+          HabitListScreen(user: widget.user),
+          TodoListScreen()
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -68,16 +64,16 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           label: '树洞',
         ),
         NavigationDestination(
-          icon: Icon(Icons.bar_chart),
-          label: '统计',
-        ),
-        NavigationDestination(
           icon: Icon(Icons.book),
           label: '日记',
         ),
         NavigationDestination(
           icon: Icon(Icons.check),
           label: '习惯',
+        ),
+        NavigationDestination(
+          icon: Icon(Icons.list),
+          label: '清单',
         ),
       ],
     );

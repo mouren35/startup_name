@@ -24,7 +24,12 @@ class DatabaseService {
       path,
       onCreate: (db, version) {
         return db.execute(
-          'CREATE TABLE habits(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, frequency TEXT, completed INTEGER)',
+          '''CREATE TABLE habits(
+              id INTEGER PRIMARY KEY AUTOINCREMENT, 
+              name TEXT, 
+              description TEXT, 
+              frequency TEXT, 
+              completed INTEGER)''',
         );
       },
       version: 1,

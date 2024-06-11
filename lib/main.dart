@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/login/login_page.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
 import 'package:startup_namer/provider/habit_provider.dart';
+import 'package:startup_namer/provider/list_provider.dart';
 
 import 'db/note_db.dart';
 import 'db/task_db.dart';
@@ -14,15 +15,16 @@ import 'firebase_options.dart';
 void main(List<String> args) async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
-);
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => TaskDB()..init()),
         ChangeNotifierProvider(create: (_) => NoteDb()..init()),
         ChangeNotifierProvider(create: (_) => DiaryProvider()),
-        ChangeNotifierProvider(create: (context) => HabitProvider())
+        ChangeNotifierProvider(create: (context) => HabitProvider()),
+        ChangeNotifierProvider(create: (_) => TodoProvider()),
       ],
       child: const MyApp(),
     ),

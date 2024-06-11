@@ -22,7 +22,7 @@ class DatabaseHelper {
     String path = join(await getDatabasesPath(), 'diary.db');
     return await openDatabase(
       path,
-      version: 2, // 更新版本号以更改数据库架构
+      version: 2,
       onCreate: (db, version) {
         return db.execute(
           'CREATE TABLE diary_entries(id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, date TEXT, emotion TEXT)',

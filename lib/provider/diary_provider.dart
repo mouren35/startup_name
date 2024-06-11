@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:startup_namer/db/diary_db.dart';
 import 'package:startup_namer/model/diary_model.dart';
 
+
 class DiaryProvider with ChangeNotifier {
   List<DiaryEntry> _entries = [];
 

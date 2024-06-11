@@ -6,8 +6,7 @@ import 'package:startup_namer/db/task_db.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
 
 class TaskStatisticsPage extends StatelessWidget {
-  final User user;
-  const TaskStatisticsPage({Key? key, required this.user}) : super(key: key);
+  const TaskStatisticsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

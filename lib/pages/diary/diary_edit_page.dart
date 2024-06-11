@@ -7,7 +7,7 @@ import 'package:startup_namer/provider/diary_provider.dart';
 class EditScreen extends StatefulWidget {
   final DiaryEntry? entry;
 
-  const EditScreen({super.key, this.entry});
+  EditScreen({this.entry});
 
   @override
   _EditScreenState createState() => _EditScreenState();
@@ -33,21 +33,54 @@ class _EditScreenState extends State<EditScreen> {
     }
   }
 
+  void _selectEmotion(String emotion) {
+    setState(() {
+      _emotion = emotion;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.entry == null ? 'Add Entry' : 'Edit Entry'),
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(Icons.emoji_emotions),
+            onSelected: _selectEmotion,
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 'Happy',
+                child: Text('😊 Happy'),
+              ),
+              PopupMenuItem(
+                value: 'Sad',
+                child: Text('😢 Sad'),
+              ),
+              PopupMenuItem(
+                value: 'Angry',
+                child: Text('😡 Angry'),
+              ),
+              PopupMenuItem(
+                value: 'Neutral',
+                child: Text('😐 Neutral'),
+              ),
+            ],
+          ),
+        ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
                 initialValue: _title,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
                 onSaved: (value) {
                   _title = value!;
                 },
@@ -58,9 +91,14 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
+              SizedBox(height: 16),
               TextFormField(
                 initialValue: _content,
-                decoration: const InputDecoration(labelText: 'Content'),
+                decoration: InputDecoration(
+                  labelText: 'Content',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 5,
                 onSaved: (value) {
                   _content = value!;
                 },
@@ -71,28 +109,9 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              DropdownButtonFormField(
-                value: _emotion,
-                decoration: const InputDecoration(labelText: 'Emotion'),
-                items: const [
-                  DropdownMenuItem(value: 'Happy', child: Text('😊 Happy')),
-                  DropdownMenuItem(value: 'Sad', child: Text('😢 Sad')),
-                  DropdownMenuItem(value: 'Angry', child: Text('😡 Angry')),
-                  DropdownMenuItem(value: 'Neutral', child: Text('😐 Neutral')),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _emotion = value as String;
-                  });
-                },
-                validator: (value) {
-                  if (value == null) {
-                    return 'Please select an emotion';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 20),
+              SizedBox(height: 16),
+              Text('Selected Emotion: ${_getEmotionEmoji(_emotion)} $_emotion'),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -114,12 +133,27 @@ class _EditScreenState extends State<EditScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('Save'),
+                child: Text('Save'),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _getEmotionEmoji(String emotion) {
+    switch (emotion) {
+      case 'Happy':
+        return '😊';
+      case 'Sad':
+        return '😢';
+      case 'Angry':
+        return '😡';
+      case 'Neutral':
+        return '😐';
+      default:
+        return '';
+    }
   }
 }
