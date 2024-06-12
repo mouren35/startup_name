@@ -5,6 +5,8 @@ import 'package:startup_namer/db/task_db.dart';
 class AddListPage extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
 
+  AddListPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);

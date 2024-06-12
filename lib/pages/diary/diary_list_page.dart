@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:startup_namer/model/diary_model.dart';
 import 'package:startup_namer/pages/diary/diary_edit_page.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 class DiaryListPage extends StatelessWidget {
   final User user;
@@ -13,109 +14,135 @@ class DiaryListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('日记'),
+        title: Text('日记本'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add),
+            icon: Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const EditScreen(entry: null)),
+                    builder: (context) => EditScreen(entry: null)),
               );
             },
           ),
+          IconButton(onPressed: () {}, icon: UserAvatar(email: user.email!)),
         ],
       ),
       body: Consumer<DiaryProvider>(
         builder: (context, diaryProvider, child) {
-          return GridView.builder(
-            padding: const EdgeInsets.all(8.0),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 8.0,
-              mainAxisSpacing: 8.0,
-            ),
-            itemCount: diaryProvider.entries.length,
-            itemBuilder: (context, index) {
-              DiaryEntry entry = diaryProvider.entries[index];
-              return Card(
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => EditScreen(entry: entry)),
+          return diaryProvider.entries.isEmpty
+              ? Center(child: Text('暂无日记，请点击右上角添加'))
+              : GridView.builder(
+                  padding: EdgeInsets.all(8.0),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 2,
+                    crossAxisSpacing: 8.0,
+                    mainAxisSpacing: 8.0,
+                  ),
+                  itemCount: diaryProvider.entries.length,
+                  itemBuilder: (context, index) {
+                    DiaryEntry entry = diaryProvider.entries[index];
+                    return Card(
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditScreen(entry: entry)),
+                          );
+                        },
+                        onLongPress: () {
+                          _showDeleteDialog(context, entry);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      entry.title,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Text(
+                                    _getEmotionEmoji(entry.emotion),
+                                    style: TextStyle(fontSize: 18),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                entry.content,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[700],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          entry.title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Flexible(
-                          child: Text(
-                            entry.content,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[700],
-                            ),
-                          ),
-                        ),
-                        const Spacer(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                                '${_getEmotionEmoji(entry.emotion)} ${entry.emotion}'),
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () {
-                                Provider.of<DiaryProvider>(context,
-                                        listen: false)
-                                    .deleteEntry(entry.id!);
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
-          );
+                );
         },
+      ),
+    );
+  }
+
+  void _showDeleteDialog(BuildContext context, DiaryEntry entry) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('删除日记'),
+        content: Text('确定要删除这篇日记吗？'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('取消'),
+          ),
+          TextButton(
+            onPressed: () {
+              Provider.of<DiaryProvider>(context, listen: false)
+                  .deleteEntry(entry.id!);
+              Navigator.of(context).pop();
+            },
+            child: Text('删除'),
+          ),
+        ],
       ),
     );
   }
 
   String _getEmotionEmoji(String emotion) {
     switch (emotion) {
-      case 'Happy':
+      case '快乐':
         return '😊';
-      case 'Sad':
+      case '悲伤':
         return '😢';
-      case 'Angry':
+      case '愤怒':
         return '😡';
-      case 'Neutral':
+      case '平静':
         return '😐';
       default:
         return '';

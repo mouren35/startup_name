@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class NewPostScreen extends StatefulWidget {
   final User user;
 
-  NewPostScreen({required this.user});
+  const NewPostScreen({super.key, required this.user});
 
   @override
   _NewPostScreenState createState() => _NewPostScreenState();
@@ -41,7 +41,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('新帖子'),
+        title: const Text('新帖子'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -51,7 +51,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '标题',
                   border: OutlineInputBorder(),
                 ),
@@ -62,10 +62,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _contentController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '内容',
                   border: OutlineInputBorder(),
                 ),
@@ -76,10 +76,10 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitPost,
-                child: Text('发布'),
+                child: const Text('发布'),
               ),
             ],
           ),

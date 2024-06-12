@@ -3,13 +3,14 @@ import 'package:provider/provider.dart';
 import 'package:startup_namer/model/diary_model.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
 
+
 class EditScreen extends StatefulWidget {
   final DiaryEntry? entry;
 
-  const EditScreen({super.key, this.entry});
+  EditScreen({this.entry});
 
   @override
-  State<EditScreen> createState() => _EditScreenState();
+  _EditScreenState createState() => _EditScreenState();
 }
 
 class _EditScreenState extends State<EditScreen> {
@@ -28,7 +29,7 @@ class _EditScreenState extends State<EditScreen> {
     } else {
       _title = '';
       _content = '';
-      _emotion = '开心'; // Default emotion
+      _emotion = '快乐'; // 默认心情
     }
   }
 
@@ -45,38 +46,38 @@ class _EditScreenState extends State<EditScreen> {
         title: Text(widget.entry == null ? '添加日记' : '编辑日记'),
         actions: [
           PopupMenuButton<String>(
-            icon: const Icon(Icons.emoji_emotions),
+            icon: Icon(Icons.emoji_emotions),
             onSelected: _selectEmotion,
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: '开心',
-                child: Text('😊 开心'),
+              PopupMenuItem(
+                value: '快乐',
+                child: Text('😊 快乐'),
               ),
-              const PopupMenuItem(
-                value: '伤心',
-                child: Text('😢 伤心'),
+              PopupMenuItem(
+                value: '悲伤',
+                child: Text('😢 悲伤'),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: '愤怒',
                 child: Text('😡 愤怒'),
               ),
-              const PopupMenuItem(
-                value: '焦虑',
-                child: Text('😐 焦虑'),
+              PopupMenuItem(
+                value: '平静',
+                child: Text('😐 平静'),
               ),
             ],
           ),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
                 initialValue: _title,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: '标题',
                   border: OutlineInputBorder(),
                 ),
@@ -90,10 +91,10 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 initialValue: _content,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: '内容',
                   border: OutlineInputBorder(),
                 ),
@@ -108,9 +109,9 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
-              Text('所选心情: ${_getEmotionEmoji(_emotion)} $_emotion'),
-              const SizedBox(height: 20),
+              SizedBox(height: 16),
+              Text('选择的心情: ${_getEmotionEmoji(_emotion)} $_emotion'),
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -132,7 +133,11 @@ class _EditScreenState extends State<EditScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: const Text('保存'),
+                child: Text('保存'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: TextStyle(fontSize: 16),
+                ),
               ),
             ],
           ),
@@ -143,13 +148,13 @@ class _EditScreenState extends State<EditScreen> {
 
   String _getEmotionEmoji(String emotion) {
     switch (emotion) {
-      case '开心':
+      case '快乐':
         return '😊';
-      case '伤心':
+      case '悲伤':
         return '😢';
       case '愤怒':
         return '😡';
-      case '焦虑':
+      case '平静':
         return '😐';
       default:
         return '';

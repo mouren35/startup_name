@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:startup_namer/pages/post/post_detail.dart';
 
 import 'package:intl/intl.dart';
+import 'package:startup_namer/pages/post/post_detail.dart';
 import 'package:startup_namer/pages/post/release_post_page.dart';
 import 'package:startup_namer/pages/user/user_detail_page.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart';
@@ -114,22 +114,6 @@ class PostScreen extends StatelessWidget {
                       },
                     ),
                     Text(likesCount.toString()),
-                    if (doc['userId'] == user.uid)
-                      IconButton(
-                        icon: Icon(Icons.delete, color: Colors.red),
-                        onPressed: () async {
-                          try {
-                            await _firestore
-                                .collection('posts')
-                                .doc(doc.id)
-                                .delete();
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('删除帖子失败: $e')), // 错误提示
-                            );
-                          }
-                        },
-                      ),
                   ],
                 ),
                 onTap: () {
@@ -140,6 +124,39 @@ class PostScreen extends StatelessWidget {
                           PostDetailScreen(postId: doc.id, user: user),
                     ),
                   );
+                },
+                onLongPress: () async {
+                  if (doc['userId'] == user.uid) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text('确认删除'),
+                        content: Text('确定要删除这个帖子吗？'),
+                        actions: [
+                          TextButton(
+                            child: Text('取消'),
+                            onPressed: () => Navigator.pop(context),
+                          ),
+                          TextButton(
+                            child: Text('删除'),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              try {
+                                await _firestore
+                                    .collection('posts')
+                                    .doc(doc.id)
+                                    .delete();
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('删除帖子失败: $e')), // 错误提示
+                                );
+                              }
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  }
                 },
               );
             }).toList(),

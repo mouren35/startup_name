@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart'; // For date formatting
-import 'package:startup_namer/widget/post/user_avatar.dart';
+import 'package:intl/intl.dart';
+import 'package:startup_namer/pages/post/edit_post_page.dart';
+import 'package:startup_namer/widget/post/user_avatar.dart'; // For date formatting
+
 
 class PostDetailScreen extends StatelessWidget {
   final String postId;
@@ -22,18 +24,37 @@ class PostDetailScreen extends StatelessWidget {
             stream: _firestore.collection('posts').doc(postId).snapshots(),
             builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasData && snapshot.data!['userId'] == user.uid) {
-                return IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red),
-                  onPressed: () async {
-                    try {
-                      await _firestore.collection('posts').doc(postId).delete();
-                      Navigator.pop(context);
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('删除帖子失败: $e')), // 错误提示
-                      );
-                    }
-                  },
+                return Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditPostScreen(postId: postId, user: user),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () async {
+                        try {
+                          await _firestore
+                              .collection('posts')
+                              .doc(postId)
+                              .delete();
+                          Navigator.pop(context);
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('删除帖子失败: $e')), // 错误提示
+                          );
+                        }
+                      },
+                    ),
+                  ],
                 );
               } else {
                 return Container();

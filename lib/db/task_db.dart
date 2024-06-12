@@ -169,4 +169,22 @@ class TaskDB extends ChangeNotifier {
     );
     return result.map((e) => TaskModel.fromMap(e)).toList();
   }
+
+  Future<Map<Color, int>> getCompletedTasksByColor() async {
+    final List<Map<String, Object?>> queryResult = await _db!.rawQuery(
+      'SELECT taskColor, COUNT(*) as count FROM task WHERE taskStatus = 1 GROUP BY taskColor',
+    );
+    return {
+      for (var e in queryResult) Color(e['taskColor'] as int): e['count'] as int
+    };
+  }
+
+  Future<void> deleteList(int listId) async {
+    await _db?.delete(
+      'list',
+      where: "id = ?",
+      whereArgs: [listId],
+    );
+    notifyListeners();
+  }
 }
