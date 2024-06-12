@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../db/task_db.dart';
-import '../widget/circular_timer.dart';
+import '../../db/task_db.dart';
+import '../../widget/circular_timer.dart';
 
 class TimerPage extends StatelessWidget {
   final int? id;

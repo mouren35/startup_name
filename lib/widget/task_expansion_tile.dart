@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../db/task_db.dart';
 import '../model/task_model.dart';
-import '../pages/task_detail_page.dart';
-import '../pages/timer_page.dart';
+import '../pages/task/task_detail_page.dart';
+import '../pages/task/timer_page.dart';
 import '../util/navigator_util.dart';
 import 'show_snack_bar.dart';
 

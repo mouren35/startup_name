@@ -4,8 +4,8 @@ import 'package:startup_namer/pages/diary/diary_list_page.dart';
 import 'package:startup_namer/pages/list/list_page.dart';
 import 'package:startup_namer/pages/post/post_page.dart';
 
-import '../pages/note_list_page.dart';
-import '../pages/tasks_list_page.dart';
+import '../pages/note/note_list_page.dart';
+import '../pages/task/tasks_list_page.dart';
 
 class BottomNavigator extends StatefulWidget {
   final User user;

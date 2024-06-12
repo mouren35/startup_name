@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/pages/add_task_page.dart';
+import 'package:startup_namer/pages/task/add_task_page.dart';
 import 'package:startup_namer/pages/task/search/search_page.dart';
 import 'package:startup_namer/pages/task/stats_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart';
 
-import '../db/task_db.dart';
-import '../model/task_model.dart';
-import '../widget/task_expansion_tile.dart';
+import '../../db/task_db.dart';
+import '../../model/task_model.dart';
+import '../../widget/task_expansion_tile.dart';
 
 class TaskListPage extends StatefulWidget {
   final User user;

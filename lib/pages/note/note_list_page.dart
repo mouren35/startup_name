@@ -2,15 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/pages/add_note_page.dart';
-import 'package:startup_namer/pages/review_page.dart';
+import 'package:startup_namer/pages/note/add_note_page.dart';
+import 'package:startup_namer/pages/note/review_page.dart';
 import 'package:startup_namer/widget/custom_appbar.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart';
 
-import '../db/note_db.dart';
-import '../model/note_model.dart';
-import '../util/navigator_util.dart';
-import '../widget/show_snack_bar.dart';
+import '../../db/note_db.dart';
+import '../../model/note_model.dart';
+import '../../util/navigator_util.dart';
+import '../../widget/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
 class NoteListPage extends StatelessWidget {

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/db/task_db.dart';
 import 'package:startup_namer/model/task_model.dart';
-import 'package:startup_namer/pages/add_task_page.dart'; // 导入 AddTaskPage
-import 'package:startup_namer/pages/task_detail_page.dart';
+import 'package:startup_namer/pages/task/task_detail_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';

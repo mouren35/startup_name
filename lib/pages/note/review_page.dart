@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../db/note_db.dart';
-import '../model/note_model.dart';
-import '../widget/reusable_card.dart';
+import '../../db/note_db.dart';
+import '../../model/note_model.dart';
+import '../../widget/reusable_card.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);

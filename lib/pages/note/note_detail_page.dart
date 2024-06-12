@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/model/note_model.dart';
-import 'package:startup_namer/pages/add_note_page.dart';
+import 'package:startup_namer/pages/note/add_note_page.dart';
 
 class NoteDetailPage extends StatefulWidget {
   final NoteModel? note;
