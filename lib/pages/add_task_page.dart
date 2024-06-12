@@ -246,7 +246,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       listId: _selectedListId,
     );
     if (widget.task != null) {
-      provider.updateTask(id, task.taskStatus);
+      provider.updateTaskDetails(task);
       ShowToast().showToast(
         msg: "修改成功",
         backgroundColor: Colors.green,

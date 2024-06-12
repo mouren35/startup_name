@@ -113,6 +113,7 @@ class TaskExpansionTile extends StatelessWidget {
                         step: task.steps ?? '',
                         note: task.note ?? '',
                         id: task.id,
+                        task: task,
                       ),
                     );
                   },

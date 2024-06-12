@@ -115,15 +115,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                         title: Text(value[index].title),
                         subtitle: Text(value[index].note ?? ''),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.edit),
-                          onPressed: () {
-                            NavigatorUtil.push(
-                              context,
-                              AddTaskPage(task: value[index]), // 跳转到编辑页面
-                            );
-                          },
-                        ),
+                        
                       ),
                     );
                   },

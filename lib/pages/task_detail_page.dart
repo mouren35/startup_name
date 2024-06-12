@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:startup_namer/pages/add_task_page.dart';
 import 'package:startup_namer/pages/timer_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 
@@ -12,6 +13,7 @@ class TaskDetailPage extends StatelessWidget {
   final String? step;
   final String? note;
   final int? id;
+  final TaskModel? task;
 
   const TaskDetailPage({
     Key? key,
@@ -19,13 +21,23 @@ class TaskDetailPage extends StatelessWidget {
     required this.title,
     this.step,
     this.note,
-    this.id,
+    this.id, this.task,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('任务详情')),
+      appBar: AppBar(title: const Text('任务详情'),
+      actions: [IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            NavigatorUtil.push(
+              context,
+              AddTaskPage(task: task), // 跳转到编辑页面
+            );
+          },
+        ),]
+      ),
       body: TaskDetailContent(
         title: title,
         time: time,
@@ -110,7 +122,8 @@ class TaskDetailView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TaskInfoCard(title: title, time: time, color: task.taskColor),
+          TaskInfoCard(
+              title: title, time: time, color: task.taskColor.withOpacity(0.5)),
           const SizedBox(height: 20),
           Card(
             child: Padding(

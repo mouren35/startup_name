@@ -75,6 +75,17 @@ class TaskDB extends ChangeNotifier {
     notifyListeners();
   }
 
+    // 更新任务详情的方法
+  Future<void> updateTaskDetails(TaskModel taskModel) async {
+    await _db?.update(
+      'task',
+      taskModel.toMap(),
+      where: 'id = ?',
+      whereArgs: [taskModel.id],
+    );
+    notifyListeners();
+  }
+
   Future<int> getCompletedTaskCount() async {
     final count = Sqflite.firstIntValue(
       await _db!.rawQuery('SELECT COUNT(*) FROM task WHERE taskStatus = 1'),
