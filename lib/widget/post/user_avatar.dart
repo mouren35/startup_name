@@ -5,7 +5,8 @@ class UserAvatar extends StatelessWidget {
   final double radius;
   final double fontSize;
 
-  const UserAvatar({super.key, required this.email, this.radius = 20, this.fontSize = 20});
+  const UserAvatar(
+      {super.key, required this.email, this.radius = 16, this.fontSize = 16});
 
   @override
   Widget build(BuildContext context) {

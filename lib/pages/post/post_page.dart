@@ -30,7 +30,7 @@ class PostScreen extends StatelessWidget {
                 ),
               );
             },
-          ), // 将添加按钮放到appbar的action里
+          ),
           IconButton(
             icon: UserAvatar(email: user.email!, radius: 16, fontSize: 16),
             onPressed: () {
@@ -40,7 +40,7 @@ class PostScreen extends StatelessWidget {
                     builder: (context) => UserDetailScreen(user: user)),
               );
             },
-          ), // 将头像放在action最后的Iconbutton里
+          ),
         ],
       ),
       body: StreamBuilder(

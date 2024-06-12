@@ -52,7 +52,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('认证界面')),
+      appBar: AppBar(title: const Text('登录')),
       body: Center(
         child: Card(
           margin: const EdgeInsets.all(20),
@@ -72,11 +72,12 @@ class _AuthScreenState extends State<AuthScreen> {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: '邮箱地址'),
+                    decoration: const InputDecoration(labelText: '邮箱'),
                     onSaved: (value) {
                       _email = value!;
                     },
                   ),
+                  const SizedBox(height: 12),
                   TextFormField(
                     key: const ValueKey('password'),
                     validator: (value) {
@@ -100,8 +101,8 @@ class _AuthScreenState extends State<AuthScreen> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
                     ),
                     child: Text(_isLogin ? '登录' : '注册'),
                   ),
