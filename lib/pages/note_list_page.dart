@@ -21,7 +21,7 @@ class NoteListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        actions: [Icon(Icons.add), Icon(Icons.quiz_outlined),
+        actions: [const Icon(Icons.add), const Icon(Icons.quiz_outlined),
           UserAvatar(email: user.email!),
         ],
         onActionPressed: [

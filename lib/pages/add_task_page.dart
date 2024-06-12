@@ -7,7 +7,8 @@ import '../model/task_model.dart';
 import '../widget/show_toast.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({Key? key}) : super(key: key);
+  final TaskModel? task; // 添加任务模型参数，用于编辑
+  const AddTaskPage({Key? key, this.task}) : super(key: key);
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -21,6 +22,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Duration _duration = const Duration(minutes: 25);
 
   Color _taskColor = Colors.purple; // 默认任务颜色
+  String _repeatType = '不重复'; // 默认重复类型
+  int _repeatInterval = 1; // 默认重复周期
 
   final Map<Color, String> colorMap = {
     Colors.purple: '工作',
@@ -29,6 +32,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
     Colors.green: '健康',
     Colors.blue: '心智',
   };
+
+  final List<String> repeatTypes = ['不重复', '按天', '按周', '按月'];
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task != null) {
+      titleController.text = widget.task!.title;
+      noteController.text = widget.task!.note ?? '';
+      stepsController.text = widget.task!.steps ?? '';
+      _duration = Duration(minutes: widget.task!.taskDuration ?? 25);
+      _taskColor = widget.task!.taskColor;
+      _repeatType = widget.task!.repeatType;
+      _repeatInterval = widget.task!.repeatInterval;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,18 +122,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     final selectedDuration =
-              //         await _showDurationPickerDialog(context);
-              //     if (selectedDuration != null) {
-              //       setState(() {
-              //         _duration = selectedDuration;
-              //       });
-              //     }
-              //   },
-              //   child: Text('设置任务时长 (${_duration.inMinutes} 分钟)'),
-              // ),
               const Text(
                 '选择任务类型',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -134,6 +141,38 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   );
                 }).toList(),
               ),
+              const SizedBox(height: 16.0),
+              const Text(
+                '选择重复周期',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              DropdownButton<String>(
+                value: _repeatType,
+                items: repeatTypes.map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+                onChanged: (newValue) {
+                  setState(() {
+                    _repeatType = newValue!;
+                  });
+                },
+              ),
+              if (_repeatType != '不重复')
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: '重复周期间隔（天/周/月）',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _repeatInterval = int.parse(value);
+                    });
+                  },
+                ),
             ],
           ),
         ),
@@ -151,36 +190,51 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   void _addTask(TaskDB provider) {
+    if (titleController.text.isEmpty) {
+      ShowToast().showToast(msg: '任务标题不能为空', backgroundColor: Colors.red);
+      return;
+    }
     final title = titleController.text;
     final note = noteController.text;
     final steps = stepsController.text;
-    final id = DateTime.now().millisecondsSinceEpoch;
+    final id = widget.task?.id ?? DateTime.now().millisecondsSinceEpoch;
 
-    if (_duration != Duration.zero) {
-      provider.addTask(
-        TaskModel(
-          id: id,
-          title: title,
-          note: note,
-          steps: steps,
-          taskDuration: _duration.inMinutes,
-          createdAt: DateTime.now(),
-          taskColor: _taskColor, // 添加颜色属性
-        ),
-      );
-      titleController.clear();
-      noteController.clear();
-      stepsController.clear();
+    final task = TaskModel(
+      id: id,
+      title: title,
+      note: note,
+      steps: steps,
+      taskDuration: _duration.inMinutes,
+      createdAt: DateTime.now(),
+      taskColor: _taskColor, // 添加颜色属性
+      repeatType: _repeatType,
+      repeatInterval: _repeatInterval,
+    );
+    if (widget.task != null) {
+      provider.updateTask(id, task.taskStatus);
       ShowToast().showToast(
-        msg: "添加成功",
+        msg: "修改成功",
         backgroundColor: Colors.green,
       );
     } else {
-      ShowToast().showToast(
-        msg: "时间不能为0",
-        backgroundColor: Colors.red,
-      );
+      if (_duration != Duration.zero) {
+        provider.addTask(task);
+        titleController.clear();
+        noteController.clear();
+        stepsController.clear();
+        ShowToast().showToast(
+          msg: "添加成功",
+          backgroundColor: Colors.green,
+        );
+      } else {
+        ShowToast().showToast(
+          msg: "时间不能为0",
+          backgroundColor: Colors.red,
+        );
+      }
     }
+
     _duration = const Duration(minutes: 25);
+    Navigator.of(context).pop();
   }
 }

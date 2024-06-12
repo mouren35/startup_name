@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:startup_namer/pages/diary/diary_list_page.dart';
-import 'package:startup_namer/pages/habit/habit_list_page.dart';
 import 'package:startup_namer/pages/list/list_page.dart';
 import 'package:startup_namer/pages/post/post_page.dart';
 
@@ -32,8 +31,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           NoteListPage(user: widget.user),
           PostScreen(user: widget.user),
           DiaryListPage(user: widget.user),
-          HabitListScreen(user: widget.user),
-          TodoListScreen()
+          // HabitListScreen(user: widget.user),
+          const TodoListScreen()
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),
@@ -66,10 +65,6 @@ class _BottomNavigatorState extends State<BottomNavigator> {
         NavigationDestination(
           icon: Icon(Icons.book),
           label: '日记',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.check),
-          label: '习惯',
         ),
         NavigationDestination(
           icon: Icon(Icons.list),

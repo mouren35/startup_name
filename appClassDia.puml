@@ -1,27 +1,666 @@
 @startuml
-'https://plantuml.com/class-diagram
+set namespaceSeparator ::
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+class "startup_namer::db::diary_db.dart::DatabaseHelper" {
+  {static} -DatabaseHelper _instance
+  {static} -Database? _database
+  +dynamic database
+  -dynamic _initDatabase()
+  +dynamic insertDiaryEntry()
+  +dynamic getDiaryEntries()
+  +dynamic updateDiaryEntry()
+  +dynamic deleteDiaryEntry()
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+"startup_namer::db::diary_db.dart::DatabaseHelper" o-- "startup_namer::db::diary_db.dart::DatabaseHelper"
+"startup_namer::db::diary_db.dart::DatabaseHelper" o-- "sqflite_common::sqlite_api.dart::Database"
+
+class "startup_namer::db::habit_db.dart::DatabaseService" {
+  {static} -DatabaseService _instance
+  {static} -Database? _database
+  +dynamic database
+  -dynamic _initDatabase()
+  +dynamic insertHabit()
+  +dynamic habits()
+  +dynamic updateHabit()
+  +dynamic deleteHabit()
 }
+
+"startup_namer::db::habit_db.dart::DatabaseService" o-- "startup_namer::db::habit_db.dart::DatabaseService"
+"startup_namer::db::habit_db.dart::DatabaseService" o-- "sqflite_common::sqlite_api.dart::Database"
+
+class "startup_namer::db::list_db.dart::DatabaseHelper" {
+  {static} -DatabaseHelper _instance
+  {static} -Database? _database
+  +dynamic database
+  -dynamic _initDatabase()
+  +dynamic insertTodoList()
+  +dynamic getTodoLists()
+  +dynamic insertTodoItem()
+  +dynamic getTodoItems()
+  +dynamic updateTodoItem()
+}
+
+"startup_namer::db::list_db.dart::DatabaseHelper" o-- "startup_namer::db::list_db.dart::DatabaseHelper"
+"startup_namer::db::list_db.dart::DatabaseHelper" o-- "sqflite_common::sqlite_api.dart::Database"
+
+class "startup_namer::db::note_db.dart::NoteDb" {
+  {static} +String id
+  {static} +String title
+  {static} +String answer
+  {static} +String status
+  -Database? _db
+  +dynamic init()
+  +dynamic addNote()
+  +dynamic getNote()
+  +dynamic deleteNote()
+  +dynamic update()
+}
+
+"startup_namer::db::note_db.dart::NoteDb" o-- "sqflite_common::sqlite_api.dart::Database"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "startup_namer::db::note_db.dart::NoteDb"
+
+class "startup_namer::db::task_db.dart::TaskDB" {
+  {static} +String id
+  {static} +String title
+  {static} +String note
+  {static} +String steps
+  {static} +String taskDuration
+  {static} +String taskStatus
+  {static} +String createdAt
+  {static} +String taskColor
+  -Database? _db
+  +dynamic init()
+  +dynamic addTask()
+  +dynamic getTask()
+  +dynamic deleteTask()
+  +dynamic updateTask()
+  +dynamic getCompletedTaskCount()
+  +dynamic getTotalTaskCount()
+  +dynamic getDailyTimeSpent()
+  +dynamic searchTasks()
+  +dynamic getTasksByDate()
+}
+
+"startup_namer::db::task_db.dart::TaskDB" o-- "sqflite_common::sqlite_api.dart::Database"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "startup_namer::db::task_db.dart::TaskDB"
+
+class "startup_namer::firebase_options.dart::DefaultFirebaseOptions" {
+  {static} +FirebaseOptions android
+  {static} +FirebaseOptions ios
+  {static} +FirebaseOptions currentPlatform
+}
+
+"startup_namer::firebase_options.dart::DefaultFirebaseOptions" o-- "firebase_core_platform_interface::firebase_core_platform_interface.dart::FirebaseOptions"
+
+class "startup_namer::main.dart::MyApp" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::main.dart::MyApp"
+
+class "startup_namer::model::diary_model.dart::DiaryEntry" {
+  +int? id
+  +String title
+  +String content
+  +DateTime date
+  +String emotion
+  +Map<String, dynamic> toMap()
+}
+
+class "startup_namer::model::habit_model.dart::Habit" {
+  +int id
+  +String name
+  +String description
+  +String frequency
+  +bool completed
+  +Map<String, dynamic> toMap()
+}
+
+class "startup_namer::model::list_model.dart::TodoList" {
+  +int? id
+  +int? parentListId
+  +String title
+  +List<TodoItem> items
+  +List<TodoList> subLists
+  +Map<String, dynamic> toMap()
+  +String toString()
+}
+
+class "startup_namer::model::list_model.dart::TodoItem" {
+  +int? id
+  +int listId
+  +String content
+  +bool isCompleted
+  +Map<String, dynamic> toMap()
+  +String toString()
+}
+
+class "startup_namer::model::note_model.dart::NoteModel" {
+  +int id
+  +String title
+  +String answer
+  +String idField
+  +String titleField
+  +String answerField
+  +Map<String, Object?> toMap()
+}
+
+class "startup_namer::model::task_model.dart::TaskModel" {
+  +int? id
+  +String title
+  +String? note
+  +String? steps
+  +int? taskDuration
+  +int taskStatus
+  +DateTime createdAt
+  +Color taskColor
+  +Map<String, Object?> toMap()
+}
+
+"startup_namer::model::task_model.dart::TaskModel" o-- "dart::ui::Color"
+
+class "startup_namer::navigator::bottom_navigator.dart::BottomNavigator" {
+  +User user
+  +State<BottomNavigator> createState()
+}
+
+"startup_namer::navigator::bottom_navigator.dart::BottomNavigator" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::navigator::bottom_navigator.dart::BottomNavigator"
+
+class "startup_namer::navigator::bottom_navigator.dart::_BottomNavigatorState" {
+  -int _currentIndex
+  -PageController _controller
+  +Widget build()
+  -void _onPageChanged()
+  -Widget _buildBottomNavigationBar()
+  -void _onDestinationSelected()
+}
+
+"startup_namer::navigator::bottom_navigator.dart::_BottomNavigatorState" o-- "flutter::src::widgets::page_view.dart::PageController"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::navigator::bottom_navigator.dart::_BottomNavigatorState"
+
+class "startup_namer::pages::add_note_page.dart::AddNotePage" {
+  +NoteModel? note
+  +State<AddNotePage> createState()
+}
+
+"startup_namer::pages::add_note_page.dart::AddNotePage" o-- "startup_namer::model::note_model.dart::NoteModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::add_note_page.dart::AddNotePage"
+
+class "startup_namer::pages::add_note_page.dart::_AddNotePageState" {
+  -TextEditingController _titleController
+  -TextEditingController _answerController
+  -GlobalKey<FormState> _formKey
+  +void initState()
+  +void dispose()
+  +Widget build()
+  -void _addNote()
+  -dynamic _updateNote()
+}
+
+"startup_namer::pages::add_note_page.dart::_AddNotePageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"startup_namer::pages::add_note_page.dart::_AddNotePageState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::add_note_page.dart::_AddNotePageState"
+
+class "startup_namer::pages::add_task_page.dart::AddTaskPage" {
+  +State<AddTaskPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::add_task_page.dart::AddTaskPage"
+
+class "startup_namer::pages::add_task_page.dart::_AddTaskPageState" {
+  +TextEditingController titleController
+  +TextEditingController noteController
+  +TextEditingController stepsController
+  -Duration _duration
+  -Color _taskColor
+  +Map<Color, String> colorMap
+  +Widget build()
+  -dynamic _showDurationPickerDialog()
+  -void _addTask()
+}
+
+"startup_namer::pages::add_task_page.dart::_AddTaskPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"startup_namer::pages::add_task_page.dart::_AddTaskPageState" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::add_task_page.dart::_AddTaskPageState"
+
+class "startup_namer::pages::diary::diary_edit_page.dart::EditScreen" {
+  +DiaryEntry? entry
+  +_EditScreenState createState()
+}
+
+"startup_namer::pages::diary::diary_edit_page.dart::EditScreen" o-- "startup_namer::model::diary_model.dart::DiaryEntry"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::diary::diary_edit_page.dart::EditScreen"
+
+class "startup_namer::pages::diary::diary_edit_page.dart::_EditScreenState" {
+  -GlobalKey<FormState> _formKey
+  -String _title
+  -String _content
+  -String _emotion
+  +void initState()
+  -void _selectEmotion()
+  +Widget build()
+  -String _getEmotionEmoji()
+}
+
+"startup_namer::pages::diary::diary_edit_page.dart::_EditScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::diary::diary_edit_page.dart::_EditScreenState"
+
+class "startup_namer::pages::diary::diary_list_page.dart::DiaryListPage" {
+  +User user
+  +Widget build()
+  -String _getEmotionEmoji()
+}
+
+"startup_namer::pages::diary::diary_list_page.dart::DiaryListPage" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::diary::diary_list_page.dart::DiaryListPage"
+
+class "startup_namer::pages::habit::add_habit_page.dart::AddHabitScreen" {
+  +_AddHabitScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::habit::add_habit_page.dart::AddHabitScreen"
+
+class "startup_namer::pages::habit::add_habit_page.dart::_AddHabitScreenState" {
+  -GlobalKey<FormState> _formKey
+  -String _name
+  -String _description
+  -String _frequency
+  -void _submit()
+  +Widget build()
+}
+
+"startup_namer::pages::habit::add_habit_page.dart::_AddHabitScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::habit::add_habit_page.dart::_AddHabitScreenState"
+
+class "startup_namer::pages::habit::habit_list_page.dart::HabitListScreen" {
+  +User user
+  +Widget build()
+}
+
+"startup_namer::pages::habit::habit_list_page.dart::HabitListScreen" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::habit::habit_list_page.dart::HabitListScreen"
+
+class "startup_namer::pages::list::list_detail_page.dart::TodoDetailScreen" {
+  +int index
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::list::list_detail_page.dart::TodoDetailScreen"
+
+class "startup_namer::pages::list::list_page.dart::TodoListScreen" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::list::list_page.dart::TodoListScreen"
+
+class "startup_namer::pages::login::login_page.dart::AuthScreen" {
+  +_AuthScreenState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::login::login_page.dart::AuthScreen"
+
+class "startup_namer::pages::login::login_page.dart::_AuthScreenState" {
+  -FirebaseAuth _auth
+  -GlobalKey<FormState> _formKey
+  -String _email
+  -String _password
+  -bool _isLogin
+  -void _trySubmit()
+  +Widget build()
+}
+
+"startup_namer::pages::login::login_page.dart::_AuthScreenState" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+"startup_namer::pages::login::login_page.dart::_AuthScreenState" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::login::login_page.dart::_AuthScreenState"
+
+class "startup_namer::pages::note_detail_page.dart::NoteDetailPage" {
+  +NoteModel? note
+  +State<StatefulWidget> createState()
+}
+
+"startup_namer::pages::note_detail_page.dart::NoteDetailPage" o-- "startup_namer::model::note_model.dart::NoteModel"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::note_detail_page.dart::NoteDetailPage"
+
+class "startup_namer::pages::note_detail_page.dart::_NoteDetailPageState" {
+  +Widget build()
+  -Widget _buildEditButton()
+  -void _navigateToAddNotePage()
+  -Widget _buildText()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::note_detail_page.dart::_NoteDetailPageState"
+
+class "startup_namer::pages::note_list_page.dart::NoteListPage" {
+  +User user
+  +Widget build()
+  -Widget _buildSlidableNoteItem()
+  -dynamic _deleteNoteAndShowSnackBar()
+}
+
+"startup_namer::pages::note_list_page.dart::NoteListPage" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::note_list_page.dart::NoteListPage"
+
+class "startup_namer::pages::post::post_detail.dart::PostDetailScreen" {
+  +String postId
+  +User user
+  -FirebaseFirestore _firestore
+  -TextEditingController _commentController
+  +Widget build()
+}
+
+"startup_namer::pages::post::post_detail.dart::PostDetailScreen" o-- "firebase_auth::firebase_auth.dart::User"
+"startup_namer::pages::post::post_detail.dart::PostDetailScreen" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"startup_namer::pages::post::post_detail.dart::PostDetailScreen" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::post::post_detail.dart::PostDetailScreen"
+
+class "startup_namer::pages::post::post_page.dart::PostScreen" {
+  +User user
+  -FirebaseFirestore _firestore
+  +Widget build()
+}
+
+"startup_namer::pages::post::post_page.dart::PostScreen" o-- "firebase_auth::firebase_auth.dart::User"
+"startup_namer::pages::post::post_page.dart::PostScreen" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::post::post_page.dart::PostScreen"
+
+class "startup_namer::pages::post::release_post_page.dart::NewPostScreen" {
+  +User user
+  -TextEditingController _titleController
+  -TextEditingController _contentController
+  -FirebaseFirestore _firestore
+  +Widget build()
+}
+
+"startup_namer::pages::post::release_post_page.dart::NewPostScreen" o-- "firebase_auth::firebase_auth.dart::User"
+"startup_namer::pages::post::release_post_page.dart::NewPostScreen" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"startup_namer::pages::post::release_post_page.dart::NewPostScreen" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::post::release_post_page.dart::NewPostScreen"
+
+class "startup_namer::pages::review_page.dart::ReviewPage" {
+  +State<ReviewPage> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::review_page.dart::ReviewPage"
+
+class "startup_namer::pages::review_page.dart::_ReviewPageState" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::review_page.dart::_ReviewPageState"
+
+class "startup_namer::pages::review_page.dart::ReviewCards" {
+  +List<NoteModel> noteList
+  +State<ReviewCards> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::review_page.dart::ReviewCards"
+
+class "startup_namer::pages::review_page.dart::_ReviewCardsState" {
+  -int _currentIndexNumber
+  -bool _reviewCompleted
+  -int _score
+  -Timer _timer
+  -int _remainingSeconds
+  +void initState()
+  -void _startTimer()
+  -void _showTimeoutDialog()
+  -void _nextQuestion()
+  -dynamic _showAnswerDialog()
+  +Widget build()
+  +void dispose()
+}
+
+"startup_namer::pages::review_page.dart::_ReviewCardsState" o-- "dart::async::Timer"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::review_page.dart::_ReviewCardsState"
+
+class "startup_namer::pages::task::calendar_page.dart::calendar_page.dart::CalendarPage" {
+  +_CalendarPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::task::calendar_page.dart::calendar_page.dart::CalendarPage"
+
+class "startup_namer::pages::task::calendar_page.dart::calendar_page.dart::_CalendarPageState" {
+  -ValueNotifier<List<TaskModel>>? _selectedTasks
+  -CalendarFormat _calendarFormat
+  -DateTime _focusedDay
+  -DateTime? _selectedDay
+  +void initState()
+  -void _loadTasksForSelectedDay()
+  +void dispose()
+  -void _onDaySelected()
+  +Widget build()
+}
+
+"startup_namer::pages::task::calendar_page.dart::calendar_page.dart::_CalendarPageState" o-- "flutter::src::foundation::change_notifier.dart::ValueNotifier<List<TaskModel>>"
+"startup_namer::pages::task::calendar_page.dart::calendar_page.dart::_CalendarPageState" o-- "table_calendar::src::shared::utils.dart::CalendarFormat"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::task::calendar_page.dart::calendar_page.dart::_CalendarPageState"
+
+class "startup_namer::pages::task::search::search_page.dart::SearchPage" {
+  +_SearchPageState createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::task::search::search_page.dart::SearchPage"
+
+class "startup_namer::pages::task::search::search_page.dart::_SearchPageState" {
+  -TextEditingController _searchController
+  -List<TaskModel>? _searchResults
+  -void _performSearch()
+  +Widget build()
+}
+
+"startup_namer::pages::task::search::search_page.dart::_SearchPageState" o-- "flutter::src::widgets::editable_text.dart::TextEditingController"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::task::search::search_page.dart::_SearchPageState"
+
+class "startup_namer::pages::task::stats_page.dart::TaskStatisticsPage" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::task::stats_page.dart::TaskStatisticsPage"
+
+class "startup_namer::pages::tasks_list_page.dart::TaskListPage" {
+  +User user
+  +State<TaskListPage> createState()
+}
+
+"startup_namer::pages::tasks_list_page.dart::TaskListPage" o-- "firebase_auth::firebase_auth.dart::User"
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::pages::tasks_list_page.dart::TaskListPage"
+
+class "startup_namer::pages::tasks_list_page.dart::_TaskListPageState" {
+  -ScrollController _scrollController
+  +void initState()
+  +void dispose()
+  -void _onScroll()
+  +Widget build()
+  -Widget _buildLoadingWidget()
+}
+
+"startup_namer::pages::tasks_list_page.dart::_TaskListPageState" o-- "flutter::src::widgets::scroll_controller.dart::ScrollController"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::pages::tasks_list_page.dart::_TaskListPageState"
+
+class "startup_namer::pages::task_detail_page.dart::TaskDetailPage" {
+  +int time
+  +String title
+  +String? step
+  +String? note
+  +int? id
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::task_detail_page.dart::TaskDetailPage"
+
+class "startup_namer::pages::task_detail_page.dart::TaskDetailContent" {
+  +String title
+  +int time
+  +String step
+  +String note
+  +int? id
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::task_detail_page.dart::TaskDetailContent"
+
+class "startup_namer::pages::task_detail_page.dart::TaskDetailView" {
+  +TaskModel task
+  +int time
+  +String title
+  +String? step
+  +String? note
+  +int? id
+  +Widget build()
+  -Widget _buildDetailText()
+  -void _startTimer()
+}
+
+"startup_namer::pages::task_detail_page.dart::TaskDetailView" o-- "startup_namer::model::task_model.dart::TaskModel"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::task_detail_page.dart::TaskDetailView"
+
+class "startup_namer::pages::task_detail_page.dart::TaskInfoCard" {
+  +String title
+  +int time
+  +Color color
+  +Widget build()
+}
+
+"startup_namer::pages::task_detail_page.dart::TaskInfoCard" o-- "dart::ui::Color"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::task_detail_page.dart::TaskInfoCard"
+
+class "startup_namer::pages::timer_page.dart::TimerPage" {
+  +int? id
+  +String title
+  +int seconds
+  +String note
+  +String step
+  +Widget build()
+  -dynamic _updateTaskStatus()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::pages::timer_page.dart::TimerPage"
+
+class "startup_namer::provider::diary_provider.dart::DiaryProvider" {
+  -List<DiaryEntry> _entries
+  +List<DiaryEntry> entries
+  +dynamic fetchEntries()
+  +dynamic addEntry()
+  +dynamic updateEntry()
+  +dynamic deleteEntry()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "startup_namer::provider::diary_provider.dart::DiaryProvider"
+
+class "startup_namer::provider::habit_provider.dart::HabitProvider" {
+  -List<Habit> _habits
+  +List<Habit> habits
+  +dynamic loadHabits()
+  +dynamic addHabit()
+  +dynamic updateHabit()
+  +dynamic deleteHabit()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "startup_namer::provider::habit_provider.dart::HabitProvider"
+
+class "startup_namer::provider::list_provider.dart::TodoProvider" {
+  -List<TodoList> _todoLists
+  -DatabaseHelper _dbHelper
+  +List<TodoList> todoLists
+  -dynamic _loadTodoLists()
+  +dynamic addTodoList()
+  +dynamic addTodoItem()
+  +dynamic updateTodoListTitle()
+  +dynamic updateTodoItemStatus()
+}
+
+"startup_namer::provider::list_provider.dart::TodoProvider" o-- "startup_namer::db::list_db.dart::DatabaseHelper"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "startup_namer::provider::list_provider.dart::TodoProvider"
+
+class "startup_namer::util::navigator_util.dart::NavigatorUtil" {
+  {static} +dynamic push()
+}
+
+class "startup_namer::widget::circular_timer.dart::CircularTimer" {
+  +int? durationInSeconds
+  +double size
+  +State<CircularTimer> createState()
+}
+
+"flutter::src::widgets::framework.dart::StatefulWidget" <|-- "startup_namer::widget::circular_timer.dart::CircularTimer"
+
+class "startup_namer::widget::circular_timer.dart::_CircularTimerState" {
+  -Timer _timer
+  -int _elapsedSeconds
+  +void initState()
+  +void dispose()
+  -void _startTimer()
+  +Widget build()
+}
+
+"startup_namer::widget::circular_timer.dart::_CircularTimerState" o-- "dart::async::Timer"
+"flutter::src::widgets::framework.dart::State" <|-- "startup_namer::widget::circular_timer.dart::_CircularTimerState"
+
+class "startup_namer::widget::circular_timer.dart::_CircularTimerPainter" {
+  +Color color
+  +double progress
+  +String text
+  +void paint()
+  +bool shouldRepaint()
+}
+
+"startup_namer::widget::circular_timer.dart::_CircularTimerPainter" o-- "dart::ui::Color"
+"flutter::src::rendering::custom_paint.dart::CustomPainter" <|-- "startup_namer::widget::circular_timer.dart::_CircularTimerPainter"
+
+class "startup_namer::widget::custom_appbar.dart::CustomAppBar" {
+  +List<Widget>? actions
+  +List<void Function()>? onActionPressed
+  -DateTime _dateTime
+  +Size preferredSize
+  +Widget build()
+}
+
+"startup_namer::widget::custom_appbar.dart::CustomAppBar" o-- "dart::ui::Size"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::widget::custom_appbar.dart::CustomAppBar"
+"flutter::src::widgets::preferred_size.dart::PreferredSizeWidget" <|-- "startup_namer::widget::custom_appbar.dart::CustomAppBar"
+
+class "startup_namer::widget::post::post_tile.dart::PostTile" {
+  +DocumentSnapshot<Object?> post
+  +User user
+  +Function onTap
+  -FirebaseFirestore _firestore
+  +Widget build()
+}
+
+"startup_namer::widget::post::post_tile.dart::PostTile" o-- "cloud_firestore::cloud_firestore.dart::DocumentSnapshot<Object>"
+"startup_namer::widget::post::post_tile.dart::PostTile" o-- "firebase_auth::firebase_auth.dart::User"
+"startup_namer::widget::post::post_tile.dart::PostTile" o-- "cloud_firestore::cloud_firestore.dart::FirebaseFirestore"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::widget::post::post_tile.dart::PostTile"
+
+class "startup_namer::widget::post::user_avatar.dart::UserAvatar" {
+  +String email
+  +double radius
+  +double fontSize
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::widget::post::user_avatar.dart::UserAvatar"
+
+class "startup_namer::widget::reusable_card.dart::ReusableCard" {
+  +String text
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::widget::reusable_card.dart::ReusableCard"
+
+class "startup_namer::widget::show_toast.dart::ShowToast" {
+  +void showToast()
+}
+
+class "startup_namer::widget::task_expansion_tile.dart::TaskExpansionTile" {
+  +String title
+  +List<TaskModel> tasks
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "startup_namer::widget::task_expansion_tile.dart::TaskExpansionTile"
+
 
 @enduml

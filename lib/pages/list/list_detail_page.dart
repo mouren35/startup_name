@@ -7,13 +7,13 @@ import 'package:startup_namer/provider/list_provider.dart';
 class TodoDetailScreen extends StatelessWidget {
   final int index;
 
-  TodoDetailScreen({required this.index});
+  const TodoDetailScreen({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
     final todoList = todoProvider.todoLists[index];
-    final TextEditingController _taskController = TextEditingController();
+    final TextEditingController taskController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -28,7 +28,7 @@ class TodoDetailScreen extends StatelessWidget {
                 if (itemIndex < todoList.subLists.length) {
                   final subList = todoList.subLists[itemIndex];
                   return ListTile(
-                    leading: Icon(Icons.list),
+                    leading: const Icon(Icons.list),
                     title: Text(subList.title),
                     trailing: Text('${subList.items.length} 项'),
                     onTap: () {
@@ -70,16 +70,16 @@ class TodoDetailScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: TextField(
-                    controller: _taskController,
-                    decoration: InputDecoration(hintText: '新任务'),
+                    controller: taskController,
+                    decoration: const InputDecoration(hintText: '新任务'),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
-                    if (_taskController.text.isNotEmpty) {
-                      todoProvider.addTodoItem(index, _taskController.text);
-                      _taskController.clear();
+                    if (taskController.text.isNotEmpty) {
+                      todoProvider.addTodoItem(index, taskController.text);
+                      taskController.clear();
                     }
                   },
                 ),
@@ -93,7 +93,7 @@ class TodoDetailScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: TextEditingController(),
-                    decoration: InputDecoration(hintText: '新子清单'),
+                    decoration: const InputDecoration(hintText: '新子清单'),
                     onSubmitted: (newTitle) {
                       todoProvider.addTodoList(newTitle,
                           parentListId: todoList.id);
@@ -101,9 +101,9 @@ class TodoDetailScreen extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () {
-                    final newTitle = '新子清单';
+                    const newTitle = '新子清单';
                     todoProvider.addTodoList(newTitle,
                         parentListId: todoList.id);
                   },

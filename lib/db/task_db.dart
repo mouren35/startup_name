@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../model/task_model.dart';
@@ -12,6 +12,9 @@ class TaskDB extends ChangeNotifier {
   static const taskStatus = 'taskStatus';
   static const createdAt = 'createdAt';
   static const taskColor = 'taskColor'; // 新增颜色字段
+  static const repeatType = 'repeatType'; // 新增重复类型字段
+  static const repeatInterval = 'repeatInterval'; // 新增重复周期字段
+  static const listId = 'listId'; // 新增清单ID字段
 
   Database? _db;
 
@@ -29,7 +32,11 @@ class TaskDB extends ChangeNotifier {
             $taskDuration INTEGER NOT NULL,
             $taskStatus INTEGER,
             $createdAt TEXT NOT NULL,
-            $taskColor INTEGER NOT NULL)""");
+            $taskColor INTEGER NOT NULL,
+            $repeatType TEXT,
+            $repeatInterval INTEGER
+          )
+        """);
       },
       version: 1,
     );
@@ -96,11 +103,49 @@ class TaskDB extends ChangeNotifier {
   }
 
   Future<List<TaskModel>> getTasksByDate(DateTime date) async {
-    final result = await _db!.query(
-      'task',
-      where: 'DATE($createdAt) = ?',
-      whereArgs: [date.toIso8601String().split('T').first],
-    );
-    return result.map((e) => TaskModel.fromMap(e)).toList();
+    final allTasks = await getTask();
+    if (allTasks == null) return [];
+
+    List<TaskModel> tasksForSelectedDate = [];
+
+    for (var task in allTasks) {
+      DateTime taskDate = DateTime.parse(task.createdAt.toString());
+      bool addTask = false;
+
+      if (task.repeatType == '不重复') {
+        addTask = isSameDay(taskDate, date);
+      } else {
+        while (taskDate.isBefore(date) || isSameDay(taskDate, date)) {
+          if (isSameDay(taskDate, date)) {
+            addTask = true;
+            break;
+          }
+          switch (task.repeatType) {
+            case '按天':
+              taskDate = taskDate.add(Duration(days: task.repeatInterval));
+              break;
+            case '按周':
+              taskDate = taskDate.add(Duration(days: 7 * task.repeatInterval));
+              break;
+            case '按月':
+              taskDate = DateTime(taskDate.year,
+                  taskDate.month + task.repeatInterval, taskDate.day);
+              break;
+          }
+        }
+      }
+
+      if (addTask) {
+        tasksForSelectedDate.add(task);
+      }
+    }
+
+    return tasksForSelectedDate;
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
   }
 }

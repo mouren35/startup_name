@@ -3,20 +3,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart';
 
-
 class NewPostScreen extends StatelessWidget {
   final User user;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  NewPostScreen({required this.user});
+  NewPostScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('新帖子'),
+        title: const Text('新帖子'),
         actions: [
           UserAvatar(email: user.email!),
         ],
@@ -27,14 +26,14 @@ class NewPostScreen extends StatelessWidget {
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(labelText: '标题'),
+              decoration: const InputDecoration(labelText: '标题'),
             ),
             TextField(
               controller: _contentController,
-              decoration: InputDecoration(labelText: '内容'),
+              decoration: const InputDecoration(labelText: '内容'),
               maxLines: 5,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 if (_titleController.text.isNotEmpty &&
@@ -50,7 +49,7 @@ class NewPostScreen extends StatelessWidget {
                   Navigator.pop(context);
                 }
               },
-              child: Text('发布'),
+              child: const Text('发布'),
             ),
           ],
         ),

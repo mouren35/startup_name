@@ -6,13 +6,15 @@ import 'package:startup_namer/provider/list_provider.dart';
 
 
 class TodoListScreen extends StatelessWidget {
+  const TodoListScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('清单'),
+        title: const Text('清单'),
       ),
       body: ListView.builder(
         itemCount: todoProvider.todoLists.length,
@@ -20,7 +22,7 @@ class TodoListScreen extends StatelessWidget {
           final todoList = todoProvider.todoLists[index];
           return ListTile(
             leading: IconButton(
-              icon: Icon(Icons.list),
+              icon: const Icon(Icons.list),
               onPressed: () {
                 Navigator.push(
                   context,
@@ -33,7 +35,7 @@ class TodoListScreen extends StatelessWidget {
             title: Focus(
               child: TextField(
                 controller: TextEditingController(text: todoList.title),
-                decoration: InputDecoration(border: InputBorder.none),
+                decoration: const InputDecoration(border: InputBorder.none),
                 onSubmitted: (newTitle) {
                   todoProvider.updateTodoListTitle(index, newTitle);
                 },
@@ -52,7 +54,7 @@ class TodoListScreen extends StatelessWidget {
         onPressed: () {
           todoProvider.addTodoList('新清单');
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

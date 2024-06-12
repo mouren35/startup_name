@@ -121,6 +121,10 @@ class TaskDetailView extends StatelessWidget {
                   _buildDetailText('步骤：', step ?? '无'),
                   const SizedBox(height: 20),
                   _buildDetailText('备注：', note ?? '无'),
+                  const SizedBox(height: 20),
+                  _buildDetailText('重复周期：',
+                      _formatRepeat(task.repeatType, task.repeatInterval)),
+                
                 ],
               ),
             ),
@@ -174,6 +178,11 @@ class TaskDetailView extends StatelessWidget {
         step: step ?? '',
       ),
     );
+  }
+
+    String _formatRepeat(String type, int interval) {
+    if (type == '不重复') return type;
+    return '$interval $type';
   }
 }
 

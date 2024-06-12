@@ -69,9 +69,9 @@ class _TaskListPageState extends State<TaskListPage> {
         return Scaffold(
           appBar: CustomAppBar(
             actions: [
-              Icon(Icons.add),
-              Icon(Icons.search),
-              Icon(Icons.bar_chart_rounded),
+              const Icon(Icons.add),
+              const Icon(Icons.search),
+              const Icon(Icons.bar_chart_rounded),
               UserAvatar(email: widget.user.email!),
             ],
             onActionPressed: [

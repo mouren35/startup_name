@@ -9,7 +9,7 @@ class TodoProvider with ChangeNotifier {
 
   List<TodoList> get todoLists => _todoLists;
 
-  DatabaseHelper _dbHelper = DatabaseHelper();
+  final DatabaseHelper _dbHelper = DatabaseHelper();
 
   TodoProvider() {
     _loadTodoLists();

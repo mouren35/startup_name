@@ -13,15 +13,15 @@ class DiaryListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Emotion Diary'),
+        title: const Text('日记'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => EditScreen(entry: null)),
+                    builder: (context) => const EditScreen(entry: null)),
               );
             },
           ),
@@ -30,8 +30,8 @@ class DiaryListPage extends StatelessWidget {
       body: Consumer<DiaryProvider>(
         builder: (context, diaryProvider, child) {
           return GridView.builder(
-            padding: EdgeInsets.all(8.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            padding: const EdgeInsets.all(8.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               childAspectRatio: 3 / 2,
               crossAxisSpacing: 8.0,
@@ -54,20 +54,20 @@ class DiaryListPage extends StatelessWidget {
                     );
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           entry.title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Flexible(
                           child: Text(
                             entry.content,
@@ -79,14 +79,14 @@ class DiaryListPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                                 '${_getEmotionEmoji(entry.emotion)} ${entry.emotion}'),
                             IconButton(
-                              icon: Icon(Icons.delete, color: Colors.red),
+                              icon: const Icon(Icons.delete, color: Colors.red),
                               onPressed: () {
                                 Provider.of<DiaryProvider>(context,
                                         listen: false)

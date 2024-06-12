@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
       ),
       title: 'time_review',
       debugShowCheckedModeBanner: false,
-      home: AuthScreen(),
+      home: const AuthScreen(),
     );
   }
 }

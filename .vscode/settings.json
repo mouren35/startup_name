@@ -1,3 +1,9 @@
 {
-    "cSpell.words": ["Firestore", "fluttertoast"]
+    "cSpell.words": [
+        "appbar",
+        "AUTOINCREMENT",
+        "Firestore",
+        "fluttertoast",
+        "sqflite"
+    ]
 }

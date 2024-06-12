@@ -4,6 +4,8 @@ import 'package:startup_namer/navigator/bottom_navigator.dart';
 import 'package:startup_namer/pages/post/post_page.dart';
 
 class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+
   @override
   _AuthScreenState createState() => _AuthScreenState();
 }
@@ -50,19 +52,19 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('认证界面')),
+      appBar: AppBar(title: const Text('认证界面')),
       body: Center(
         child: Card(
-          margin: EdgeInsets.all(20),
+          margin: const EdgeInsets.all(20),
           child: Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextFormField(
-                    key: ValueKey('email'),
+                    key: const ValueKey('email'),
                     validator: (value) {
                       if (value!.isEmpty || !value.contains('@')) {
                         return '请输入有效的邮箱地址';
@@ -70,29 +72,28 @@ class _AuthScreenState extends State<AuthScreen> {
                       return null;
                     },
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(labelText: '邮箱地址'),
+                    decoration: const InputDecoration(labelText: '邮箱地址'),
                     onSaved: (value) {
                       _email = value!;
                     },
                   ),
                   TextFormField(
-                    key: ValueKey('password'),
+                    key: const ValueKey('password'),
                     validator: (value) {
                       if (value!.isEmpty || value.length < 6) {
                         return '密码至少6个字符';
                       }
                       return null;
                     },
-                    decoration: InputDecoration(labelText: '密码'),
+                    decoration: const InputDecoration(labelText: '密码'),
                     obscureText: true,
                     onSaved: (value) {
                       _password = value!;
                     },
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: _trySubmit,
-                    child: Text(_isLogin ? '登录' : '注册'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor, // 按钮颜色
                       foregroundColor: Colors.white, // 文字颜色
@@ -100,8 +101,9 @@ class _AuthScreenState extends State<AuthScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                     ),
+                    child: Text(_isLogin ? '登录' : '注册'),
                   ),
                   TextButton(
                     child: Text(_isLogin ? '创建新账户' : '我已有账户'),

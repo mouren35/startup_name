@@ -10,7 +10,7 @@ class PostTile extends StatelessWidget {
   final Function onTap;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  PostTile({required this.post, required this.user, required this.onTap});
+  PostTile({super.key, required this.post, required this.user, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

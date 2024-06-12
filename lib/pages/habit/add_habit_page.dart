@@ -8,7 +8,7 @@ class AddHabitScreen extends StatefulWidget {
   const AddHabitScreen({super.key});
 
   @override
-  _AddHabitScreenState createState() => _AddHabitScreenState();
+  State<AddHabitScreen> createState() => _AddHabitScreenState();
 }
 
 class _AddHabitScreenState extends State<AddHabitScreen> {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:startup_namer/pages/login/login_page.dart';
 import 'package:startup_namer/widget/post/user_avatar.dart'; // For date formatting
 
 class PostDetailScreen extends StatelessWidget {
@@ -11,26 +10,13 @@ class PostDetailScreen extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _commentController = TextEditingController();
 
-  PostDetailScreen({required this.postId, required this.user});
+  PostDetailScreen({super.key, required this.postId, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('帖子详情'),
-        actions: [
-          UserAvatar(email: user.email!),
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () async {
-              await FirebaseAuth.instance.signOut();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => AuthScreen()),
-              );
-            },
-          ),
-        ],
+        title: const Text('帖子详情'),
       ),
       body: Column(
         children: [
@@ -39,7 +25,7 @@ class PostDetailScreen extends StatelessWidget {
               stream: _firestore.collection('posts').doc(postId).snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
                 var post = snapshot.data!;
                 bool isLiked = post['likes'].contains(user.uid);
@@ -58,17 +44,18 @@ class PostDetailScreen extends StatelessWidget {
                           email: post['email'], radius: 30, fontSize: 24),
                       title: Text(
                         post['title'],
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(post['content'], style: TextStyle(fontSize: 14)),
+                          Text(post['content'], style: const TextStyle(fontSize: 18)),
                           Text(formattedTime),
                         ],
                       ),
-                      trailing: Column(
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
                             icon: Icon(
@@ -93,16 +80,13 @@ class PostDetailScreen extends StatelessWidget {
                               }
                             },
                           ),
-                          Text(
-                            likesCount.toString(),
-                            // style: TextStyle(fontSize: 4),
-                          ),
+                          Text(likesCount.toString()),
                         ],
                       ),
                     ),
-                    Divider(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
+                    const Divider(),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: Text(
                         '评论',
                         style: TextStyle(
@@ -120,7 +104,7 @@ class PostDetailScreen extends StatelessWidget {
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                           if (!snapshot.hasData) {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(child: CircularProgressIndicator());
                           }
                           return ListView(
                             children: snapshot.data!.docs.map((doc) {
@@ -142,21 +126,21 @@ class PostDetailScreen extends StatelessWidget {
                                   children: [
                                     Text(
                                       doc['email'],
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       formattedTime,
-                                      style: TextStyle(fontSize: 12),
+                                      style: const TextStyle(fontSize: 12),
                                     ),
                                   ],
                                 ),
                                 subtitle: Text(
                                   doc['comment'],
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16),
                                 ),
-                                trailing: Column(
+                                trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     IconButton(
@@ -192,7 +176,7 @@ class PostDetailScreen extends StatelessWidget {
                                       },
                                     ),
                                     Text(likesCount.toString(),
-                                        style: TextStyle(fontSize: 12)),
+                                        style: const TextStyle(fontSize: 12)),
                                   ],
                                 ),
                               );
@@ -206,7 +190,7 @@ class PostDetailScreen extends StatelessWidget {
               },
             ),
           ),
-          Divider(),
+          const Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -214,14 +198,14 @@ class PostDetailScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: '输入评论',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () async {
                     if (_commentController.text.isNotEmpty) {
                       await _firestore

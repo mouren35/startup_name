@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:startup_namer/db/task_db.dart';
 import 'package:startup_namer/model/task_model.dart';
+import 'package:startup_namer/pages/add_task_page.dart'; // 导入 AddTaskPage
 import 'package:startup_namer/pages/task_detail_page.dart';
 import 'package:startup_namer/util/navigator_util.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -63,7 +64,7 @@ class _CalendarPageState extends State<CalendarPage> {
             focusedDay: _focusedDay,
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             calendarFormat: _calendarFormat,
-            eventLoader: (day) => [],
+            eventLoader: (day) => [], // 不再使用 eventLoader 加载任务
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: const CalendarStyle(
               outsideDaysVisible: false,
@@ -114,6 +115,15 @@ class _CalendarPageState extends State<CalendarPage> {
                         ),
                         title: Text(value[index].title),
                         subtitle: Text(value[index].note ?? ''),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () {
+                            NavigatorUtil.push(
+                              context,
+                              AddTaskPage(task: value[index]), // 跳转到编辑页面
+                            );
+                          },
+                        ),
                       ),
                     );
                   },
