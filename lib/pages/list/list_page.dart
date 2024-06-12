@@ -1,60 +1,61 @@
-// lib/screens/todo_list_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/pages/list/list_detail_page.dart';
-import 'package:startup_namer/provider/list_provider.dart';
+import 'package:startup_namer/db/task_db.dart';
+import 'add_list_page.dart';
+import 'list_detail_page.dart'; // 引入清单详情页
 
-
-class TodoListScreen extends StatelessWidget {
-  const TodoListScreen({super.key});
-
+class ListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final todoProvider = Provider.of<TodoProvider>(context);
+    final provider = Provider.of<TaskDB>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('清单'),
+        title: const Text('清单列表'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AddListPage(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: ListView.builder(
-        itemCount: todoProvider.todoLists.length,
-        itemBuilder: (context, index) {
-          final todoList = todoProvider.todoLists[index];
-          return ListTile(
-            leading: IconButton(
-              icon: const Icon(Icons.list),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TodoDetailScreen(index: index),
-                  ),
-                );
-              },
-            ),
-            title: Focus(
-              child: TextField(
-                controller: TextEditingController(text: todoList.title),
-                decoration: const InputDecoration(border: InputBorder.none),
-                onSubmitted: (newTitle) {
-                  todoProvider.updateTodoListTitle(index, newTitle);
+      body: FutureBuilder<List<Map<String, Object?>>?>(
+        future: provider.getLists(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('没有可用的清单'));
+          }
+
+          final lists = snapshot.data!;
+          return ListView.builder(
+            itemCount: lists.length,
+            itemBuilder: (context, index) {
+              final list = lists[index];
+              return ListTile(
+                title: Text(list['title'] as String),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ListDetailPage(
+                        listId: list['id'] as int,
+                        listTitle: list['title'] as String,
+                      ),
+                    ),
+                  );
                 },
-              ),
-              onFocusChange: (hasFocus) {
-                if (!hasFocus) {
-                  todoProvider.updateTodoListTitle(index, todoList.title);
-                }
-              },
-            ),
-            trailing: Text('${todoList.items.length} 项'),
+              );
+            },
           );
         },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          todoProvider.addTodoList('新清单');
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }

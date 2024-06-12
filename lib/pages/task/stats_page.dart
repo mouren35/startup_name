@@ -60,7 +60,7 @@ class TaskStatisticsPage extends StatelessWidget {
                                     color: Colors.lightBlueAccent,
                                   ),
                                 ],
-                                showingTooltipIndicators: [0],
+                                // showingTooltipIndicators: [0],
                               ),
                             )
                             .toList(),

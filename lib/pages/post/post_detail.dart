@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
-import 'package:startup_namer/widget/post/user_avatar.dart'; // For date formatting
+import 'package:intl/intl.dart'; // For date formatting
+import 'package:startup_namer/widget/post/user_avatar.dart';
 
 class PostDetailScreen extends StatelessWidget {
   final String postId;
@@ -10,13 +10,37 @@ class PostDetailScreen extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _commentController = TextEditingController();
 
-  PostDetailScreen({super.key, required this.postId, required this.user});
+  PostDetailScreen({required this.postId, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('帖子详情'),
+        title: Text('帖子详情'),
+        actions: [
+          StreamBuilder(
+            stream: _firestore.collection('posts').doc(postId).snapshots(),
+            builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasData && snapshot.data!['userId'] == user.uid) {
+                return IconButton(
+                  icon: Icon(Icons.delete, color: Colors.red),
+                  onPressed: () async {
+                    try {
+                      await _firestore.collection('posts').doc(postId).delete();
+                      Navigator.pop(context);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('删除帖子失败: $e')), // 错误提示
+                      );
+                    }
+                  },
+                );
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -24,8 +48,12 @@ class PostDetailScreen extends StatelessWidget {
             child: StreamBuilder(
               stream: _firestore.collection('posts').doc(postId).snapshots(),
               builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                      child: Text('加载帖子详情时出错: ${snapshot.error}')); // 错误提示
+                }
                 if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
+                  return Center(child: CircularProgressIndicator());
                 }
                 var post = snapshot.data!;
                 bool isLiked = post['likes'].contains(user.uid);
@@ -41,16 +69,19 @@ class PostDetailScreen extends StatelessWidget {
                   children: [
                     ListTile(
                       leading: UserAvatar(
-                          email: post['email'], radius: 30, fontSize: 24),
+                          email: post['email'],
+                          radius: 20,
+                          fontSize: 16), // 改小头像和字体
                       title: Text(
                         post['title'],
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold), // 改小字体
                       ),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(post['content'], style: const TextStyle(fontSize: 18)),
+                          Text(post['content'],
+                              style: TextStyle(fontSize: 16)), // 改小字体
                           Text(formattedTime),
                         ],
                       ),
@@ -63,20 +94,26 @@ class PostDetailScreen extends StatelessWidget {
                               color: isLiked ? Colors.blue : null,
                             ),
                             onPressed: () async {
-                              if (isLiked) {
-                                await _firestore
-                                    .collection('posts')
-                                    .doc(postId)
-                                    .update({
-                                  'likes': FieldValue.arrayRemove([user.uid])
-                                });
-                              } else {
-                                await _firestore
-                                    .collection('posts')
-                                    .doc(postId)
-                                    .update({
-                                  'likes': FieldValue.arrayUnion([user.uid])
-                                });
+                              try {
+                                if (isLiked) {
+                                  await _firestore
+                                      .collection('posts')
+                                      .doc(postId)
+                                      .update({
+                                    'likes': FieldValue.arrayRemove([user.uid])
+                                  });
+                                } else {
+                                  await _firestore
+                                      .collection('posts')
+                                      .doc(postId)
+                                      .update({
+                                    'likes': FieldValue.arrayUnion([user.uid])
+                                  });
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('更新点赞失败: $e')), // 错误提示
+                                );
                               }
                             },
                           ),
@@ -84,9 +121,9 @@ class PostDetailScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    const Divider(),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Divider(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
                         '评论',
                         style: TextStyle(
@@ -103,8 +140,13 @@ class PostDetailScreen extends StatelessWidget {
                             .snapshots(),
                         builder:
                             (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasError) {
+                            return Center(
+                                child:
+                                    Text('加载评论时出错: ${snapshot.error}')); // 错误提示
+                          }
                           if (!snapshot.hasData) {
-                            return const Center(child: CircularProgressIndicator());
+                            return Center(child: CircularProgressIndicator());
                           }
                           return ListView(
                             children: snapshot.data!.docs.map((doc) {
@@ -119,26 +161,26 @@ class PostDetailScreen extends StatelessWidget {
                               return ListTile(
                                 leading: UserAvatar(
                                     email: doc['email'],
-                                    radius: 20,
-                                    fontSize: 16),
+                                    radius: 16,
+                                    fontSize: 14), // 改小头像和字体
                                 title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       doc['email'],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
                                       formattedTime,
-                                      style: const TextStyle(fontSize: 12),
+                                      style: TextStyle(fontSize: 12),
                                     ),
                                   ],
                                 ),
                                 subtitle: Text(
                                   doc['comment'],
-                                  style: const TextStyle(fontSize: 16),
+                                  style: TextStyle(fontSize: 16),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -152,31 +194,40 @@ class PostDetailScreen extends StatelessWidget {
                                         size: 16,
                                       ),
                                       onPressed: () async {
-                                        if (isLiked) {
-                                          await _firestore
-                                              .collection('posts')
-                                              .doc(postId)
-                                              .collection('comments')
-                                              .doc(doc.id)
-                                              .update({
-                                            'likes': FieldValue.arrayRemove(
-                                                [user.uid])
-                                          });
-                                        } else {
-                                          await _firestore
-                                              .collection('posts')
-                                              .doc(postId)
-                                              .collection('comments')
-                                              .doc(doc.id)
-                                              .update({
-                                            'likes': FieldValue.arrayUnion(
-                                                [user.uid])
-                                          });
+                                        try {
+                                          if (isLiked) {
+                                            await _firestore
+                                                .collection('posts')
+                                                .doc(postId)
+                                                .collection('comments')
+                                                .doc(doc.id)
+                                                .update({
+                                              'likes': FieldValue.arrayRemove(
+                                                  [user.uid])
+                                            });
+                                          } else {
+                                            await _firestore
+                                                .collection('posts')
+                                                .doc(postId)
+                                                .collection('comments')
+                                                .doc(doc.id)
+                                                .update({
+                                              'likes': FieldValue.arrayUnion(
+                                                  [user.uid])
+                                            });
+                                          }
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                                content:
+                                                    Text('更新点赞失败: $e')), // 错误提示
+                                          );
                                         }
                                       },
                                     ),
                                     Text(likesCount.toString(),
-                                        style: const TextStyle(fontSize: 12)),
+                                        style: TextStyle(fontSize: 12)),
                                   ],
                                 ),
                               );
@@ -190,7 +241,7 @@ class PostDetailScreen extends StatelessWidget {
               },
             ),
           ),
-          const Divider(),
+          Divider(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -198,28 +249,34 @@ class PostDetailScreen extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: _commentController,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       labelText: '输入评论',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.send),
+                  icon: Icon(Icons.send),
                   onPressed: () async {
                     if (_commentController.text.isNotEmpty) {
-                      await _firestore
-                          .collection('posts')
-                          .doc(postId)
-                          .collection('comments')
-                          .add({
-                        'comment': _commentController.text,
-                        'userId': user.uid,
-                        'email': user.email,
-                        'timestamp': FieldValue.serverTimestamp(),
-                        'likes': [],
-                      });
-                      _commentController.clear();
+                      try {
+                        await _firestore
+                            .collection('posts')
+                            .doc(postId)
+                            .collection('comments')
+                            .add({
+                          'comment': _commentController.text,
+                          'userId': user.uid,
+                          'email': user.email,
+                          'timestamp': FieldValue.serverTimestamp(),
+                          'likes': [],
+                        });
+                        _commentController.clear();
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('发布评论失败: $e')), // 错误提示
+                        );
+                      }
                     }
                   },
                 ),

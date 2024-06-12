@@ -21,7 +21,8 @@ class UserDetailScreen extends StatelessWidget {
             UserAvatar(email: user.email!, radius: 40, fontSize: 40),
             const SizedBox(height: 16),
             Text(user.email!,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
@@ -31,7 +32,7 @@ class UserDetailScreen extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => const AuthScreen()),
                 );
               },
-              child: const Text('注销'),
+              child: const Text('退出登录'),
             ),
           ],
         ),

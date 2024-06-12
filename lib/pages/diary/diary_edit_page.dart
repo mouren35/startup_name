@@ -28,7 +28,7 @@ class _EditScreenState extends State<EditScreen> {
     } else {
       _title = '';
       _content = '';
-      _emotion = 'Happy'; // Default emotion
+      _emotion = '开心'; // Default emotion
     }
   }
 
@@ -49,19 +49,19 @@ class _EditScreenState extends State<EditScreen> {
             onSelected: _selectEmotion,
             itemBuilder: (context) => [
               const PopupMenuItem(
-                value: 'Happy',
+                value: '开心',
                 child: Text('😊 开心'),
               ),
               const PopupMenuItem(
-                value: 'Sad',
+                value: '伤心',
                 child: Text('😢 伤心'),
               ),
               const PopupMenuItem(
-                value: 'Angry',
+                value: '愤怒',
                 child: Text('😡 愤怒'),
               ),
               const PopupMenuItem(
-                value: 'Neutral',
+                value: '焦虑',
                 child: Text('😐 焦虑'),
               ),
             ],

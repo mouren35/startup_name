@@ -24,6 +24,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   Color _taskColor = Colors.purple; // 默认任务颜色
   String _repeatType = '不重复'; // 默认重复类型
   int _repeatInterval = 1; // 默认重复周期
+  int? _selectedListId; // 新增：选中的清单ID
 
   final Map<Color, String> colorMap = {
     Colors.purple: '工作',
@@ -46,6 +47,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       _taskColor = widget.task!.taskColor;
       _repeatType = widget.task!.repeatType;
       _repeatInterval = widget.task!.repeatInterval;
+      _selectedListId = widget.task!.listId; // 初始化选中的清单ID
     }
   }
 
@@ -173,6 +175,38 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     });
                   },
                 ),
+              const SizedBox(height: 16.0),
+              const Text(
+                '选择清单',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              FutureBuilder<List<Map<String, Object?>>?>(
+                future: provider.getLists(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Text('没有可用的清单');
+                  }
+
+                  return DropdownButton<int>(
+                    value: _selectedListId,
+                    items: snapshot.data!.map((list) {
+                      return DropdownMenuItem<int>(
+                        value: list['id'] as int?,
+                        child: Text(list['title'] as String),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedListId = newValue;
+                      });
+                    },
+                    hint: const Text('选择清单'),
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -209,6 +243,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       taskColor: _taskColor, // 添加颜色属性
       repeatType: _repeatType,
       repeatInterval: _repeatInterval,
+      listId: _selectedListId,
     );
     if (widget.task != null) {
       provider.updateTask(id, task.taskStatus);

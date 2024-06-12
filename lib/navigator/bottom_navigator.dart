@@ -32,7 +32,8 @@ class _BottomNavigatorState extends State<BottomNavigator> {
           PostScreen(user: widget.user),
           DiaryListPage(user: widget.user),
           // HabitListScreen(user: widget.user),
-          const TodoListScreen()
+          // const TodoListScreen()
+          ListPage()
         ],
       ),
       bottomNavigationBar: _buildBottomNavigationBar(),

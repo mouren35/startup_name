@@ -124,25 +124,26 @@ class TaskDetailView extends StatelessWidget {
                   const SizedBox(height: 20),
                   _buildDetailText('重复周期：',
                       _formatRepeat(task.repeatType, task.repeatInterval)),
-                
                 ],
               ),
             ),
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: () => _startTimer(context),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            child: const Text(
-              '开始计时',
-              textAlign: TextAlign.center,
-            ),
-          ),
+          task.taskStatus == 0
+              ? ElevatedButton(
+                  onPressed: () => _startTimer(context),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Text(
+                    '开始计时',
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
@@ -180,7 +181,7 @@ class TaskDetailView extends StatelessWidget {
     );
   }
 
-    String _formatRepeat(String type, int interval) {
+  String _formatRepeat(String type, int interval) {
     if (type == '不重复') return type;
     return '$interval $type';
   }

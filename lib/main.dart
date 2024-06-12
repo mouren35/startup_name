@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/login/login_page.dart';
 import 'package:startup_namer/provider/diary_provider.dart';
 import 'package:startup_namer/provider/habit_provider.dart';
-import 'package:startup_namer/provider/list_provider.dart';
 
 import 'db/note_db.dart';
 import 'db/task_db.dart';
@@ -24,7 +23,7 @@ void main(List<String> args) async {
         ChangeNotifierProvider(create: (_) => NoteDb()..init()),
         ChangeNotifierProvider(create: (_) => DiaryProvider()),
         ChangeNotifierProvider(create: (context) => HabitProvider()),
-        ChangeNotifierProvider(create: (_) => TodoProvider()),
+        // ChangeNotifierProvider(create: (_) => TodoProvider()),
       ],
       child: const MyApp(),
     ),

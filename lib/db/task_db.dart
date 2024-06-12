@@ -11,10 +11,10 @@ class TaskDB extends ChangeNotifier {
   static const taskDuration = 'time';
   static const taskStatus = 'taskStatus';
   static const createdAt = 'createdAt';
-  static const taskColor = 'taskColor'; // 新增颜色字段
-  static const repeatType = 'repeatType'; // 新增重复类型字段
-  static const repeatInterval = 'repeatInterval'; // 新增重复周期字段
-  static const listId = 'listId'; // 新增清单ID字段
+  static const taskColor = 'taskColor';
+  static const repeatType = 'repeatType';
+  static const repeatInterval = 'repeatInterval';
+  static const listId = 'listId';
 
   Database? _db;
 
@@ -34,9 +34,12 @@ class TaskDB extends ChangeNotifier {
             $createdAt TEXT NOT NULL,
             $taskColor INTEGER NOT NULL,
             $repeatType TEXT,
-            $repeatInterval INTEGER
-          )
-        """);
+            $repeatInterval INTEGER,
+            $listId INTEGER)""");
+        await database.execute("""
+          CREATE TABLE list (
+            $id INTEGER PRIMARY KEY AUTOINCREMENT,
+            $title TEXT NOT NULL)""");
       },
       version: 1,
     );
@@ -147,5 +150,23 @@ class TaskDB extends ChangeNotifier {
     return date1.year == date2.year &&
         date1.month == date2.month &&
         date1.day == date2.day;
+  }
+
+  Future<void> addList(String title) async {
+    await _db?.insert('list', {'title': title});
+    notifyListeners();
+  }
+
+  Future<List<Map<String, Object?>>?> getLists() async {
+    return await _db?.query('list');
+  }
+
+  Future<List<TaskModel>> getTasksByListId(int listId) async {
+    final result = await _db!.query(
+      'task',
+      where: 'listId = ?',
+      whereArgs: [listId],
+    );
+    return result.map((e) => TaskModel.fromMap(e)).toList();
   }
 }
