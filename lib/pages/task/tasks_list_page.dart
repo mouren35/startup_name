@@ -82,7 +82,7 @@ class _TaskListPageState extends State<TaskListPage> {
                 NavigatorUtil.push(context, const SearchPage());
               },
               () {
-                NavigatorUtil.push(context, StatisticsPage());
+                NavigatorUtil.push(context, const StatisticsPage());
               },
               () {}
             ],

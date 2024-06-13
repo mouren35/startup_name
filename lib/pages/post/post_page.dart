@@ -12,16 +12,16 @@ class PostScreen extends StatelessWidget {
   final User user;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  PostScreen({required this.user});
+  PostScreen({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('帖子列表'),
+        title: const Text('帖子列表'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               Navigator.push(
                 context,
@@ -53,10 +53,10 @@ class PostScreen extends StatelessWidget {
             return Center(child: Text('加载帖子时出错: ${snapshot.error}')); // 错误提示
           }
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('还没有帖子，快来发布吧！')); // 提示语
+            return const Center(child: Text('还没有帖子，快来发布吧！')); // 提示语
           }
           return ListView(
             children: snapshot.data!.docs.map((doc) {
@@ -71,13 +71,13 @@ class PostScreen extends StatelessWidget {
                 leading: UserAvatar(
                     email: doc['email'], radius: 20, fontSize: 16), // 改小头像和字体
                 title: Text(doc['title'],
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 20, fontWeight: FontWeight.bold)), // 改小字体
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(doc['content'],
-                        style: TextStyle(fontSize: 16)), // 改小字体
+                        style: const TextStyle(fontSize: 16)), // 改小字体
                     Text(formattedTime),
                   ],
                 ),
@@ -130,15 +130,15 @@ class PostScreen extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: Text('确认删除'),
-                        content: Text('确定要删除这个帖子吗？'),
+                        title: const Text('确认删除'),
+                        content: const Text('确定要删除这个帖子吗？'),
                         actions: [
                           TextButton(
-                            child: Text('取消'),
+                            child: const Text('取消'),
                             onPressed: () => Navigator.pop(context),
                           ),
                           TextButton(
-                            child: Text('删除'),
+                            child: const Text('删除'),
                             onPressed: () async {
                               Navigator.pop(context);
                               try {

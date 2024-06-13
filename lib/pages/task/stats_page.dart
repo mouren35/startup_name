@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:startup_namer/db/task_db.dart';
 
 class StatisticsPage extends StatefulWidget {
+  const StatisticsPage({super.key});
+
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
 }
@@ -41,7 +43,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       SizedBox(
                         height: 300,
                         child: BarChart(
@@ -65,7 +67,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 },
                               ),
                             ),
-                            gridData: FlGridData(show: false),
+                            gridData: const FlGridData(show: false),
                             borderData: FlBorderData(show: false),
                             titlesData: FlTitlesData(
                               show: true,
@@ -74,17 +76,17 @@ class _StatisticsPageState extends State<StatisticsPage> {
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                               bottomTitles: AxisTitles(
-                                axisNameWidget: Text('分类'),
+                                axisNameWidget: const Text('分类'),
                                 sideTitles: SideTitles(
                                   showTitles: true,
                                   reservedSize: 30,
                                   getTitlesWidget: getTitles,
                                 ),
                               ),
-                              topTitles: AxisTitles(
+                              topTitles: const AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
-                              rightTitles: AxisTitles(
+                              rightTitles: const AxisTitles(
                                 sideTitles: SideTitles(showTitles: false),
                               ),
                             ),

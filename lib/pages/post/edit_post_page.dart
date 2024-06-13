@@ -6,7 +6,7 @@ class EditPostScreen extends StatefulWidget {
   final String postId;
   final User user;
 
-  EditPostScreen({required this.postId, required this.user});
+  const EditPostScreen({super.key, required this.postId, required this.user});
 
   @override
   _EditPostScreenState createState() => _EditPostScreenState();
@@ -36,7 +36,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('编辑帖子'),
+        title: const Text('编辑帖子'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -44,23 +44,23 @@ class _EditPostScreenState extends State<EditPostScreen> {
           children: [
             TextField(
               controller: _titleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '标题',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: _contentController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: '内容',
                 border: OutlineInputBorder(),
               ),
               maxLines: 5,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
-              child: Text('保存'),
+              child: const Text('保存'),
               onPressed: () async {
                 if (_titleController.text.isNotEmpty &&
                     _contentController.text.isNotEmpty) {

@@ -4,6 +4,7 @@
         "AUTOINCREMENT",
         "Firestore",
         "fluttertoast",
+        "prefs",
         "sqflite"
     ]
 }

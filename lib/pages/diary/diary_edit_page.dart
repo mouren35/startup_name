@@ -7,7 +7,7 @@ import 'package:startup_namer/provider/diary_provider.dart';
 class EditScreen extends StatefulWidget {
   final DiaryEntry? entry;
 
-  EditScreen({this.entry});
+  const EditScreen({super.key, this.entry});
 
   @override
   _EditScreenState createState() => _EditScreenState();
@@ -46,22 +46,22 @@ class _EditScreenState extends State<EditScreen> {
         title: Text(widget.entry == null ? '添加日记' : '编辑日记'),
         actions: [
           PopupMenuButton<String>(
-            icon: Icon(Icons.emoji_emotions),
+            icon: const Icon(Icons.emoji_emotions),
             onSelected: _selectEmotion,
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: '快乐',
                 child: Text('😊 快乐'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: '悲伤',
                 child: Text('😢 悲伤'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: '愤怒',
                 child: Text('😡 愤怒'),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: '平静',
                 child: Text('😐 平静'),
               ),
@@ -70,14 +70,14 @@ class _EditScreenState extends State<EditScreen> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
           child: Column(
             children: <Widget>[
               TextFormField(
                 initialValue: _title,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '标题',
                   border: OutlineInputBorder(),
                 ),
@@ -91,10 +91,10 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TextFormField(
                 initialValue: _content,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: '内容',
                   border: OutlineInputBorder(),
                 ),
@@ -109,9 +109,9 @@ class _EditScreenState extends State<EditScreen> {
                   return null;
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text('选择的心情: ${_getEmotionEmoji(_emotion)} $_emotion'),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
@@ -133,11 +133,11 @@ class _EditScreenState extends State<EditScreen> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('保存'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  textStyle: TextStyle(fontSize: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  textStyle: const TextStyle(fontSize: 16),
                 ),
+                child: const Text('保存'),
               ),
             ],
           ),

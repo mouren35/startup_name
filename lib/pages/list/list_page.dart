@@ -4,6 +4,8 @@ import 'package:startup_namer/db/task_db.dart';
 import 'list_detail_page.dart';
 
 class ListPage extends StatefulWidget {
+  const ListPage({super.key});
+
   @override
   _ListPageState createState() => _ListPageState();
 }

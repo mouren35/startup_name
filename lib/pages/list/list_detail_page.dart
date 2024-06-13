@@ -42,7 +42,7 @@ class ListDetailPage extends StatelessWidget {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No tasks available'));
+                return const Center(child: Text('没有任务'));
               } else {
                 final tasks = snapshot.data!;
                 return ListView.builder(
