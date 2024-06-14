@@ -124,9 +124,7 @@ class _WenxinChatPageState extends State<WenxinChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AI'),
-      ),
+      appBar: AppBar(title: const Text('AI')),
       body: Column(
         children: [
           Expanded(
