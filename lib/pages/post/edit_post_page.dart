@@ -1,3 +1,4 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,7 +40,7 @@ class _EditPostScreenState extends State<EditPostScreen> {
         title: const Text('编辑帖子'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(kPadding),
         child: Column(
           children: [
             TextField(

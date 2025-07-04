@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../db/task_db.dart';
+import '../services/task_db.dart';
 
 class TaskModel {
   final int? id;

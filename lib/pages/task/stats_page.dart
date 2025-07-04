@@ -1,7 +1,8 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:startup_namer/db/task_db.dart';
+import 'package:startup_namer/services/task_db.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
@@ -37,7 +38,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                   child: Column(
                     children: [
                       const Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(kPadding),
                         child: Text(
                           '任务完成数量',
                           style: TextStyle(fontSize: 20),
@@ -106,7 +107,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.all(16.0),
+                        padding: EdgeInsets.all(kPadding),
                         child: Text(
                           '任务完成情况占比',
                           style: TextStyle(fontSize: 20),

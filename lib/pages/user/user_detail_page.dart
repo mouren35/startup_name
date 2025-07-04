@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:startup_namer/pages/login/login_page.dart';
-import 'package:startup_namer/widget/post/user_avatar.dart';
+import 'package:startup_namer/widgets/post/user_avatar.dart';
 
 class UserDetailScreen extends StatelessWidget {
   final User user;

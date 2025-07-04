@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:startup_namer/db/diary_db.dart';
-import 'package:startup_namer/model/diary_model.dart';
+import 'package:startup_namer/services/diary_db.dart';
+import 'package:startup_namer/models/diary_model.dart';
 
 
 class DiaryProvider with ChangeNotifier {

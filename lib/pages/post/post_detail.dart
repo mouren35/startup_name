@@ -1,9 +1,10 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:startup_namer/pages/post/edit_post_page.dart';
-import 'package:startup_namer/widget/post/user_avatar.dart'; // For date formatting
+import 'package:startup_namer/widgets/post/user_avatar.dart'; // For date formatting
 
 
 class PostDetailScreen extends StatelessWidget {
@@ -146,7 +147,7 @@ class PostDetailScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     const Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(kSmallPadding),
                       child: Text(
                         '评论',
                         style: TextStyle(
@@ -266,7 +267,7 @@ class PostDetailScreen extends StatelessWidget {
           ),
           const Divider(),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(kSmallPadding),
             child: Row(
               children: [
                 Expanded(

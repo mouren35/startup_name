@@ -1,5 +1,6 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
-import 'package:startup_namer/model/note_model.dart';
+import 'package:startup_namer/models/note_model.dart';
 import 'package:startup_namer/pages/note/add_note_page.dart';
 
 class NoteDetailPage extends StatefulWidget {
@@ -24,14 +25,14 @@ class _NoteDetailPageState extends State<NoteDetailPage> {
       body: SingleChildScrollView(
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(kPadding),
             child: Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(kPadding),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

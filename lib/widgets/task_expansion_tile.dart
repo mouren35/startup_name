@@ -1,12 +1,13 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
-import '../db/task_db.dart';
-import '../model/task_model.dart';
+import '../services/task_db.dart';
+import '../models/task_model.dart';
 import '../pages/task/task_detail_page.dart';
 import '../pages/task/timer_page.dart';
-import '../util/navigator_util.dart';
+import '../utils/navigator_util.dart';
 import 'show_snack_bar.dart';
 
 class TaskExpansionTile extends StatelessWidget {
@@ -43,7 +44,7 @@ class TaskExpansionTile extends StatelessWidget {
                 border: Border.all(
                   color: task.taskColor, // 使用颜色属性
                 ),
-                borderRadius: BorderRadius.circular(12.0),
+                borderRadius: BorderRadius.circular(kBorderRadius),
               ),
               child: Slidable(
                 endActionPane: ActionPane(

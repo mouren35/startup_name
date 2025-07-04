@@ -1,8 +1,9 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import 'package:startup_namer/util/api_util.dart';
+import 'package:startup_namer/utils/api_util.dart';
 
 class WenxinChatPage extends StatefulWidget {
   const WenxinChatPage({super.key});
@@ -129,7 +130,7 @@ class _WenxinChatPageState extends State<WenxinChatPage> {
         children: [
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(kPadding),
               itemCount: _messages.length + (_isLoading ? 1 : 0),
               itemBuilder: (context, index) {
                 if (index == _messages.length) {
@@ -150,7 +151,7 @@ class _WenxinChatPageState extends State<WenxinChatPage> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(kPadding),
             child: Row(
               children: [
                 Expanded(

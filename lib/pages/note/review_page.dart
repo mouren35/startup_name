@@ -1,3 +1,4 @@
+import "package:startup_namer/core/constants.dart";
 import 'dart:async';
 
 import 'package:flip_card/flip_card.dart';
@@ -5,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
-import '../../db/note_db.dart';
-import '../../model/note_model.dart';
-import '../../widget/reusable_card.dart';
+import '../../services/note_db.dart';
+import '../../models/note_model.dart';
+import '../../widgets/reusable_card.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({Key? key}) : super(key: key);
@@ -147,7 +148,7 @@ class _ReviewCardsState extends State<ReviewCards> {
         title: const Text("复习"),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(kPadding),
             child: Center(
               child: Text(
                 '$_remainingSeconds 秒',

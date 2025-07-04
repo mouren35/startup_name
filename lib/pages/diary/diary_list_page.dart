@@ -1,9 +1,10 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/model/diary_model.dart';
+import 'package:startup_namer/models/diary_model.dart';
 import 'package:startup_namer/pages/chat/wenxin_chat_page.dart';
 import 'package:startup_namer/pages/diary/diary_edit_page.dart';
-import 'package:startup_namer/provider/diary_provider.dart';
+import 'package:startup_namer/providers/diary_provider.dart';
 
 
 class DiaryListPage extends StatelessWidget {
@@ -41,7 +42,7 @@ class DiaryListPage extends StatelessWidget {
           return diaryProvider.entries.isEmpty
               ? const Center(child: Text('暂无日记，请点击右上角添加'))
               : GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(kSmallPadding),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 3 / 2,
@@ -68,7 +69,7 @@ class DiaryListPage extends StatelessWidget {
                           _showDeleteDialog(context, entry);
                         },
                         child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(kPadding),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

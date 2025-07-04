@@ -1,10 +1,11 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../db/task_db.dart';
-import '../../model/task_model.dart';
-import '../../widget/show_toast.dart';
+import '../../services/task_db.dart';
+import '../../models/task_model.dart';
+import '../../widgets/show_toast.dart';
 
 class AddTaskPage extends StatefulWidget {
   final TaskModel? task; // 添加任务模型参数，用于编辑
@@ -80,7 +81,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(kPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

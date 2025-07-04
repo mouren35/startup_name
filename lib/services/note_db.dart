@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../model/note_model.dart';
+import '../models/note_model.dart';
 
 class NoteDb extends ChangeNotifier {
   static const id = 'id';

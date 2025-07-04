@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/db/task_db.dart';
-import 'package:startup_namer/model/task_model.dart';
+import 'package:startup_namer/services/task_db.dart';
+import 'package:startup_namer/models/task_model.dart';
 import 'package:startup_namer/pages/task/add_task_page.dart';
 import 'package:startup_namer/pages/task/task_detail_page.dart';
 

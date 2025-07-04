@@ -1,7 +1,8 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/model/diary_model.dart';
-import 'package:startup_namer/provider/diary_provider.dart';
+import 'package:startup_namer/models/diary_model.dart';
+import 'package:startup_namer/providers/diary_provider.dart';
 
 
 class EditScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _EditScreenState extends State<EditScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(kPadding),
         child: Form(
           key: _formKey,
           child: Column(

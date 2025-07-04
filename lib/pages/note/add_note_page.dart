@@ -1,9 +1,10 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../db/note_db.dart';
-import '../../model/note_model.dart';
-import '../../widget/show_toast.dart';
+import '../../services/note_db.dart';
+import '../../models/note_model.dart';
+import '../../widgets/show_toast.dart';
 
 class AddNotePage extends StatefulWidget {
   final NoteModel? note;
@@ -49,7 +50,7 @@ class _AddNotePageState extends State<AddNotePage> {
         title: const Text('添加笔记'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(kLargePadding),
         child: Form(
           key: _formKey,
           child: Column(

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:startup_namer/pages/post/post_detail.dart';
 import 'package:startup_namer/pages/post/release_post_page.dart';
 import 'package:startup_namer/pages/user/user_detail_page.dart';
-import 'package:startup_namer/widget/post/user_avatar.dart';
+import 'package:startup_namer/widgets/post/user_avatar.dart';
 
 class PostScreen extends StatelessWidget {
   final User user;

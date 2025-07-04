@@ -1,7 +1,8 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/db/task_db.dart';
-import 'package:startup_namer/model/task_model.dart';
+import 'package:startup_namer/services/task_db.dart';
+import 'package:startup_namer/models/task_model.dart';
 import 'package:startup_namer/pages/task/task_detail_page.dart';
 
 class SearchPage extends StatefulWidget {
@@ -60,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(kPadding),
         child: Column(
           children: [
             Expanded(

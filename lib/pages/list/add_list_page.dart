@@ -1,6 +1,7 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:startup_namer/db/task_db.dart';
+import 'package:startup_namer/services/task_db.dart';
 
 class AddListPage extends StatelessWidget {
   final TextEditingController _controller = TextEditingController();
@@ -16,7 +17,7 @@ class AddListPage extends StatelessWidget {
         title: const Text('添加清单'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(kPadding),
         child: Column(
           children: [
             TextField(

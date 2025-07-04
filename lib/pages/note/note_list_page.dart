@@ -4,13 +4,13 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/note/add_note_page.dart';
 import 'package:startup_namer/pages/note/review_page.dart';
-import 'package:startup_namer/widget/custom_appbar.dart';
-import 'package:startup_namer/widget/post/user_avatar.dart';
+import 'package:startup_namer/widgets/custom_appbar.dart';
+import 'package:startup_namer/widgets/post/user_avatar.dart';
 
-import '../../db/note_db.dart';
-import '../../model/note_model.dart';
-import '../../util/navigator_util.dart';
-import '../../widget/show_snack_bar.dart';
+import '../../services/note_db.dart';
+import '../../models/note_model.dart';
+import '../../utils/navigator_util.dart';
+import '../../widgets/show_snack_bar.dart';
 import 'note_detail_page.dart';
 
 class NoteListPage extends StatelessWidget {

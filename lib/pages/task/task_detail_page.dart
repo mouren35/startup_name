@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:startup_namer/pages/task/add_task_page.dart';
 import 'package:startup_namer/pages/task/timer_page.dart';
-import 'package:startup_namer/util/navigator_util.dart';
+import 'package:startup_namer/utils/navigator_util.dart';
 
-import '../../db/task_db.dart';
-import '../../model/task_model.dart';
+import '../../services/task_db.dart';
+import '../../models/task_model.dart';
 
 class TaskDetailPage extends StatelessWidget {
   final int time;

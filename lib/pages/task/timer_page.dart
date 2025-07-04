@@ -1,8 +1,9 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../db/task_db.dart';
-import '../../widget/circular_timer.dart';
+import '../../services/task_db.dart';
+import '../../widgets/circular_timer.dart';
 
 class TimerPage extends StatelessWidget {
   final int? id;
@@ -70,7 +71,7 @@ class TimerPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.all(kLargePadding),
                 child: Row(
                   children: [
                     Expanded(

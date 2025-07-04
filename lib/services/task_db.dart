@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import '../model/task_model.dart';
+import '../models/task_model.dart';
 
 class TaskDB extends ChangeNotifier {
   static const id = 'id';

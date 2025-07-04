@@ -1,8 +1,9 @@
+import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
-import 'package:startup_namer/db/task_db.dart';
-import 'package:startup_namer/model/task_model.dart';
+import 'package:startup_namer/services/task_db.dart';
+import 'package:startup_namer/models/task_model.dart';
 import 'package:startup_namer/pages/task/task_detail_page.dart';
-import 'package:startup_namer/util/navigator_util.dart';
+import 'package:startup_namer/utils/navigator_util.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
@@ -99,7 +100,7 @@ class _CalendarPageState extends State<CalendarPage> {
                         border: Border.all(
                           color: value[index].taskColor, // 使用颜色属性
                         ),
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(kBorderRadius),
                       ),
                       child: ListTile(
                         onTap: () => NavigatorUtil.push(
