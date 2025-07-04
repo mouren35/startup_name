@@ -75,6 +75,12 @@ class _ListPageState extends State<ListPage> {
   }
 
   @override
+  void dispose() {
+    _listTitleController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -18,6 +18,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
   void _submitPost() async {
     if (_formKey.currentState!.validate()) {
       try {

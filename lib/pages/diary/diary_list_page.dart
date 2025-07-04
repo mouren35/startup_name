@@ -14,7 +14,7 @@ class DiaryListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('日记本'),
+        title: const Text('日记'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),

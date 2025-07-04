@@ -1,4 +1,3 @@
-import "package:startup_namer/core/constants.dart";
 import 'package:flutter/material.dart';
 
 // 通用间距

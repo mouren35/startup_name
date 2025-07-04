@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:startup_namer/pages/post/edit_post_page.dart';
 import 'package:startup_namer/widgets/post/user_avatar.dart'; // For date formatting
 
-
 class PostDetailScreen extends StatelessWidget {
   final String postId;
   final User user;
@@ -19,7 +18,7 @@ class PostDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('帖子详情'),
+        title: const Text('详情'),
         actions: [
           StreamBuilder(
             stream: _firestore.collection('posts').doc(postId).snapshots(),
@@ -170,13 +169,17 @@ class PostDetailScreen extends StatelessWidget {
                                     Text('加载评论时出错: ${snapshot.error}')); // 错误提示
                           }
                           if (!snapshot.hasData) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
-                          return ListView(
-                            children: snapshot.data!.docs.map((doc) {
-                              bool isLiked = doc['likes'].contains(user.uid);
-                              int likesCount = doc['likes'].length;
-                              Timestamp? timestamp = doc['timestamp'];
+                          return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              final comment = snapshot.data!.docs[index];
+                              bool isLiked =
+                                  comment['likes'].contains(user.uid);
+                              int likesCount = comment['likes'].length;
+                              Timestamp? timestamp = comment['timestamp'];
                               String formattedTime = timestamp != null
                                   ? DateFormat('yyyy-MM-dd – kk:mm')
                                       .format(timestamp.toDate())
@@ -184,14 +187,14 @@ class PostDetailScreen extends StatelessWidget {
 
                               return ListTile(
                                 leading: UserAvatar(
-                                    email: doc['email'],
+                                    email: comment['email'],
                                     radius: 16,
                                     fontSize: 14), // 改小头像和字体
                                 title: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      doc['email'],
+                                      comment['email'],
                                       style: const TextStyle(
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold),
@@ -203,7 +206,7 @@ class PostDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                                 subtitle: Text(
-                                  doc['comment'],
+                                  comment['comment'],
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 trailing: Row(
@@ -224,7 +227,7 @@ class PostDetailScreen extends StatelessWidget {
                                                 .collection('posts')
                                                 .doc(postId)
                                                 .collection('comments')
-                                                .doc(doc.id)
+                                                .doc(comment.id)
                                                 .update({
                                               'likes': FieldValue.arrayRemove(
                                                   [user.uid])
@@ -234,7 +237,7 @@ class PostDetailScreen extends StatelessWidget {
                                                 .collection('posts')
                                                 .doc(postId)
                                                 .collection('comments')
-                                                .doc(doc.id)
+                                                .doc(comment.id)
                                                 .update({
                                               'likes': FieldValue.arrayUnion(
                                                   [user.uid])
@@ -255,7 +258,7 @@ class PostDetailScreen extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            }).toList(),
+                            },
                           );
                         },
                       ),

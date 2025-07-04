@@ -53,6 +53,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   @override
+  void dispose() {
+    titleController.dispose();
+    noteController.dispose();
+    stepsController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
 

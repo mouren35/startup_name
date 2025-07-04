@@ -18,7 +18,7 @@ class PostScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('帖子列表'),
+        title: const Text('帖子'),
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -58,8 +58,10 @@ class PostScreen extends StatelessWidget {
           if (snapshot.data!.docs.isEmpty) {
             return const Center(child: Text('还没有帖子，快来发布吧！')); // 提示语
           }
-          return ListView(
-            children: snapshot.data!.docs.map((doc) {
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot doc = snapshot.data!.docs[index];
               bool isLiked = doc['likes'].contains(user.uid);
               int likesCount = doc['likes'].length;
               Timestamp? timestamp = doc['timestamp'];
@@ -159,7 +161,7 @@ class PostScreen extends StatelessWidget {
                   }
                 },
               );
-            }).toList(),
+            },
           );
         },
       ),
