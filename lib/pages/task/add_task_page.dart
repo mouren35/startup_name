@@ -1,4 +1,4 @@
-import 'package:duration_picker_dialog_box/duration_picker_dialog_box.dart';
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -215,11 +215,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   Future<Duration?> _showDurationPickerDialog(BuildContext context) async {
-    return showDurationPicker(
+    return await showDurationPicker(
       context: context,
-      initialDuration: _duration,
-      confirmText: '确定',
-      cancelText: '取消',
+      initialTime: Duration(minutes: 0),
     );
   }
 
