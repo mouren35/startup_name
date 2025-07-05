@@ -26,7 +26,13 @@ class TaskExpansionTile extends StatelessWidget {
 
     return ExpansionTile(
       initiallyExpanded: true,
-      title: Text(title),
+      title: Text(
+        title,
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium
+            ?.copyWith(fontWeight: FontWeight.bold),
+      ),
       children: [
         ListView.builder(
           itemCount: tasks.length,
@@ -34,17 +40,13 @@ class TaskExpansionTile extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             final task = tasks[index];
-            return Container(
-              margin: const EdgeInsets.symmetric(
-                horizontal: 12.0,
-                vertical: 4.0,
-              ),
-              decoration: BoxDecoration(
-                color: task.taskColor.withOpacity(0.3), // 使用颜色属性
-                border: Border.all(
-                  color: task.taskColor, // 使用颜色属性
-                ),
+            return Card(
+              elevation: 2,
+              margin:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+              shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(kBorderRadius),
+                side: BorderSide(color: task.taskColor, width: 1),
               ),
               child: Slidable(
                 endActionPane: ActionPane(
@@ -53,7 +55,8 @@ class TaskExpansionTile extends StatelessWidget {
                     if (title == '未完成') ...[
                       SlidableAction(
                         label: '计时',
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        foregroundColor: Colors.white,
                         icon: Icons.timer_outlined,
                         onPressed: (context) {
                           NavigatorUtil.push(
@@ -70,7 +73,8 @@ class TaskExpansionTile extends StatelessWidget {
                     ],
                     SlidableAction(
                       label: '删除',
-                      backgroundColor: Colors.red,
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                      foregroundColor: Colors.white,
                       icon: Icons.delete_forever,
                       onPressed: (context) async {
                         await provider.deleteTask(task.id!);
@@ -92,7 +96,9 @@ class TaskExpansionTile extends StatelessWidget {
                         children: [
                           SlidableAction(
                             label: '完成',
-                            backgroundColor: Colors.green,
+                            backgroundColor:
+                                Theme.of(context).colorScheme.secondary,
+                            foregroundColor: Colors.white,
                             icon: Icons.check,
                             onPressed: (context) async {
                               await provider.updateTask(task.id!, 1);
@@ -102,9 +108,29 @@ class TaskExpansionTile extends StatelessWidget {
                       )
                     : null,
                 child: ListTile(
-                  leading: Text('${task.taskDuration}'),
-                  title: Text(task.title),
-                  subtitle: Text(task.note.toString()),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  leading: Chip(
+                    label: Text('${task.taskDuration} min'),
+                    backgroundColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    labelStyle:
+                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
+                  title: Text(
+                    task.title,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    task.note.toString(),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: Colors.grey[600]),
+                  ),
                   onTap: () {
                     NavigatorUtil.push(
                       context,

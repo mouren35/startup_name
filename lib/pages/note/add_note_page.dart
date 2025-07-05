@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../services/note_db.dart';
 import '../../models/note_model.dart';
-import '../../widgets/show_toast.dart';
+import '../../utils/show_toast.dart';
 
 class AddNotePage extends StatefulWidget {
   final NoteModel? note;

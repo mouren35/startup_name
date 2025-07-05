@@ -46,50 +46,57 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskDB>(context);
+    final theme = Theme.of(context);
 
-    return FutureBuilder<List<TaskModel>?>(
-      future: provider.getTask(),
-      builder: (
-        BuildContext context,
-        AsyncSnapshot<List<TaskModel>?> snapshot,
-      ) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return _buildLoadingWidget();
-        }
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      appBar: CustomAppBar(
+        actions: [
+          Icon(Icons.search),
+          Icon(Icons.bar_chart_rounded),
+          UserAvatar(email: widget.user.email!),
+        ],
+        onActionPressed: [
+          () {
+            NavigatorUtil.push(context, const SearchPage());
+          },
+          () {
+            NavigatorUtil.push(context, const StatisticsPage());
+          },
+          () {},
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          NavigatorUtil.push(context, const AddTaskPage());
+        },
+        child: const Icon(Icons.add),
+        tooltip: '添加任务',
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      ),
+      body: FutureBuilder<List<TaskModel>?>(
+        future: provider.getTask(),
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<TaskModel>?> snapshot,
+        ) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return _buildLoadingWidget();
+          }
 
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error:  [${snapshot.error}'));
+          }
 
-        final data = snapshot.data;
-        final undoTask = data?.where((task) => task.taskStatus == 0).toList();
-        final completedTask =
-            data?.where((task) => task.taskStatus == 1).toList();
+          final data = snapshot.data;
+          final undoTask = data?.where((task) => task.taskStatus == 0).toList();
+          final completedTask =
+              data?.where((task) => task.taskStatus == 1).toList();
 
-        return Scaffold(
-          appBar: CustomAppBar(
-            actions: [
-              const Icon(Icons.add),
-              const Icon(Icons.search),
-              const Icon(Icons.bar_chart_rounded),
-              UserAvatar(email: widget.user.email!),
-            ],
-            onActionPressed: [
-              () {
-                NavigatorUtil.push(context, const AddTaskPage());
-              },
-              () {
-                NavigatorUtil.push(context, const SearchPage());
-              },
-              () {
-                NavigatorUtil.push(context, const StatisticsPage());
-              },
-              () {}
-            ],
-          ),
-          body: SingleChildScrollView(
+          return SingleChildScrollView(
             controller: _scrollController,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TaskExpansionTile(
                   title: '未完成',
@@ -101,9 +108,9 @@ class _TaskListPageState extends State<TaskListPage> {
                 ),
               ],
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
